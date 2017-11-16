@@ -11,7 +11,7 @@ module.exports = {
     )
   },
   output: {
-    path: path.resolve(path.resolve(__dirname), '../temp'),
+    path: path.resolve(path.resolve(__dirname), '../../../temp'),
     filename: '[name].[hash:8].js',
     chunkFilename: 'hera-website/js/[name].[hash:8].js'
   },
