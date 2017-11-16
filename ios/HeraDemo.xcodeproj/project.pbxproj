@@ -1,0 +1,439 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5526E6451FBBD8CB0014ACE6 /* RetrieveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E6441FBBD8CB0014ACE6 /* RetrieveViewController.m */; };
+		5526E64B1FBC177E0014ACE6 /* demoapp.zip in Resources */ = {isa = PBXBuildFile; fileRef = 5526E64A1FBC177E0014ACE6 /* demoapp.zip */; };
+		5526E64E1FBC37EC0014ACE6 /* LinkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E64D1FBC37EC0014ACE6 /* LinkViewController.m */; };
+		639123BB2E30375E1AE1F3E4 /* libPods-HeraDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 70A368766FF0A5275194A974 /* libPods-HeraDemo.a */; };
+		E94AD6991FB4546600AC5B39 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E94AD68C1FB4546600AC5B39 /* AppDelegate.m */; };
+		E94AD69A1FB4546600AC5B39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E94AD68D1FB4546600AC5B39 /* Assets.xcassets */; };
+		E94AD69B1FB4546600AC5B39 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E94AD68E1FB4546600AC5B39 /* LaunchScreen.storyboard */; };
+		E94AD69C1FB4546600AC5B39 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E94AD6901FB4546600AC5B39 /* Main.storyboard */; };
+		E94AD69D1FB4546600AC5B39 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E94AD6921FB4546600AC5B39 /* Info.plist */; };
+		E94AD69E1FB4546600AC5B39 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E94AD6931FB4546600AC5B39 /* main.m */; };
+		E94AD69F1FB4546600AC5B39 /* resources.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E94AD6951FB4546600AC5B39 /* resources.xcassets */; };
+		E94AD6A01FB4546600AC5B39 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E94AD6971FB4546600AC5B39 /* ViewController.m */; };
+		E94AD6A11FB4546600AC5B39 /* HeraRes.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E94AD6981FB4546600AC5B39 /* HeraRes.bundle */; };
+		E94AD6A61FB45F3B00AC5B39 /* Hera.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E94AD6A71FB45F3B00AC5B39 /* Hera.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		46D239121F20466400751BF0 /* HeraDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HeraDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5526E6431FBBD8CB0014ACE6 /* RetrieveViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RetrieveViewController.h; sourceTree = "<group>"; };
+		5526E6441FBBD8CB0014ACE6 /* RetrieveViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RetrieveViewController.m; sourceTree = "<group>"; };
+		5526E64A1FBC177E0014ACE6 /* demoapp.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = demoapp.zip; sourceTree = "<group>"; };
+		5526E64C1FBC37EC0014ACE6 /* LinkViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinkViewController.h; sourceTree = "<group>"; };
+		5526E64D1FBC37EC0014ACE6 /* LinkViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LinkViewController.m; sourceTree = "<group>"; };
+		70A368766FF0A5275194A974 /* libPods-HeraDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HeraDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		960E6830EC73C28305304025 /* Pods-HeraDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HeraDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-HeraDemo/Pods-HeraDemo.release.xcconfig"; sourceTree = "<group>"; };
+		E94AD68B1FB4546600AC5B39 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		E94AD68C1FB4546600AC5B39 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		E94AD68D1FB4546600AC5B39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E94AD68F1FB4546600AC5B39 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E94AD6911FB4546600AC5B39 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		E94AD6921FB4546600AC5B39 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E94AD6931FB4546600AC5B39 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		E94AD6941FB4546600AC5B39 /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		E94AD6951FB4546600AC5B39 /* resources.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = resources.xcassets; sourceTree = "<group>"; };
+		E94AD6961FB4546600AC5B39 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		E94AD6971FB4546600AC5B39 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		E94AD6981FB4546600AC5B39 /* HeraRes.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HeraRes.bundle; sourceTree = "<group>"; };
+		E94AD6A71FB45F3B00AC5B39 /* Hera.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Hera.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED0C5E3BE86A1D57B4EFBFB4 /* Pods-HeraDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HeraDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HeraDemo/Pods-HeraDemo.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		46D2390F1F20466400751BF0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E94AD6A61FB45F3B00AC5B39 /* Hera.framework in Frameworks */,
+				639123BB2E30375E1AE1F3E4 /* libPods-HeraDemo.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		46D239091F20466400751BF0 = {
+			isa = PBXGroup;
+			children = (
+				E94AD68A1FB4546600AC5B39 /* HeraDemo */,
+				46D239131F20466400751BF0 /* Products */,
+				53F35229C446BB2C8BE1E41D /* Pods */,
+				CBB8864738245ECCBC31473A /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		46D239131F20466400751BF0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				46D239121F20466400751BF0 /* HeraDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		53F35229C446BB2C8BE1E41D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				ED0C5E3BE86A1D57B4EFBFB4 /* Pods-HeraDemo.debug.xcconfig */,
+				960E6830EC73C28305304025 /* Pods-HeraDemo.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		CBB8864738245ECCBC31473A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E94AD6A71FB45F3B00AC5B39 /* Hera.framework */,
+				70A368766FF0A5275194A974 /* libPods-HeraDemo.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E94AD68A1FB4546600AC5B39 /* HeraDemo */ = {
+			isa = PBXGroup;
+			children = (
+				5526E64A1FBC177E0014ACE6 /* demoapp.zip */,
+				E94AD68B1FB4546600AC5B39 /* AppDelegate.h */,
+				E94AD68C1FB4546600AC5B39 /* AppDelegate.m */,
+				E94AD68D1FB4546600AC5B39 /* Assets.xcassets */,
+				E94AD68E1FB4546600AC5B39 /* LaunchScreen.storyboard */,
+				E94AD6901FB4546600AC5B39 /* Main.storyboard */,
+				E94AD6921FB4546600AC5B39 /* Info.plist */,
+				E94AD6931FB4546600AC5B39 /* main.m */,
+				E94AD6941FB4546600AC5B39 /* PrefixHeader.pch */,
+				E94AD6951FB4546600AC5B39 /* resources.xcassets */,
+				E94AD6961FB4546600AC5B39 /* ViewController.h */,
+				E94AD6971FB4546600AC5B39 /* ViewController.m */,
+				5526E6431FBBD8CB0014ACE6 /* RetrieveViewController.h */,
+				5526E6441FBBD8CB0014ACE6 /* RetrieveViewController.m */,
+				5526E64C1FBC37EC0014ACE6 /* LinkViewController.h */,
+				5526E64D1FBC37EC0014ACE6 /* LinkViewController.m */,
+				E94AD6981FB4546600AC5B39 /* HeraRes.bundle */,
+			);
+			path = HeraDemo;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		46D239111F20466400751BF0 /* HeraDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 46D239291F20466400751BF0 /* Build configuration list for PBXNativeTarget "HeraDemo" */;
+			buildPhases = (
+				EB6574792DDDA595AA47631D /* [CP] Check Pods Manifest.lock */,
+				46D2390E1F20466400751BF0 /* Sources */,
+				46D2390F1F20466400751BF0 /* Frameworks */,
+				46D239101F20466400751BF0 /* Resources */,
+				EBC58081D1022513B16CD4A7 /* [CP] Embed Pods Frameworks */,
+				C0488D02C8BE05C104CBDBA2 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HeraDemo;
+			productName = WDHodoerDemo;
+			productReference = 46D239121F20466400751BF0 /* HeraDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		46D2390A1F20466400751BF0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = weidian;
+				TargetAttributes = {
+					46D239111F20466400751BF0 = {
+						CreatedOnToolsVersion = 8.3;
+						DevelopmentTeam = S38HQFK7S4;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 46D2390D1F20466400751BF0 /* Build configuration list for PBXProject "HeraDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 46D239091F20466400751BF0;
+			productRefGroup = 46D239131F20466400751BF0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				46D239111F20466400751BF0 /* HeraDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		46D239101F20466400751BF0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E94AD6A11FB4546600AC5B39 /* HeraRes.bundle in Resources */,
+				E94AD69D1FB4546600AC5B39 /* Info.plist in Resources */,
+				E94AD69C1FB4546600AC5B39 /* Main.storyboard in Resources */,
+				E94AD69A1FB4546600AC5B39 /* Assets.xcassets in Resources */,
+				5526E64B1FBC177E0014ACE6 /* demoapp.zip in Resources */,
+				E94AD69B1FB4546600AC5B39 /* LaunchScreen.storyboard in Resources */,
+				E94AD69F1FB4546600AC5B39 /* resources.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C0488D02C8BE05C104CBDBA2 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HeraDemo/Pods-HeraDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EB6574792DDDA595AA47631D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		EBC58081D1022513B16CD4A7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HeraDemo/Pods-HeraDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		46D2390E1F20466400751BF0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5526E64E1FBC37EC0014ACE6 /* LinkViewController.m in Sources */,
+				5526E6451FBBD8CB0014ACE6 /* RetrieveViewController.m in Sources */,
+				E94AD6A01FB4546600AC5B39 /* ViewController.m in Sources */,
+				E94AD69E1FB4546600AC5B39 /* main.m in Sources */,
+				E94AD6991FB4546600AC5B39 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		E94AD68E1FB4546600AC5B39 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E94AD68F1FB4546600AC5B39 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		E94AD6901FB4546600AC5B39 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E94AD6911FB4546600AC5B39 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		46D239271F20466400751BF0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		46D239281F20466400751BF0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		46D2392A1F20466400751BF0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = ED0C5E3BE86A1D57B4EFBFB4 /* Pods-HeraDemo.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = S38HQFK7S4;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = HeraDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.koudai.weidian.dev;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		46D2392B1F20466400751BF0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 960E6830EC73C28305304025 /* Pods-HeraDemo.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = S38HQFK7S4;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = HeraDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.koudai.weidian.dev;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		46D2390D1F20466400751BF0 /* Build configuration list for PBXProject "HeraDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				46D239271F20466400751BF0 /* Debug */,
+				46D239281F20466400751BF0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		46D239291F20466400751BF0 /* Build configuration list for PBXNativeTarget "HeraDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				46D2392A1F20466400751BF0 /* Debug */,
+				46D2392B1F20466400751BF0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 46D2390A1F20466400751BF0 /* Project object */;
+}

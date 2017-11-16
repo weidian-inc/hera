@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tab_bar_padding_l">15dp</dimen>
+    <dimen name="tab_bar_padding_s">5dp</dimen>
+    <dimen name="tab_bar_text_size_l">16sp</dimen>
+    <dimen name="tab_bar_text_size_s">12sp</dimen>
+
+    <dimen name="action_sheet_item_lr_padding">20dp</dimen>
+    <dimen name="action_sheet_item_tb_padding">15dp</dimen>
+    <dimen name="action_sheet_item_text_size">14sp</dimen>
+</resources>

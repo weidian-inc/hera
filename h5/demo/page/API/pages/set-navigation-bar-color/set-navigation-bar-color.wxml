@@ -1,0 +1,32 @@
+<import src="../../../common/head.wxml" />
+<import src="../../../common/foot.wxml" />
+
+<view class="container">
+  <template is="head" data="{{title: 'setNaivgationBarColor'}}"/>
+
+  <form class="page-body" bindsubmit="setNaivgationBarColor">
+    <view class="weui-cells weui-cells_after-color">
+      <view class="weui-cell weui-cell_input">
+        <view class="weui-cell__hd">
+          <view class="weui-label">背景色</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" type="text" placeholder="#c4d7e6" name="backgroundColor"></input>
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_input">
+        <view class="weui-cell__hd">
+          <view class="weui-label">文字颜色</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" type="text" placeholder="#000000 or #ffffff" name="frontColor"></input>
+        </view>
+      </view>
+    </view>
+    <view class="btn-area">
+      <button type="primary" formType="submit">设置</button>
+    </view>
+  </form>
+
+  <template is="foot" />
+</view>

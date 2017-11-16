@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Hera</string>
+    <string name="open_page_for_result">openPageForResult示例</string>
+    <string name="set_result">返回页面结果</string>
+</resources>

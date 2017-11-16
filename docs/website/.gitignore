@@ -1,0 +1,10 @@
+.DS_Store
+.idea/
+coverage/
+temp/
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn.lock
+stats.json
+.history

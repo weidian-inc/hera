@@ -1,0 +1,38 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="android:Theme.Light"/>
+
+    <style name="SlideNoTittle" parent="android:Theme.Light.NoTitleBar">
+        <item name="android:windowAnimationStyle">@style/activityAnim</item>
+    </style>
+
+    <!-- 使用style方式定义activity切换动画无效 -->
+    <style name="activityAnim" parent="@android:style/Animation.Translucent">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
+
+        <item name="android:activityCloseEnterAnimation">@android:anim/slide_in_left</item>
+
+        <item name="android:activityCloseExitAnimation">@android:anim/slide_out_right</item>
+
+    </style>
+
+    <style name="TransparentDialog" parent="android:Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="ModalDialog" parent="android:Theme.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+</resources>

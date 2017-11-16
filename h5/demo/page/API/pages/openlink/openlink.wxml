@@ -1,0 +1,28 @@
+<import src="../../../common/head.wxml" />
+<import src="../../../common/foot.wxml" />
+
+<view class="container">
+  <template is="head" data="{{title: 'openLink'}}"/>
+
+  <view class="page-body">
+    <view class="page-section">
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">url</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="请输入url" name="url" value="{{url}}" bindinput="urlChange"></input>
+          </view>
+        </view>
+      </view>
+      <view class="btn-area">
+        <button bindtap="openLink">打开h5</button>
+      </view>
+    </view>
+  </view>
+
+  <modal title="{{dialog.title}}" hidden="{{dialog.hidden}}" no-cancel bindconfirm="confirm">{{dialog.content}}</modal>
+
+  <template is="foot" />
+</view>

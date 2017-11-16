@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Hera</string>
+    <string name="enter_hera">点击进入</string>
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+    <string name="init_loading">初始化加载中</string>
+</resources>

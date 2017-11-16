@@ -1,0 +1,5 @@
+*.xcscheme
+*.xcuserdata
+xcschememanagement.plist
+xcuserdata
+.DS_Store
