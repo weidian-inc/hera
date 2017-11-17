@@ -26,7 +26,7 @@ node -v
 
 ```sh
 # 从内部npm仓库安装
-npm i @wd/hera-cli -g
+npm i hera-cli -g
 ```
 
 初始化小程序
