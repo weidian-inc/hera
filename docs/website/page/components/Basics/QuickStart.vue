@@ -4,7 +4,7 @@
 
     <section>
       <p>这篇文章会带领你使用<code>Hera-Cli</code>来创建一个小程序项目，并指导按需搭建相应平台的开发环境，试着点击下面的按钮来选择你想要测试的平台以及你的开发环境</p>
-      <p>注意以下平台均运行在本机上，如果想运行在真机，请阅读：<a href="#/android/andorid-real-device">真机调试</a></p>
+      <p>注意以下平台均运行在本机上，如果想运行在真机，请阅读：<a href="#/ios/ios-real-device">真机调试</a></p>
       <p>
         <span>开发环境:</span>
         <ul class="os-list">
