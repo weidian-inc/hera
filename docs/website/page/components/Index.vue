@@ -4,7 +4,7 @@
     <article class="app-content-container">
       <app-content></app-content>
     </article>
-    <footer><a href="https://github.com/wdfe">@wdfe</a> 北京口袋时尚科技有限公司</footer>
+    <footer><a href="https://github.com/weidian-inc">@weidian-inc</a> 北京口袋时尚科技有限公司</footer>
   </div>
 </template>
 
