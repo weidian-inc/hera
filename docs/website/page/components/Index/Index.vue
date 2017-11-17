@@ -4,7 +4,7 @@
       <content class="particles">
         <div class="mask" id="particles-js"></div>
         <p class="title">全平台小程序框架，助力移动开发</p>
-        <p class="subtitle">小程序的能力，你的平台也可以拥有</p>
+        <p class="subtitle">让你的小程序，充满无限可能</p>
         <div class="button-group">
           <!-- <router-link to="/basics/quickstart" class="button-start">快速开始</router-link> -->
           <router-link to="/basics/quickstart" class="button-doc">查看文档</router-link>

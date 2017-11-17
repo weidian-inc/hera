@@ -53,3 +53,5 @@ cat config.json
 ```sh
 hera run ios
 ```
+<br />
+<p>注意：以上步骤只适用于虚拟机环境，如果想运行在真机，请阅读：<a style="color:#3898FC" href="#/ios/ios-real-device">真机调试</a></p>
