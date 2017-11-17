@@ -35,7 +35,7 @@ public class HeraApplication extends Application {
 
 
 ## 自定义API
-Hera框架本身已经提供了丰富的原生[API]()实现，为了更好地满足在开发者需求，Hera也提供了自定义原生API的能力。
+Hera框架本身已经提供了丰富的原生[API](https://weidian-inc.github.io/hera/#/others/api-list)实现，为了更好地满足在开发者需求，Hera也提供了自定义原生API的能力。
 ### Android端
 
 #### 调用接收
@@ -63,7 +63,7 @@ onResult(IHostApiCallback.FAILED, null);// 处理失败的后的结果返回
 ```
 
 ### JS端
-[自定义API配置文件]()
+[自定义API配置文件](https://weidian-inc.github.io/hera/#/others/api-extend)
 
 ## 打开小程序页面
 
