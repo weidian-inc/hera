@@ -37,8 +37,9 @@ public class ApiOpenLink implements IHostApi {
             if (!TextUtils.isEmpty(url)) {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
-                Uri content_url = Uri.parse(url);
-                intent.setData(content_url);
+                Uri uri = Uri.parse(url);
+                intent.setData(uri);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mContext.startActivity(intent);
                 callback.onResult(IHostApiCallback.SUCCEED, null);
             } else {
