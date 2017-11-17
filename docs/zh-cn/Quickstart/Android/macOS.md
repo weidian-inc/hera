@@ -25,7 +25,7 @@ node -v
 安装本项目
 
 ```sh
-# 从内部npm仓库安装
+# 从npm仓库安装
 npm i hera-cli -g
 ```
 
