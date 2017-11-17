@@ -3,7 +3,7 @@
     <div class="wrapper">
       <div class="logo-wrap">
         <img class="logo" src="../../assets/images/HERA.png"/>
-        <span>小程序SDK</span>
+        <span>小程序框架</span>
       </div>
       <ul class="nav">
         <li :class="{'active': active === ''}"><router-link to="/">首页</router-link></li>
