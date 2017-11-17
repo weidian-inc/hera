@@ -1,7 +1,7 @@
 ## 安卓
 
 ## Android Studio
-目前需要[Android Studio](http://developer.android.com/sdk/index.html)2.0或更高版本。
+目前需要[Android Studio](https://developer.android.google.cn/studio/index.html)2.0或更高版本。
 
 > Android Studio需要Java Development Kit [JDK] 1.8。你可以在命令行中输入 javac -version来查看你当前安装的JDK版本。如果版本不合要求，则可以到[官网](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 )上下载。

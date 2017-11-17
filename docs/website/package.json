@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack-dev-server --progress --inline --config config/webpack.dev-website.config.js --host 0.0.0.0",
     "build": "NODE_ENV=production webpack --progress --config config/webpack.build-website.config.js --display-modules --sort-modules-by size",
-    "deploy:gh-pages": "npm run build && git checkout gh-pages && cp -r temp/* ... && git add . && git commit -m 'chore: update doc' --no-verify&& git push",
+    "deploy:gh-pages": "npm run build && git checkout gh-pages && cd ../../ && cp -r temp/* . && git add . && git commit -m 'chore: update doc' --no-verify",
     "lint": "eslint --fix  ./website/**/*.js ./website/**/*.vue",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

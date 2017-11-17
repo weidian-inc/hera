@@ -11,8 +11,8 @@
         <li :class="{'active': active !== ''}"><router-link to="/basics/quickstart">文档</router-link></li>
         <!-- <li :class="{'active': active === '/resources'}"><router-link to="/resources">资源</router-link></li> -->
         <li>
-          <a href="https://github.com/Weidian-developer/hera">
-            <img class="star-badge" src="https://img.shields.io/github/stars/Weidian-developer/hera.svg?style=social&label=Stars">
+          <a href="https://github.com/weidian-inc/hera">
+            <img class="star-badge" src="https://img.shields.io/github/stars/weidian-inc/hera.svg?style=social&label=Stars">
           </a>
         </li>
       </ul>
