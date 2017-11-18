@@ -56,12 +56,24 @@ cd projName
 cat config.json
 ```
 
-运行
+查看是否连接了设备：
+
+```sh
+adb devices
+```
+
+如果设备处于活跃状态会显示如下信息，如果列表为空或设备处于离线状态，请重新连接安卓手机或重启虚拟机
+
+```sh
+List of devices attached
+0ec123456    device
+```
+
+构建应用并开启虚拟机：
 
 ```sh
 hera run android
 ```
 
-## 参考
+> 注意: 初次运行可能会下载 Gradle， 如果您没有使用代理可能会下很长时间, 如果出现`java.util.zip.ZipException`错误，请删除用户根目录下的.gradle 目录后重新尝试上面的命令或是[手动安装 Gradle 3.3](https://gradle.org/install/)
 
-环境搭建部分参考了: [React Native中文网](https://reactnative.cn/docs/0.50/getting-started.html#android-studio)
