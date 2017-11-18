@@ -20,15 +20,23 @@ node -v
 
 如果您的系统中没有以上环境，请按[此教程](#/android/andorid-env-setup)搭建安卓开发环境
 
+## 安装 Git
+
+如果您的系统中没有安装 Git 命令行工具，请[点此下载安装](https://git-scm.com/downloads)。
+
 ## 安装运行
 
-安装脚手架
-
-> Tips: 如果下载时出现网络问题，可以尝试使用 [nrm](https://github.com/Pana/nrm) 或 [npm config](http://cnodejs.org/topic/4f9904f9407edba21468f31e) 命令切换至[国内的 npm 源](http://www.jianshu.com/p/171ec231ced4)
-
+首先切换 npm 源，如果您已经使用了代理则可忽略这一步骤
 
 ```sh
-# 从内部npm仓库安装
+npm config set registry https://registry.npm.taobao.org
+```
+
+> Tips: 也可以使用 [nrm](https://github.com/Pana/nrm) 命令切换至[国内的 npm 源](http://www.jianshu.com/p/171ec231ced4)
+
+从`npm`仓库安装脚手架
+
+```sh
 npm i hera-cli -g
 ```
 

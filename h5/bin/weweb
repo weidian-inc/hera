@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // var os = require('os')
 
-const promisify = require('promisify-node')
+var promisify = require('promisify-node')
 var childProcess = require('child_process')
 var exec = childProcess.exec
 var program = require('commander')
@@ -12,9 +12,10 @@ var open = require('open')
 var chalk = require('chalk')
 // var net = require('net')
 // var boxen = require('boxen')
-const path = require('path')
-const copydir = promisify(require('copy-dir'))
-// const co = require('co')
+var archiver = require('archiver')
+var path = require('path')
+var copydir = promisify(require('copy-dir'))
+// var co = require('co')
 
 program
   .version(json.version)
@@ -24,7 +25,7 @@ program
   .option('-l, --list', '使用默认浏览器打开更新历史')
   .option('-p, --port <n>', '指定服务端口，默认 3000', parseInt)
   .option('-d, --dist <p>', '指定生成的路径')
-  .option('-t, --zip','打包')
+  .option('-t, --zip', '打包')
 
 program.parse(process.argv)
 
@@ -53,7 +54,7 @@ if (program.list) {
   open('https://github.com/Weidian-developer/hera')
   process.exit()
 }
-var tmpFolderName,curPath = process.cwd()
+var tmpFolderName, curPath = process.cwd()
 var folder = program.args[0]
 if (folder) {
   var stats
@@ -63,23 +64,29 @@ if (folder) {
   if (!stats) {
     console.log('指定目录不存在或者不是目录，请检查')
     process.exit()
-  }else if(stats.isFile()){
-      if(folder.match(/\.zip$/i)){
-          tmpFolderName = '/tmp/__weapp'+Math.random().toString(16).substr(2)+(new Date()).getTime()
-          childProcess.execSync(`unzip ${folder} -d ${tmpFolderName}`)
-          console.log(folder)
-          folder = childProcess.execSync(`find ${tmpFolderName} -name app.json -print`).toString().replace(/^\s+|(app\.json\s*$)/,'')
-          var tmpMatchValue = folder.match(/(^.*)\n/);
-          if(tmpMatchValue){
-              folder = tmpMatchValue[1].replace(/app\.json\s*$/,'')
-          }
-      }else{
-          console.log('指定目录不存在或者不是目录，请检查')
-          process.exit()
+  } else if (stats.isFile()) {
+    if (folder.match(/\.zip$/i)) {
+      tmpFolderName =
+        '/tmp/__weapp' +
+        Math.random().toString(16).substr(2) +
+        new Date().getTime()
+      childProcess.execSync(`unzip ${folder} -d ${tmpFolderName}`)
+      console.log(folder)
+      folder = childProcess
+        .execSync(`find ${tmpFolderName} -name app.json -print`)
+        .toString()
+        .replace(/^\s+|(app\.json\s*$)/, '')
+      var tmpMatchValue = folder.match(/(^.*)\n/)
+      if (tmpMatchValue) {
+        folder = tmpMatchValue[1].replace(/app\.json\s*$/, '')
       }
-  }else if(!stats.isDirectory){
+    } else {
       console.log('指定目录不存在或者不是目录，请检查')
       process.exit()
+    }
+  } else if (!stats.isDirectory) {
+    console.log('指定目录不存在或者不是目录，请检查')
+    process.exit()
   }
   try {
     process.chdir(folder)
@@ -95,7 +102,7 @@ if (!program.build && !fs.existsSync('./app.json')) {
 
 // 开始转换代码
 var util = require('../lib/util')
-// const Parallel = require('node-parallel')
+// var Parallel = require('node-parallel')
 var rootPath = path.resolve(__dirname, '../tmp')
 var distPath = path.resolve(curPath, program.dist || './dist')
 
@@ -112,7 +119,7 @@ function doTransformFile () {
       .catch(e => console.log(e))
   } else {
     var core = require('../lib/core')
-    distPath = distPath+'/app'
+    distPath = distPath + '/app'
 
     core
       .getOtherFiles(folder, distPath)
@@ -133,12 +140,7 @@ function doTransformFile () {
     })
 
     core.getHeraConfig(true).then(function (content) {
-      util.createFile(
-        distPath + '/script',
-        'config.js',
-        content,
-        zipFiles
-      )
+      util.createFile(distPath + '/script', 'config.js', content, zipFiles)
     })
 
     core.getServiceJs(true).then(function (content) {
@@ -197,7 +199,7 @@ function doTransformFile () {
         })
       })
     })
-    if(program.zip){
+    if (program.zip) {
       zipFiles()
     }
   }
@@ -209,10 +211,43 @@ var zipFiles = (function () {
     step--
     if (step === 0) {
       console.log(`Done, zipping files`)
-      exec(`cd ${distPath} && zip -r -q ${distPath}.zip ./*`, (err, out) => {
-        err && console.log(err)
+      // exec(`cd ${distPath} && zip -r -q ${distPath}.zip ./*`, (err, out) => {
+      //   err && console.log(err)
+      //   console.log('文件已生成到:' + distPath)
+      // })
+
+      // create a file to stream archive data to.
+      var output = fs.createWriteStream(`${distPath}.zip`)
+      var archive = archiver('zip', {
+        zlib: { level: 9 } // Sets the compression level.
+      })
+
+      output.on('close', function () {
+        console.log(archive.pointer() + ' total bytes')
+        // console.log(
+        //   'archiver has been finalized and the output file descriptor has closed.'
+        // )
         console.log('文件已生成到:' + distPath)
       })
+
+      // good practice to catch warnings (ie stat failures and other non-blocking errors)
+      archive.on('warning', function (err) {
+        if (err.code === 'ENOENT') {
+          // log warning
+        } else {
+          // throw error
+          throw err
+        }
+      })
+
+      // good practice to catch this error explicitly
+      archive.on('error', function (err) {
+        throw err
+      })
+
+      archive.pipe(output)
+      archive.directory(`${distPath}`, false)
+      archive.finalize()
     } else {
       console.log(`${step} step left`)
     }
@@ -229,7 +264,7 @@ var zipFiles = (function () {
 //     }
 //     server.listen(port, function () {
 //       // console.log('listening on port ' + port)
-//       const openMsg = `Opening it on: http://localhost:${port}`
+//       var openMsg = `Opening it on: http://localhost:${port}`
 //       var msg = '\n' + boxen(openMsg, {
 //             padding: 1,
 //             margin: 1,
