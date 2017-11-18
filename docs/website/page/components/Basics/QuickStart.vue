@@ -44,10 +44,10 @@ export default {
           id: 'macos',
           name: 'macOS',
         },
-        // {
-        //   id: 'windows',
-        //   name: 'Windows',
-        // },
+        {
+          id: 'windows',
+          name: 'Windows',
+        },
         {
           id: 'linux',
           name: 'Linux',

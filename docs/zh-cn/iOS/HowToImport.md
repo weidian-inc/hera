@@ -4,7 +4,7 @@
 
 使用cocoapods接入，创建Podfile如下:
 
-```text
+```pod
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '9.0'
 
@@ -38,7 +38,7 @@ appInfo.appPath = @"appPath";
 
 Hera框架本身已经提供了丰富的原生API实现，为了更好地满足在开发者需求，Hera也提供了自定义原生API的能力。
 
-###### 1.注册需要同步返回结果的API
+#### 1.注册需要同步返回结果的API
 
 通过**WHHybridExtension**注册自定义API,处理完毕返回结果
 
@@ -49,7 +49,7 @@ Hera框架本身已经提供了丰富的原生API实现，为了更好地满足�
 }];
 ```
 
-###### 2.注册需要异步返回结果的API
+#### 2.注册需要异步返回结果的API
 
 通过**WHHybridExtension**注册自定义API,处理事件对象需要实现**WDHRetrieveApiProtocol**接口,当事件处理完毕后在主线程执行**WDHApiCompletion**返回相应结果
 

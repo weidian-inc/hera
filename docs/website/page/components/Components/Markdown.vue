@@ -9,6 +9,7 @@
 // quickstart
 // import Quickstart from '../../../../zh-cn/Quickstart/Quickstart.md';
 import QuickstartAndroidMac from '../../../../zh-cn/Quickstart/Android/macOS.md';
+import QuickstartAndroidWin from '../../../../zh-cn/Quickstart/Android/windows.md';
 import QuickstartIOSMac from '../../../../zh-cn/Quickstart/iOS/macOS.md';
 import QuickstartWeb from '../../../../zh-cn/Quickstart/Web/all.md';
 import QuickstartNotSupport from './NotSupport.md';
@@ -37,7 +38,7 @@ const mdList = {
   'basic-quick-windows-ios': QuickstartNotSupport,
   'basic-quick-macos-android': QuickstartAndroidMac,
   'basic-quick-linux-android': QuickstartAndroidMac,
-  'basic-quick-windows-android': QuickstartAndroidMac,
+  'basic-quick-windows-android': QuickstartAndroidWin,
   'basic-quick-macos-web': QuickstartWeb,
   'basic-quick-linux-web': QuickstartWeb,
   'basic-quick-windows-web': QuickstartWeb,
@@ -93,7 +94,9 @@ export default {
 .markdown {
 
   a {
-    color: #cc5b5b;
+    color: #e81000;
+    font-weight: 600;
+    margin: 0 2px;
   }
 
   h1 {
