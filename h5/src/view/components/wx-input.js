@@ -288,19 +288,17 @@ export default !(function () {
         inputObj = this.$.input,
         height = bounds.height - pos[0] - pos[1]
       height != this.__lastHeight &&
-        ((inputObj.style.height = height + 'px'),
-        (inputObj.style.lineHeight = height + 'px'),
-        (this.__lastHeight = height)),
+        ((inputObj.style.height = height + 'px'), (this.__lastHeight = height)),
         (inputObj.style.color = styles.color)
       var ele = this.$.placeholder
       ;(ele.style.height = bounds.height - pos[0] - pos[1] + 'px'),
         (ele.style.lineHeight = ele.style.height)
     },
     defaultValueChange: function (value, t) {
-      this.maxlength > 0 && (value = value.slice(0, this.maxlength)),
-        this._checkPlaceholderStyle(value),
-        this._showValueChange(value),
-        (this._value = value)
+      this.maxlength > 0 && (value = value.slice(0, this.maxlength))
+      this._checkPlaceholderStyle(value)
+      this._showValueChange(value)
+      this._value = value
       return value
     },
     _getPlaceholderStyle: function (placeholderStyle) {

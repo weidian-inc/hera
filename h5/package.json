@@ -9,9 +9,11 @@
   "scripts": {
     "start": "npm run build && ./bin/weweb demo",
     "build": "NODE_ENV=production webpack --progress",
+    "build:dev": "webpack --progress",
     "dev": "WATCH=true webpack --config webpack.config.js --progress",
     "precommit": "lint-staged",
-    "format": "prettier-standard './*.js' && prettier-standard 'src/**/*.js' && prettier-standard 'lib/**/*.js'"
+    "format":
+      "prettier-standard './*.js' && prettier-standard 'src/**/*.js' && prettier-standard 'lib/**/*.js'"
   },
   "repository": {
     "type": "git",
@@ -20,10 +22,7 @@
   "lint-staged": {
     "gitDir": "../",
     "linters": {
-      "{*.js,*weweb,*.json}!docs": [
-        "prettier-standard",
-        "git add"
-      ]
+      "h5/**/{*.js,*weweb,*.json}": ["prettier-standard", "git add"]
     }
   },
   "dependencies": {
