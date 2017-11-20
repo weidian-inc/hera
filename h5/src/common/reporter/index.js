@@ -7,7 +7,7 @@ if (typeof ServiceJSBridge !== 'undefined') {
   logEventName = 'H5_JS_SERVICE_ERR'
 } else if (typeof HeraJSBridge !== 'undefined') {
   jsBridge = window.HeraJSBridge
-  bridgeName = 'Weixin'
+  bridgeName = 'Hera'
   logEventName = 'H5_JS_VIEW_ERR'
 }
 if (typeof __wxConfig === 'undefined') {
