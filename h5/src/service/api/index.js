@@ -1118,7 +1118,8 @@ var apiObj = {
     })
   },
   hideKeyboard: function (params) {
-    bridge.publish('hideKeyboard', {}) // "devtools" ==  utils.getPlatform() ? bridge.publish("hideKeyboard", {}) :  bridge.invokeMethod("hideKeyboard", params)
+    // bridge.publish('hideKeyboard', {}) // "devtools" ==  utils.getPlatform() ? bridge.publish("hideKeyboard", {}) :  bridge.invokeMethod("hideKeyboard", params)
+    bridge.invokeMethod("hideKeyboard", params)
   },
   getPublicLibVersion: function () {
     var rt
