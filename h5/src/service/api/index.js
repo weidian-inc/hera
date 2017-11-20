@@ -8,6 +8,7 @@ import map from './map'
 import configFlags from './configFlags'
 import context from './context'
 import canvas from './canvas'
+import storage from './storage'
 import appContextSwitch from './appContextSwitch'
 
 import './evalGeneratorFunction'
@@ -302,110 +303,45 @@ var apiObj = {
   },
   getStorage: function (params) {
     if (paramCheck('getStorage', params, { key: '' })) {
-      bridge.invokeMethod('getStorage', params, {
-        beforeSuccess: function (res) {
-          res.data = utils.stringToAnyType(res.data, res.dataType)
-          delete res.dataType
-        },
-        afterFail: function () {
-          var res =
-            arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}
-          if (res.errMsg && res.errMsg.indexOf('data not found') > 0) return !1
-        }
-      })
+      storage.getStorage(params)
     }
   },
   getStorageSync: function (key) {
     if (paramCheck('getStorageSync', key, '')) {
-      var rt
-      bridge.invokeMethod(
-        'getStorageSync',
-        { key: key },
-        {
-          beforeAll: function (res) {
-            res = res || {}
-            rt = utils.stringToAnyType(res.data, res.dataType)
-          },
-          afterFail: function () {
-            var res =
-              arguments.length > 0 && void 0 !== arguments[0]
-                ? arguments[0]
-                : {}
-            if (res.errMsg && res.errMsg.indexOf('data not found') > 0) { return !1 }
-          }
-        }
-      )
+      var rt = storage.get(key)
       return rt
     }
   },
   setStorage: function (params) {
     if (paramCheck('setStorage', params, { key: '' })) {
-      try {
-        var opt = utils.anyTypeToString(params.data),
-          data = opt.data,
-          dataType = opt.dataType
-        bridge.invokeMethod('setStorage', {
-          key: params.key,
-          data: data,
-          dataType: dataType,
-          success: params.success,
-          fail: params.fail,
-          complete: params.complete
-        })
-      } catch (e) {
-        typeof params.fail === 'function' &&
-          params.fail({
-            errMsg: 'setStorage:fail ' + e.message
-          }),
-          typeof params.complete === 'function' &&
-            params.complete({
-              errMsg: 'setStorage:fail ' + e.message
-            })
-      }
+      storage.setStorage(params)
     }
   },
   setStorageSync: function (key, value) {
     value = value || ''
     if (paramCheck('setStorageSync', key, '')) {
-      var dataObj = utils.anyTypeToString(value),
-        data = dataObj.data,
-        dataType = dataObj.dataType
-      bridge.invokeMethod('setStorageSync', {
-        key: key,
-        data: data,
-        dataType: dataType
-      })
+      storage.set(key,value)
     }
   },
   removeStorage: function (params) {
     paramCheck('removeStorage', params, { key: '' }) &&
-      bridge.invokeMethod('removeStorage', params)
+    storage.removeStorage(params)
   },
   removeStorageSync: function (key) {
     paramCheck('removeStorageSync', key, '') &&
-      bridge.invokeMethod('removeStorageSync', { key: key })
+    storage.remove(key)
   },
   clearStorage: function () {
-    bridge.invokeMethod('clearStorage')
+    storage.clearStorage()
   },
   clearStorageSync: function () {
-    bridge.invokeMethod('clearStorageSync')
+    storage.clearStorage()
   },
   getStorageInfo: function (params) {
-    bridge.invokeMethod('getStorageInfo', params)
+    storage.getStorageInfo(params)
   },
   getStorageInfoSync: function () {
-    var rt = void 0
-    bridge.invokeMethod(
-      'getStorageInfoSync',
-      {},
-      {
-        beforeAll: function (t) {
-          rt = t
-          delete t.errMsg
-        }
-      }
-    )
+    var rt = storage.getStorageInfoSync()
     return rt
   },
   request: function () {
