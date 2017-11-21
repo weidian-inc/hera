@@ -320,16 +320,15 @@ var apiObj = {
   setStorageSync: function (key, value) {
     value = value || ''
     if (paramCheck('setStorageSync', key, '')) {
-      storage.set(key,value)
+      storage.set(key, value)
     }
   },
   removeStorage: function (params) {
     paramCheck('removeStorage', params, { key: '' }) &&
-    storage.removeStorage(params)
+      storage.removeStorage(params)
   },
   removeStorageSync: function (key) {
-    paramCheck('removeStorageSync', key, '') &&
-    storage.remove(key)
+    paramCheck('removeStorageSync', key, '') && storage.remove(key)
   },
   clearStorage: function () {
     storage.clearStorage()
@@ -644,7 +643,6 @@ var apiObj = {
   },
   getLocation: function (params) {
     console.log('getLocation', params, apiObj.appStatus, apiObj.hanged)
-
     ;(apiObj.appStatus === configFlags.AppStatus.BACK_GROUND &&
       apiObj.hanged === !1) ||
       bridge.invokeMethod('getLocation', params)
@@ -1079,11 +1077,11 @@ var apiObj = {
       arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}
     if (paramCheck('createAnimation', params, {})) return new Animation(params)
   },
-  createAudioContext: function (e) {
-    return createAudio.call(apiObj, e, curWebViewId)
+  createAudioContext: function (audioId) {
+    return createAudio.call(apiObj, audioId, curWebViewId)
   },
-  createVideoContext: function (e) {
-    return createVideo.call(apiObj, e, curWebViewId)
+  createVideoContext: function (videoId) {
+    return createVideo.call(apiObj, videoId, curWebViewId)
   },
   createMapContext: function (e) {
     return new map.MapContext(e)
@@ -1119,7 +1117,7 @@ var apiObj = {
   },
   hideKeyboard: function (params) {
     // bridge.publish('hideKeyboard', {}) // "devtools" ==  utils.getPlatform() ? bridge.publish("hideKeyboard", {}) :  bridge.invokeMethod("hideKeyboard", params)
-    bridge.invokeMethod("hideKeyboard", params)
+    bridge.invokeMethod('hideKeyboard', params)
   },
   getPublicLibVersion: function () {
     var rt
@@ -1594,7 +1592,6 @@ var getTouchInfo = function (touchInfo, eventKey, eventInfo) {
     onTouchCancel: 'touchcancel',
     onLongPress: 'longtap'
   }
-
   ;[
     'onTouchStart',
     'onTouchMove',
