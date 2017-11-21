@@ -25,7 +25,7 @@
 //
 
 #import "WDHPhotoPreviewView.h"
-#import "WDHPhotoPreviewLayout.m"
+#import "WDHPhotoPreviewLayout.h"
 #import "WDHPhotoPreviewCollectionViewCell.h"
 
 #define kHorizitalSpacing 10
