@@ -1,6 +1,6 @@
 {
   "name": "hera-weweb",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "wx 2 app",
   "main": "bin/weweb",
   "bin": {
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Weidian-developer/hera"
+    "url": "https://github.com/weidian-inc/hera.git"
   },
   "lint-staged": {
     "gitDir": "../",

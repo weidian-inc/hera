@@ -121,6 +121,9 @@ export default {
         {
           en: 'hava-a-wxapp',
           zh: '使用现有的小程序',
+        },{
+          en: 'others-changelog',
+          zh: 'ChageLog',
         },
       ],
     };

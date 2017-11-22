@@ -27,7 +27,8 @@ import IOSImplDetail from '../../../../zh-cn/iOS/impl-detail.md';
 //Others
 import APIList from '../../../../zh-cn/Others/API.md';
 import APIExtend from '../../../../zh-cn/Others/API-Extend.md';
-import HavaAAPP from '../../../../zh-cn/Others/HavaAWXAPP.md'
+import HavaAAPP from '../../../../zh-cn/Others/HavaAWXAPP.md';
+import ChangeLog from '../../../../zh-cn/Others/ChangeLog.md';
 
 import { highlightInit } from '../../util/utils.js';
 
@@ -50,7 +51,8 @@ const mdList = {
   'ios-impl-detail': IOSImplDetail,
   'api-list': APIList,
   'api-extend': APIExtend,
-  'hava-a-wxapp': HavaAAPP
+  'hava-a-wxapp': HavaAAPP,
+  'others-changelog': ChangeLog,
 };
 
 export default {
