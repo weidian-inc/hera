@@ -32,6 +32,7 @@
 #import "WDHApp.h"
 #import "WDHFileManager.h"
 #import "WDHAppInfo.h"
+#import "WDHPhotoPreviewView.h"
 
 @implementation WHE_previewImage
 
@@ -56,37 +57,15 @@
         selectIndex = index;
     }
     
-//    [[GQImageViewer sharedInstance] setImageArray:imageArray textArray:nil];//这是数据源
-//    [GQImageViewer sharedInstance].usePageControl = YES;//设置是否使用pageControl
-//    [GQImageViewer sharedInstance].needLoopScroll = NO;//设置是否需要循环滚动
-//    [GQImageViewer sharedInstance].needPanGesture = YES;//是否需要滑动消失手势
-//    [GQImageViewer sharedInstance].selectIndex = selectIndex;//设置选中的索引
-//    GQImageViewrConfigure *configure =
-//    [GQImageViewrConfigure initWithImageViewBgColor:[UIColor blackColor]
-//                                    textViewBgColor:nil
-//                                          textColor:[UIColor whiteColor]
-//                                           textFont:[UIFont systemFontOfSize:12]
-//                                      maxTextHeight:100
-//                                     textEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
-//    [GQImageViewer sharedInstance].configure = configure;
-//    [GQImageViewer sharedInstance].achieveSelectIndex = ^(NSInteger selectIndex){//获取当前选中的图片索引
-//        NSLog(@"%ld",selectIndex);
-//    };
-//
-//    BOOL statusBarEnable = [UIApplication sharedApplication].isStatusBarHidden;
-//    [GQImageViewer sharedInstance].singleTap = ^(NSInteger selectIndex) {
-//        NSLog(@"singleTap:%ld",selectIndex);
-//        [[GQImageViewer sharedInstance] dissMissWithAnimation:YES];
-//
-//        [[UIApplication sharedApplication] setStatusBarHidden:statusBarEnable];
-//    };
-//    [GQImageViewer sharedInstance].laucnDirection = GQLaunchDirectionRight;//设置推出方向
-//
-//    //预览隐藏statusBar
-//    [[UIApplication sharedApplication] setStatusBarHidden:YES];
-//
-//    [[GQImageViewer sharedInstance] showInView:[WHECommonUtil appWindow] animation:YES];//显示GQImageViewer到指定view上
-
+    BOOL statusBarEnable = [UIApplication sharedApplication].isStatusBarHidden;
+    [WDHPhotoPreviewView showWithImgs:imageArray
+                        selectedIndex:selectIndex
+                    selectedImageView:nil
+                      allVisibleViews:nil
+                           closeBlock:^(NSInteger currentIndex) {
+                               [[UIApplication sharedApplication] setStatusBarHidden:statusBarEnable];
+    }];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
 }
 
 - (NSArray *)parseUrls {

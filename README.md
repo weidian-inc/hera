@@ -52,6 +52,15 @@ hera run web
 - iOS:  何欣宇、孙宇、王艺桥
 - H5：戴越越、丁俊杰、彭观发
 
+
+## 分享交流
+
+<p align="center">
+  <img src="docs/zh-cn/Others/assets/qq-group.png" height="350"/>
+  <img src="docs/zh-cn/Others/assets/wechat-group.jpeg" height="350"/>
+</p>
+
+
 ## Licence
 
 BSD License

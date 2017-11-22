@@ -222,6 +222,12 @@
 		E94AD6FD1FB974D400AC5B39 /* WHEImagePickerView.h in Headers */ = {isa = PBXBuildFile; fileRef = E94AD6FB1FB974D300AC5B39 /* WHEImagePickerView.h */; };
 		E94AD6FE1FB974D400AC5B39 /* WHEImagePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = E94AD6FC1FB974D400AC5B39 /* WHEImagePickerView.m */; };
 		E94AD7371FBD955500AC5B39 /* HeraRes.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E94AD7361FBD955500AC5B39 /* HeraRes.bundle */; };
+		E94AD73A1FC28A5000AC5B39 /* WDHPhotoPreviewView.h in Headers */ = {isa = PBXBuildFile; fileRef = E94AD7381FC28A5000AC5B39 /* WDHPhotoPreviewView.h */; };
+		E94AD73B1FC28A5000AC5B39 /* WDHPhotoPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = E94AD7391FC28A5000AC5B39 /* WDHPhotoPreviewView.m */; };
+		E94AD73F1FC28ADA00AC5B39 /* WDHPhotoPreviewCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = E94AD73D1FC28ADA00AC5B39 /* WDHPhotoPreviewCollectionViewCell.h */; };
+		E94AD7401FC28ADA00AC5B39 /* WDHPhotoPreviewCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E94AD73E1FC28ADA00AC5B39 /* WDHPhotoPreviewCollectionViewCell.m */; };
+		E94AD7431FC28AF900AC5B39 /* WDHPhotoPreviewLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = E94AD7411FC28AF900AC5B39 /* WDHPhotoPreviewLayout.h */; };
+		E94AD7441FC28AF900AC5B39 /* WDHPhotoPreviewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = E94AD7421FC28AF900AC5B39 /* WDHPhotoPreviewLayout.m */; };
 		F8C2FD0E99E7C67C3290272A /* libPods-Hera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F3020D76C0B31956B93E8CC /* libPods-Hera.a */; };
 /* End PBXBuildFile section */
 
@@ -449,6 +455,12 @@
 		E94AD6FB1FB974D300AC5B39 /* WHEImagePickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHEImagePickerView.h; sourceTree = "<group>"; };
 		E94AD6FC1FB974D400AC5B39 /* WHEImagePickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WHEImagePickerView.m; sourceTree = "<group>"; };
 		E94AD7361FBD955500AC5B39 /* HeraRes.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HeraRes.bundle; sourceTree = "<group>"; };
+		E94AD7381FC28A5000AC5B39 /* WDHPhotoPreviewView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WDHPhotoPreviewView.h; sourceTree = "<group>"; };
+		E94AD7391FC28A5000AC5B39 /* WDHPhotoPreviewView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WDHPhotoPreviewView.m; sourceTree = "<group>"; };
+		E94AD73D1FC28ADA00AC5B39 /* WDHPhotoPreviewCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WDHPhotoPreviewCollectionViewCell.h; sourceTree = "<group>"; };
+		E94AD73E1FC28ADA00AC5B39 /* WDHPhotoPreviewCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WDHPhotoPreviewCollectionViewCell.m; sourceTree = "<group>"; };
+		E94AD7411FC28AF900AC5B39 /* WDHPhotoPreviewLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WDHPhotoPreviewLayout.h; sourceTree = "<group>"; };
+		E94AD7421FC28AF900AC5B39 /* WDHPhotoPreviewLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WDHPhotoPreviewLayout.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -635,6 +647,7 @@
 		469D61F51F14730400719AFE /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E94AD73C1FC28AAB00AC5B39 /* PhotoPreview */,
 				468E12D41F1E0250009472E5 /* WDHLoadingView.h */,
 				468E12D51F1E0250009472E5 /* WDHLoadingView.m */,
 				468E12D01F1DF547009472E5 /* WDHNavigationView.h */,
@@ -869,6 +882,19 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		E94AD73C1FC28AAB00AC5B39 /* PhotoPreview */ = {
+			isa = PBXGroup;
+			children = (
+				E94AD7381FC28A5000AC5B39 /* WDHPhotoPreviewView.h */,
+				E94AD7391FC28A5000AC5B39 /* WDHPhotoPreviewView.m */,
+				E94AD73D1FC28ADA00AC5B39 /* WDHPhotoPreviewCollectionViewCell.h */,
+				E94AD73E1FC28ADA00AC5B39 /* WDHPhotoPreviewCollectionViewCell.m */,
+				E94AD7411FC28AF900AC5B39 /* WDHPhotoPreviewLayout.h */,
+				E94AD7421FC28AF900AC5B39 /* WDHPhotoPreviewLayout.m */,
+			);
+			name = PhotoPreview;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -908,6 +934,7 @@
 				468282E21F601DEE00FC71D8 /* WHE_stopRecord.h in Headers */,
 				468282C21F601DEE00FC71D8 /* WHE_previewImage.h in Headers */,
 				46E55AA01F1CCDF1007D7C9E /* WDHPageBaseViewController.h in Headers */,
+				E94AD7431FC28AF900AC5B39 /* WDHPhotoPreviewLayout.h in Headers */,
 				4682828D1F601DED00FC71D8 /* WHEAVManager.h in Headers */,
 				46DB2B231F387AEC001F5279 /* NSString+WDH.h in Headers */,
 				553A771A1F46CC5C003F33F5 /* WDHURLProtocol.h in Headers */,
@@ -963,6 +990,7 @@
 				468282B41F601DEE00FC71D8 /* WHE_getStorageInfoSync.h in Headers */,
 				468282D21F601DEE00FC71D8 /* WHE_setClipboardData.h in Headers */,
 				468282AA1F601DEE00FC71D8 /* WHE_getSavedFileInfo.h in Headers */,
+				E94AD73F1FC28ADA00AC5B39 /* WDHPhotoPreviewCollectionViewCell.h in Headers */,
 				4625BB8D1F1752670031CE7D /* WDHManagerProtocol.h in Headers */,
 				E94AD6FA1FB9738D00AC5B39 /* GLProgressHUD.h in Headers */,
 				E94AD6B71FB9589400AC5B39 /* WHEAssetsGroupViewController.h in Headers */,
@@ -979,6 +1007,7 @@
 				468282A21F601DED00FC71D8 /* WHE_getClipboardData.h in Headers */,
 				46A8DE161F3075A700C6DAF3 /* WDHTabBarViewController.h in Headers */,
 				468282E01F601DEE00FC71D8 /* WHE_startRecord.h in Headers */,
+				E94AD73A1FC28A5000AC5B39 /* WDHPhotoPreviewView.h in Headers */,
 				E94AD6B31FB9579A00AC5B39 /* WHEFetchImageController.h in Headers */,
 				46E55A921F1C6062007D7C9E /* WDHBridge.h in Headers */,
 				4682828F1F601DED00FC71D8 /* WHEMacro.h in Headers */,
@@ -1084,7 +1113,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1136,6 +1165,7 @@
 				469D622F1F14783E00719AFE /* WDHApiRequest.m in Sources */,
 				468E12C71F1DAC49009472E5 /* WDHPageBridge.m in Sources */,
 				468E12D71F1E0250009472E5 /* WDHLoadingView.m in Sources */,
+				E94AD73B1FC28A5000AC5B39 /* WDHPhotoPreviewView.m in Sources */,
 				468282951F601DED00FC71D8 /* WHEScanViewController.m in Sources */,
 				E94AD6F61FB971A800AC5B39 /* GLPinchableImageView.m in Sources */,
 				468282F11F601DEE00FC71D8 /* WHHybridExtension.m in Sources */,
@@ -1156,6 +1186,7 @@
 				E94AD6D11FB967E300AC5B39 /* WHEAssetsListViewController.m in Sources */,
 				E94AD6B81FB9589400AC5B39 /* WHEAssetsGroupViewController.m in Sources */,
 				468282CF1F601DEE00FC71D8 /* WHE_saveImageToPhotosAlbum.m in Sources */,
+				E94AD7441FC28AF900AC5B39 /* WDHPhotoPreviewLayout.m in Sources */,
 				468282911F601DED00FC71D8 /* WHEMaskView.m in Sources */,
 				468282A31F601DEE00FC71D8 /* WHE_getClipboardData.m in Sources */,
 				468282BF1F601DEE00FC71D8 /* WHE_pauseVoice.m in Sources */,
@@ -1190,6 +1221,7 @@
 				468282ED1F601DEE00FC71D8 /* WHEBaseApi.m in Sources */,
 				557478611FB6AC7C0026C8FB /* WHECryptUtil.m in Sources */,
 				4625BB7F1F172E5A0031CE7D /* WDHPageModel.m in Sources */,
+				E94AD7401FC28ADA00AC5B39 /* WDHPhotoPreviewCollectionViewCell.m in Sources */,
 				E94AD6DD1FB96A3A00AC5B39 /* WHEAssetsListCell.m in Sources */,
 				468E12DB1F1E0ED9009472E5 /* WDHToastView.m in Sources */,
 				468282D51F601DEE00FC71D8 /* WHE_setKeepScreenOn.m in Sources */,

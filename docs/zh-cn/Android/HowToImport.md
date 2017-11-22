@@ -7,7 +7,7 @@
 ```gradle
 minSdkVersion 17
 targetSdkVersion 22
-compile "com.weidian.lib:hera:0.0.1"
+compile "com.weidian.lib:hera:1.0.0"
 ```
 
 ## Hera框架初始化
