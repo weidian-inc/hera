@@ -123,7 +123,7 @@ export default {
           zh: '使用现有的小程序',
         },{
           en: 'others-changelog',
-          zh: 'ChageLog',
+          zh: 'ChangeLog',
         },
       ],
     };
