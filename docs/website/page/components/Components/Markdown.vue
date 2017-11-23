@@ -29,6 +29,7 @@ import APIList from '../../../../zh-cn/Others/API.md';
 import APIExtend from '../../../../zh-cn/Others/API-Extend.md';
 import HavaAAPP from '../../../../zh-cn/Others/HavaAWXAPP.md';
 import ChangeLog from '../../../../zh-cn/Others/ChangeLog.md';
+import loginAndCors from '../../../../zh-cn/Others/loginAndCors.md';
 
 import { highlightInit } from '../../util/utils.js';
 
@@ -53,6 +54,7 @@ const mdList = {
   'api-extend': APIExtend,
   'hava-a-wxapp': HavaAAPP,
   'others-changelog': ChangeLog,
+  'login-and-cors':loginAndCors
 };
 
 export default {

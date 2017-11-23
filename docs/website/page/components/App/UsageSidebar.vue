@@ -115,13 +115,18 @@ export default {
           zh: '支持的 API',
         },
         {
+          en: 'login-and-cors',
+          zh: '微信登录与跨域',
+        },
+        {
           en: 'api-extend',
           zh: 'API拓展',
         },
         {
           en: 'hava-a-wxapp',
           zh: '使用现有的小程序',
-        },{
+        },
+        {
           en: 'others-changelog',
           zh: 'ChangeLog',
         },
