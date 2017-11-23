@@ -56,23 +56,18 @@
 	return self.currentController.pageModel;
 }
 
+- (void)setViewControllers:(NSArray *)viewControllers
+{
+	for (UIViewController *vc in viewControllers) {
+		[self addChildViewController:vc];
+	}
+}
+
 
 #pragma mark - View Life Cycle
 
 - (void)dealloc {
 	NSLog(@"deinit WDHTabBarViewController");
-}
-
-- (void)cleanMemory {
-	NSArray *childVC = self.childViewControllers;
-	if (childVC && childVC.count > 0) {
-		for(WDHPageBaseViewController *vc in childVC) {
-			[vc.view removeFromSuperview];
-			if (vc && [vc isKindOfClass:WDHPageBaseViewController.class]) {
-				[vc cleanMemory];
-			}
-		}
-	}
 }
 
 - (void)viewDidLoad {
@@ -145,32 +140,6 @@
 	}
 	
 	vc.frame = (CGRect){0,webViewTop,w,h-naviHeight-tabbarFrame.size.height};
-}
-
-- (void)setViewControllers:(NSArray *)viewControllers
-{
-    for (UIViewController *vc in viewControllers) {
-        [self addChildViewController:vc];
-    }
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    //        self.navigationController.view.sendSubview(toBack: (self.navigationController.navigationBar)!)
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-    
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    _currentController.pageModel.backType = self.tabbarStyle.backType;
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
 }
 
 #pragma mark - Load Data
@@ -246,7 +215,6 @@
     [[self.view viewWithTag:WDHTabBarViewTag] removeFromSuperview];
     WDHPageBaseViewController *vc = self.childViewControllers[pageIndex];
     vc.view.tag = WDHTabBarViewTag;
-    [vc loadStyle];
     vc.pageModel.openType = @"switchTab";
     vc.pageModel.backType = @"switchTab";
     [self loadStyle:vc.pageModel];

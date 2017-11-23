@@ -27,8 +27,6 @@
 
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
-//#import "WDHPageModel.h"
-#import "WDHPageManagerProtocol.h"
 #import "WDHBaseViewController.h"
 
 @interface WDHPageBaseViewController : WDHBaseViewController
@@ -37,7 +35,6 @@
 
 @property (nonatomic, strong) id <WDHPageBridgeJSProtocol> bridge;
 
-@property (nonatomic, weak) id <WDHPageManagerProtocol> pageManager;
 
 /**
  是否为Tab类型 tab类型作为childViewController存在

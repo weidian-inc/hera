@@ -58,7 +58,6 @@
 @property (nonatomic, copy) NSString *position;
 @property (nonatomic, copy) NSString *borderStyle;
 @property (nonatomic, copy) NSArray <WDHTabbarItemStyle *> *list;
-@property (nonatomic, copy) NSString *backType;
 
 @end
 

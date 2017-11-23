@@ -28,12 +28,15 @@
 #import <UIKit/UIKit.h>
 #import "WDHNavigationView.h"
 #import "WDHPageModel.h"
+#import "WDHPageManagerProtocol.h"
 
 @interface WDHBaseViewController : UIViewController
 
 @property (nonatomic, strong) WDHNavigationView *naviView;
 
 @property (nonatomic, strong) WDHPageModel *pageModel;
+
+@property (nonatomic, weak) id <WDHPageManagerProtocol> pageManager;
 
 /**
  内存清理

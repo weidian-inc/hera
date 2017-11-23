@@ -31,10 +31,11 @@
 
 + (instancetype)sharedConfig;
 
-/**
- 是否debug模式 调试使用
- */
-@property (nonatomic, assign) BOOL isDebug;
+/// 是否开启日志 默认开启
+@property (nonatomic, assign) BOOL enableLog;
+
+/// 是否支持pop手势返回 默认支持
+@property (nonatomic, assign) BOOL enablePopGesture;
 
 @end
 

@@ -184,7 +184,7 @@
 			[(WDHPageBaseViewController *)lastPage pageModel].backType = @"navigateBack";
 		}else if ([lastPage isKindOfClass:[WDHTabBarViewController class]]) {
 			WDHTabBarViewController *tabBar = (WDHTabBarViewController *)lastPage;
-			tabBar.tabbarStyle.backType = @"navigateBack";
+			tabBar.pageModel.backType = @"navigateBack";
 		}
 		
 		return popedVC;
@@ -201,7 +201,7 @@
 			if ([page isKindOfClass:WDHPageBaseViewController.class]) {
 				[(WDHPageBaseViewController *)page pageModel].backType = @"navigateBack";
 			} else if ([page isKindOfClass:WDHTabBarViewController.class]) {
-				[(WDHTabBarViewController *)page tabbarStyle].backType = @"navigateBack";
+				[(WDHTabBarViewController *)page pageModel].backType = @"navigateBack";
 			}
 			
 			[self.naviController popToViewController:page animated:YES];
@@ -218,7 +218,7 @@
 		if ([rootPage isKindOfClass:WDHPageBaseViewController.class]) {
 			[(WDHPageBaseViewController *)rootPage pageModel].backType = @"navigateBack";
 		} else if ([rootPage isKindOfClass:WDHTabBarViewController.class]) {
-			[(WDHTabBarViewController *)rootPage tabbarStyle].backType = @"navigateBack";
+			[(WDHTabBarViewController *)rootPage pageModel].backType = @"navigateBack";
 		}
 		
 		[self.naviController popToViewController:rootPage animated:YES];

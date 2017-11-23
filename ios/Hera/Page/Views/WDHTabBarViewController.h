@@ -27,7 +27,6 @@
 
 #import <UIKit/UIKit.h>
 #import "WDHPageModel.h"
-#import "WDHPageManagerProtocol.h"
 #import "WDHBaseViewController.h"
 
 @interface WDHTabBarViewController : WDHBaseViewController
@@ -40,7 +39,6 @@
 /// controllers
 @property (nonatomic, strong) NSArray *viewControllers;
 
-@property (nonatomic, weak) id <WDHPageManagerProtocol> pageManager;
 
 /**
  切换tab

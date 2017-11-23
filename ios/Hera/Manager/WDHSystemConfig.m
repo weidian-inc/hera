@@ -40,5 +40,14 @@
 	return shared;
 }
 
+- (instancetype)init {
+	if (self = [super init]) {
+		_enableLog = YES;
+		_enablePopGesture = YES;
+	}
+	
+	return self;
+}
+
 @end
 

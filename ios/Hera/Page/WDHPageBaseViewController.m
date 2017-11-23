@@ -35,8 +35,9 @@
 #import "WDHTabBar.h"
 #import "WDHDeviceMacro.h"
 #import <MJRefresh/MJRefresh.h>
+#import "WDHSystemConfig.h"
 
-@interface WDHPageBaseViewController ()<WKScriptMessageHandler,UIWebViewDelegate,WKUIDelegate,WKNavigationDelegate>
+@interface WDHPageBaseViewController ()<WKScriptMessageHandler,UIWebViewDelegate,WKUIDelegate,WKNavigationDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, assign) BOOL isBack;
 @property (nonatomic, assign) BOOL isFirstViewAppear;
@@ -93,50 +94,42 @@
 
 - (void)dealloc {
     NSLog(@"deinit WDHPageBaseViewController");
-    [self cleanMemory];
-}
-
-- (void)cleanMemory {
-
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 	
-	[self.navigationController setNavigationBarHidden:YES animated:YES];
+	[self.pageManager activePageWillAppear:self];
 	
-    [self.pageManager activePageWillAppear:self];
-    [self loadStyle];
+	[self loadStyle];
 	
-    NSLog(@"<page>: viewWillAppear");
+	// 防止手势返回没有backType
+	if (!self.pageModel.backType) {
+		self.pageModel.backType = @"navigateBack";
+	}
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 	
-	//如果为根页面 禁止手势返回 防止手势过程中调用了系统pop方法 导致小程序退出
-	if ([self.pageManager isRootPage:self] || [self.pageManager isRootPage:self.parentViewController]) {
-		self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-	} else {
+	if ([[WDHSystemConfig sharedConfig] enablePopGesture]) {
+		self.navigationController.interactivePopGestureRecognizer.delegate = self;
 		self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+	} else {
+		self.navigationController.interactivePopGestureRecognizer.enabled = NO;
 	}
 	
-    if (!_isFirstViewAppear) {
-        
-        [self.pageManager activePageDidAppear:self];
-    }else {
-        _isFirstViewAppear = NO;
-    }
-    
-    self.isBack = true;
+	if (!_isFirstViewAppear) {
+		[self.pageManager activePageDidAppear:self];
+	}else {
+		_isFirstViewAppear = NO;
+	}
 	
-    [WDHLoadingView startAnimationInView:self.view];
+	self.isBack = true;
+	
+	[WDHLoadingView startAnimationInView:self.view];
 	
     NSLog(@"<page>: viewDidAppear");
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -276,6 +269,18 @@
 
 - (void)hideToast{
 	
+}
+
+#pragma mark - UIGestureRecognizer Delegate
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+	
+	//如果为根页面 禁止手势返回 防止手势过程中调用了系统pop方法 导致小程序退出
+	if (_isTabBarVC) {
+		return ![self.pageManager isRootPage:self.parentViewController];
+	}
+	
+	return ![self.pageManager isRootPage:self];
 }
 
 #pragma mark - 下拉刷新

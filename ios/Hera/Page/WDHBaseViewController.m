@@ -39,6 +39,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
+	if (!self.navigationController.isNavigationBarHidden) {
+		[self.navigationController setNavigationBarHidden:YES animated:YES];
+	}
 }
 
 #pragma mark - Loading
