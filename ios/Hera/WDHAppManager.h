@@ -44,6 +44,14 @@
 - (void)removeApp:(WDHApp *)app;
 
 /**
+ 判断小程序是否在运行
+ 
+ @param appId 小程序ID
+ @return YES:是 NO:否
+ */
+- (BOOL)isAppRunning:(NSString *)appId;
+
+/**
  获取当前运行的小程序
  */
 - (WDHApp *)currentApp;

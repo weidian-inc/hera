@@ -29,6 +29,8 @@
 
 @interface ViewController ()
 
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *indicatorView;
+
 @end
 
 @implementation ViewController
@@ -45,11 +47,10 @@
     UITapGestureRecognizer *ges = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap)];
     [self.view addGestureRecognizer:ges];
 	
+	self.indicatorView.alpha = 0;
 }
 
 - (void)didTap {
-
-	self.view.userInteractionEnabled = NO;
 	
 	WDHAppInfo *appInfo = [[WDHAppInfo alloc] init];
 	//小程序标识
@@ -61,9 +62,22 @@
 	//小程序资源zip路径,如果为空或未找到资源 则读取MainBundle下以appId命名的资源包(appId.zip)
 	appInfo.appPath = @"";
 	
+	[self.indicatorView startAnimating];
+	[UIView animateWithDuration:0.25 animations:^{
+		self.indicatorView.alpha = 1.0;
+	}];
+	
+	self.view.userInteractionEnabled = NO;
 	[[WDHInterface sharedInterface] startAppWithAppInfo:appInfo entrance:self.navigationController completion:^(BOOL success, NSString *msg) {
-		self.view.userInteractionEnabled = YES;
+		
 		NSLog(@"%@", msg);
+		
+		[UIView animateWithDuration:0.5 animations:^{
+			self.indicatorView.alpha = 0.0;
+		} completion:^(BOOL finished) {
+			[self.indicatorView stopAnimating];
+			self.view.userInteractionEnabled = YES;
+		}];
 	}];
 
 }

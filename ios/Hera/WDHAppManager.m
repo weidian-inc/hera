@@ -83,7 +83,17 @@
 	return [self.apps lastObject];
 }
 
-#pragma mark - Helper 
+#pragma mark - Helper
+
+- (BOOL)isAppRunning:(NSString *)appId {
+	for (WDHApp *app in self.apps) {
+		if ([app.appInfo.appId isEqualToString:appId]) {
+			return YES;
+		}
+	}
+	
+	return NO;
+}
 
 - (void)cleanWDHodoer {
 	

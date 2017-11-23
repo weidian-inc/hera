@@ -28,6 +28,7 @@
 #import "WDHInterface.h"
 #import "WDHApp.h"
 #import "WDHFileManager.h"
+#import "WDHAppManager.h"
 
 @implementation WDHInterface
 
@@ -75,6 +76,14 @@
 	if (!appInfo.appId || !appInfo.userId) {
 		if (completion) {
 			completion(NO, @"appId or userId is nil");
+		}
+		return;
+	}
+	
+	// 禁止同时开启两个相同的小程序
+	if ([[WDHAppManager sharedManager] isAppRunning:appInfo.appId]) {
+		if (completion) {
+			completion(NO, @"app is running");
 		}
 		return;
 	}
