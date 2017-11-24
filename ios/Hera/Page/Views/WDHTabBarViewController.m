@@ -93,7 +93,7 @@
     }];
     [self.view addSubview:view];
 	
-	CGFloat naviHeight = IS_IPHONE_X ? 88 : 64;
+	CGFloat naviHeight = [UIApplication sharedApplication].statusBarFrame.size.height + 44;
 	self.naviView = [[WDHNavigationView alloc] initWithFrame:(CGRect){0,0,self.view.bounds.size.width,naviHeight}];
     
     [self.naviView setLeftClick:^(WDHNavigationView *view){
