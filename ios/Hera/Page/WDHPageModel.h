@@ -36,7 +36,7 @@
 @property (nonatomic, copy) NSString * navigationBarTextStyle;
 @property (nonatomic, copy) NSString * navigationBarTitleText;
 @property (nonatomic, assign) BOOL enablePullDownRefresh;
-
+@property (nonatomic, assign) BOOL disableNavigationBack;
 @end
 
 @interface WDHTabbarItemStyle : NSObject

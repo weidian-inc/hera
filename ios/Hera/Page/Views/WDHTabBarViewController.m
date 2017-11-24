@@ -147,6 +147,8 @@
 - (void)loadStyle:(WDHPageModel *)pageModel
 {
     //window 样式
+	self.naviView.leftButton.hidden = pageModel.pageStyle.disableNavigationBack;
+	
     if (pageModel.pageStyle.navigationBarTitleText) {
         self.naviView.title = pageModel.pageStyle.navigationBarTitleText;
     }

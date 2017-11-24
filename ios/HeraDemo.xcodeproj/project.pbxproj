@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5519FEFC1FC80BDE00A8FD16 /* demoapp(2).zip in Resources */ = {isa = PBXBuildFile; fileRef = 5519FEFB1FC80BDE00A8FD16 /* demoapp(2).zip */; };
 		5526E6451FBBD8CB0014ACE6 /* RetrieveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E6441FBBD8CB0014ACE6 /* RetrieveViewController.m */; };
 		5526E64B1FBC177E0014ACE6 /* demoapp.zip in Resources */ = {isa = PBXBuildFile; fileRef = 5526E64A1FBC177E0014ACE6 /* demoapp.zip */; };
 		5526E64E1FBC37EC0014ACE6 /* LinkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E64D1FBC37EC0014ACE6 /* LinkViewController.m */; };
@@ -25,6 +26,7 @@
 
 /* Begin PBXFileReference section */
 		46D239121F20466400751BF0 /* HeraDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HeraDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5519FEFB1FC80BDE00A8FD16 /* demoapp(2).zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "demoapp(2).zip"; sourceTree = "<group>"; };
 		5526E6431FBBD8CB0014ACE6 /* RetrieveViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RetrieveViewController.h; sourceTree = "<group>"; };
 		5526E6441FBBD8CB0014ACE6 /* RetrieveViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RetrieveViewController.m; sourceTree = "<group>"; };
 		5526E64A1FBC177E0014ACE6 /* demoapp.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = demoapp.zip; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 		E94AD68A1FB4546600AC5B39 /* HeraDemo */ = {
 			isa = PBXGroup;
 			children = (
+				5519FEFB1FC80BDE00A8FD16 /* demoapp(2).zip */,
 				5526E64A1FBC177E0014ACE6 /* demoapp.zip */,
 				E94AD68B1FB4546600AC5B39 /* AppDelegate.h */,
 				E94AD68C1FB4546600AC5B39 /* AppDelegate.m */,
@@ -180,6 +183,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5519FEFC1FC80BDE00A8FD16 /* demoapp(2).zip in Resources */,
 				E94AD6A11FB4546600AC5B39 /* HeraRes.bundle in Resources */,
 				E94AD69D1FB4546600AC5B39 /* Info.plist in Resources */,
 				E94AD69C1FB4546600AC5B39 /* Main.storyboard in Resources */,

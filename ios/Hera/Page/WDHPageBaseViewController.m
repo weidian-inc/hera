@@ -191,6 +191,10 @@
 	
 	//非tabbar中作为childVC存在
 	if (!self.isTabBarVC) {
+		
+		// 是否隐藏Back按钮
+		self.naviView.leftButton.hidden = self.pageModel.pageStyle.disableNavigationBack;
+		
 		//window 样式
 		if (self.pageModel.pageStyle.navigationBarTitleText) {
 			self.naviView.title = self.pageModel.pageStyle.navigationBarTitleText;

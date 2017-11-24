@@ -91,6 +91,7 @@
     model.navigationBarTextStyle = window[@"navigationBarTextStyle"];
     model.navigationBarTitleText = window[@"navigationBarTitleText"];
 	model.enablePullDownRefresh =  [window[@"enablePullDownRefresh"] boolValue];
+	model.disableNavigationBack = [window[@"disableNavigationBack"] boolValue];
     
     return model;
 }
