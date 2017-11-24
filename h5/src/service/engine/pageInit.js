@@ -178,7 +178,7 @@ var skipPage = function(routePath, pWebViewId, pageParams, pApiKey) {//打开、
             pageUnload(pageStack[pageStack.length - 1]);
             onlyOnePage = !1;
         }
-        if (pageStack[0].webviewId === pWebViewId) {
+        if (pageStack[0].webviewId === pWebViewId ) {
             currentPage = pageStack[0];
             onlyOnePage || currentPage.page.onShow();
         } else if (isTabBarsPage(pageStack[0]) ? onlyOnePage && pageHide(pageStack[0]) : pageUnload(pageStack[0]), pageStackObjs.hasOwnProperty(pWebViewId)) {

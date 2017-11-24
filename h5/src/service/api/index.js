@@ -833,12 +833,13 @@ var apiObj = {
   },
   loginSuccess: function () {
     const url =
-      (loginSourceUrl &&
+      (loginSourceUrl && loginSourceUrl!=__wxConfig__.weweb.loginUrl &&
         (loginSourceUrl.indexOf('/') === 0
           ? loginSourceUrl
           : '/' + loginSourceUrl)) ||
       '/' + __root__
     loginSourceUrl = ''
+
     apiObj.redirectTo({
       url: url
     })

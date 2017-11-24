@@ -136,7 +136,7 @@ function concatFiles (obj, pages) {
 
   return concat.content
     .toString()
-    .replace(/HeraJSBridge/g, 'ServiceJSBridge')
+    .replace(/WeixinJSBridge/g, 'ServiceJSBridge')
     .replace(/([^\w\/\\@#%])wx\./g, '$1wd.')
     .replace(/Reporter/g, 'SReporter')
     .replace(/Object\.defineProperty\(\s*wx\s*,/g, 'Object.defineProperty(wd,')
