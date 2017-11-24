@@ -105,9 +105,6 @@
     
     self.tabbar = tabbar;
     [self.tabbar showDefaultTabarItem];
-	
-	//系统navigationBar item置空
-	self.navigationItem.hidesBackButton = YES;
 }
 
 - (void)viewDidLayoutSubviews{
@@ -131,7 +128,6 @@
 	}
 	
 	UIView *vc = [self.view viewWithTag:WDHTabBarViewTag];
-	//	CGFloat webViewTop = 0;
 	CGFloat webViewTop = self.naviView.bounds.size.height;
 	if (!CGRectEqualToRect(tabbarFrame, CGRectZero)) {
 		if (self.tabbar.positionStyle == WDHTabBarStyleTop) {

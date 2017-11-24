@@ -152,7 +152,7 @@
     CGFloat webViewTop = 0.0;
     CGFloat naviHeight = 0.0;
     if (!_isTabBarVC) {
-		CGFloat naviHeight = [UIApplication sharedApplication].statusBarFrame.size.height + 44;
+		naviHeight = [UIApplication sharedApplication].statusBarFrame.size.height + 44;
         self.naviView.frame = (CGRect){0,0,w,naviHeight};
         webViewTop = self.naviView.frame.origin.y + self.naviView.frame.size.height;
     }
