@@ -1,7 +1,7 @@
 # Hera H5
 
 ## Usage
-
+> 注意：本工程为[脚手架](https://weidian-inc.github.io/hera/#/basics/quickstart)内置的用于转换小程序代码的工具，生成的代码只能放置在客户端内运行，如果想让生成的代码在浏览器中运行，请使用[weweb](https://github.com/wdfe/weweb)
 ### 方法一：从 NPM 安装
 
 ```sh
@@ -10,8 +10,8 @@ npm i -g hera-weweb
 
 # 打包小程序
 ## 请注意，请勿在小程序所在目录下使用
-## 以防生成的文件与小程序代码混在一起
-hweweb projectDir -d distDir
+## 以防生成的文件与小程序代码混在一起
+hweweb projectDir -d distDir
 
 # 查看生成的文件
 ls distDir
@@ -22,7 +22,7 @@ ls distDir
 ## iOS：iOSDemo/demoapp.zip
 ```
 
-### 方法二：Clone源码使用
+### 方法二：Clone源码使用
 
 ``` sh
 # 安装依赖
@@ -40,7 +40,6 @@ npm run build
 
 # 打包demo
 ./bin/weweb ./demo
-
 ```
 
 ## 项目介绍
