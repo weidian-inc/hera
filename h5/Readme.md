@@ -1,22 +1,43 @@
 # Hera H5
 
-
 ## Usage
+
+### 方法一：从 NPM 安装
+
+```sh
+# 安装
+npm i -g hera-weweb
+
+# 打包小程序
+## 请注意，请勿在小程序所在目录下使用
+## 以防生成的文件与小程序代码混在一起
+hweweb projectDir -d distDir
+
+# 查看生成的文件
+ls distDir
+
+# 运行
+## 将生成的文件放置在客户端代码中
+## Android：AndroidDemo/src/main/assets/demoapp.zip
+## iOS：iOSDemo/demoapp.zip
+```
+
+### 方法二：Clone源码使用
 
 ``` sh
 # 安装依赖
-npm i 
+npm i
 
-# 开发framework 
+# 开发framework
 npm run dev
 
-# build framework 
+# build framework
 npm run build
 
 # 打包framework (打包之前先build)
 ./bin/weweb -b
 
-# 运行
+
 # 打包demo
 ./bin/weweb ./demo
 
