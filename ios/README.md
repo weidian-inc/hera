@@ -1,4 +1,4 @@
-﻿# iOS接入指南
+# iOS接入指南
 
 ## Cocoapods
 

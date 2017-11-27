@@ -55,11 +55,9 @@ hera run web
 
 ## 分享交流
 
-<p align="center">
-  <img src="docs/zh-cn/Others/assets/qq-group.png" height="350"/>
-  <img src="docs/zh-cn/Others/assets/wechat-group.jpeg" height="350"/>
-</p>
-
+微信群|QQ群
+:---:|:---:
+<img src="docs/zh-cn/Others/assets/wechat-group.jpg" height="350"/>  |  <img src="docs/zh-cn/Others/assets/qq-group.png" height="350"/>
 
 ## Licence
 

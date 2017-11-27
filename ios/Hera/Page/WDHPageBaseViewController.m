@@ -134,8 +134,7 @@
     CGFloat webViewTop = 0.0;
     CGFloat naviHeight = 0.0;
     if (!_isTabBarVC) {
-		naviHeight = IS_IPHONE_X ? 88 : 64;
-
+		naviHeight = [UIApplication sharedApplication].statusBarFrame.size.height + 44;
         self.naviView.frame = (CGRect){0,0,w,naviHeight};
         webViewTop = self.naviView.frame.origin.y + self.naviView.frame.size.height;
     }
@@ -174,6 +173,19 @@
 	
 	//非tabbar中作为childVC存在
 	if (!self.isTabBarVC) {
+		
+		// 是否隐藏Back按钮
+		self.naviView.leftButton.hidden = self.pageModel.pageStyle.disableNavigationBack;
+        
+        // 如果是rootViewController则要隐藏Back按钮
+        UINavigationController *root = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        if(self.navigationController == root && self.navigationController.viewControllers.count > 0) {
+            BOOL isRoot = self == self.navigationController.viewControllers[0];
+            if(isRoot) {
+                self.naviView.leftButton.hidden = YES;
+            }
+        }
+        
 		//window 样式
 		if (self.pageModel.pageStyle.navigationBarTitleText) {
 			self.naviView.title = self.pageModel.pageStyle.navigationBarTitleText;

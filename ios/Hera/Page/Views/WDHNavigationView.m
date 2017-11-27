@@ -49,9 +49,6 @@
 {
     if (self = [super initWithFrame:frame])
     {
-//        self.leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//        self.rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        // 使用system的修改tintColor才能起作用
         self.leftButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.rightButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.titleLabel = [UILabel new];
@@ -67,14 +64,12 @@
         
         UIImage *img = [WDHBundleUtil imageFromBundleWithName:@"WDIPh_btn_navi_back"];
         [self.leftButton setImage:img forState:UIControlStateNormal];
-        //        self.leftButton.imageEdgeInsets = UIEdgeInsets(top:0,left:10,bottom:0,right:0)
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
         SEL leftAction = @selector(leftButtonAction:);
         SEL rightAction = @selector(rightButtonAction:);
         [self.leftButton addTarget:self action:leftAction forControlEvents:UIControlEventTouchUpInside];
         
         //MARK:------->TEST:------>
-        //        self.rightButton.setTitle("SX", for: UIControlState.normal)
         [self.leftButton addTarget:self action:rightAction forControlEvents:UIControlEventTouchUpInside];
     }
     
@@ -86,11 +81,10 @@
 
     CGFloat w = self.bounds.size.width;
     CGFloat h = self.bounds.size.height;
-	CGFloat controlTop =  IS_IPHONE_X ? 44.0 : 20.0;
+	CGFloat controlTop =  [UIApplication sharedApplication].statusBarFrame.size.height;
     CGFloat controlHeight = h - controlTop;
     CGFloat btnWidth = h;
     self.leftButton.frame = (CGRect){0,controlTop,btnWidth,controlHeight};
-//    self.titleLabel.frame = (CGRect){btnWidth,controlTop,w-2*btnWidth,controlHeight};
     self.rightButton.frame = (CGRect){w-btnWidth,controlTop,btnWidth,controlHeight};
     
     // activityView 宽高默认为20

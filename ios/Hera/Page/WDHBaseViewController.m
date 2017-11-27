@@ -61,10 +61,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    UINavigationController *root = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    if(self.navigationController == root && self.navigationController.viewControllers.count > 0) {
-        self.naviView.leftButton.hidden = self == self.navigationController.viewControllers[0];
-    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
