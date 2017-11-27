@@ -17,9 +17,18 @@ app='./demo'
 ## 你可以在前述命令后增加 dev 参数，这样可以省略构建 framwork 的过程
 ## 例：./dev.sh app dev 或 ./dev.sh fra dev 或 ./dev.sh
 
+# 打包小程序
+## ./dev.sh build
+
+
 if [ "$2" != "dev" ] && [ "$1" != "dev" ]; then
-    echo "=> Building framework"
-    npm run build:dev
+    if [ "$2" == "build" ] || [ "$1" == "build" ]; then
+        echo "=> Building framework [uglyfied]"
+        npm run build
+    else
+        echo "=> Building framework [untouched]"
+        npm run build:dev
+    fi
 fi
 
 appSrc='dist/app.zip'
