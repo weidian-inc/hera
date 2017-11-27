@@ -8,7 +8,7 @@ import map from './map'
 import configFlags from './configFlags'
 import context from './context'
 import canvas from './canvas'
-import storage from './storage'
+import * as storage from './storage'
 import appContextSwitch from './appContextSwitch'
 
 import './evalGeneratorFunction'
@@ -309,7 +309,7 @@ var apiObj = {
   getStorageSync: function (key) {
     if (paramCheck('getStorageSync', key, '')) {
       var rt = storage.get(key)
-      return rt
+      return (rt && rt.data) || ''
     }
   },
   setStorage: function (params) {
@@ -833,7 +833,8 @@ var apiObj = {
   },
   loginSuccess: function () {
     const url =
-      (loginSourceUrl && loginSourceUrl!=__wxConfig__.weweb.loginUrl &&
+      (loginSourceUrl &&
+        loginSourceUrl != __wxConfig__.weweb.loginUrl &&
         (loginSourceUrl.indexOf('/') === 0
           ? loginSourceUrl
           : '/' + loginSourceUrl)) ||

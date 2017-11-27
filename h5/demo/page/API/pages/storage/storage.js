@@ -14,10 +14,87 @@ Page({
   dataChange: function (e) {
     this.data.data = e.detail.value
   },
-  getStorage: function () {
+  getStorageAsync: function () {
     var key = this.data.key,
       data = this.data.data
     var storageData
+    var self = this
+    if (key.length === 0) {
+      this.setData({
+        key: key,
+        data: data,
+        'dialog.hidden': false,
+        'dialog.title': '读取数据失败',
+        'dialog.content': 'key 不能为空'
+      })
+    } else {
+      wx.getStorage({
+        key: key,
+        success: function (res) {
+          storageData = res.data
+          self.setData({
+            key: key,
+            data: data,
+            'dialog.hidden': false,
+            'dialog.title': '读取数据成功',
+            'dialog.content': "data: '" + storageData + "'"
+          })
+        },
+        fail: function (res) {
+          storageData = res.data
+          self.setData({
+            key: key,
+            data: data,
+            'dialog.hidden': false,
+            'dialog.title': '读取数据失败',
+            'dialog.content': '找不到 key 对应的数据'
+          })
+        },
+        complete: function (res) {
+          console.log(res)
+        }
+      })
+    }
+  },
+  setStorageAsync: function () {
+    var key = this.data.key
+    var data = this.data.data
+    var self = this
+    // if (key.length === 0) {
+    //   this.setData({
+    //     key: key,
+    //     data: data,
+    //     'dialog.hidden': false,
+    //     'dialog.title': '保存数据失败',
+    //     'dialog.content': 'key 不能为空'
+    //   })
+    // } else {
+    wx.setStorage({
+      key: key,
+      data: data,
+      success: function (res) {
+        console.log(res)
+        self.setData({
+          key: key,
+          data: data,
+          'dialog.hidden': false,
+          'dialog.title': '存储数据成功'
+        })
+      },
+      fail: function (res) {
+        console.log(res)
+      },
+      complete: function (res) {
+        console.log(res)
+      }
+    })
+    // }
+  },
+  getStorageSync: function () {
+    var key = this.data.key,
+      data = this.data.data
+    var storageData
+    var self = this
 
     if (key.length === 0) {
       this.setData({
@@ -30,7 +107,7 @@ Page({
     } else {
       storageData = wx.getStorageSync(key)
       if (storageData === '') {
-        this.setData({
+        self.setData({
           key: key,
           data: data,
           'dialog.hidden': false,
@@ -38,7 +115,7 @@ Page({
           'dialog.content': '找不到 key 对应的数据'
         })
       } else {
-        this.setData({
+        self.setData({
           key: key,
           data: data,
           'dialog.hidden': false,
@@ -48,7 +125,7 @@ Page({
       }
     }
   },
-  setStorage: function () {
+  setStorageSync: function () {
     var key = this.data.key
     var data = this.data.data
     if (key.length === 0) {
@@ -70,7 +147,11 @@ Page({
     }
   },
   clearStorage: function () {
-    wx.clearStorageSync()
+    wx.clearStorage({
+      success: function () {
+        console.log('fuck')
+      }
+    })
     this.setData({
       key: '',
       data: '',

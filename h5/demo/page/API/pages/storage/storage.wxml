@@ -25,9 +25,11 @@
         </view>
       </view>
       <view class="btn-area">
-        <button type="primary" bindtap="setStorage">存储数据</button>
-        <button bindtap="getStorage">读取数据</button>
-        <button bindtap="clearStorage">清理数据</button>
+        <button bindtap="setStorageAsync">存储数据(异步)</button>
+        <button bindtap="getStorageAsync">读取数据(异步)</button>
+        <button bindtap="clearStorage">清理数据(异步)</button>
+        <button type="primary" bindtap="setStorageSync">存储数据(同步)</button>
+        <button type="primary" bindtap="getStorageSync">读取数据(同步)</button>
       </view>
     </view>
   </view>

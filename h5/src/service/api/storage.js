@@ -14,7 +14,6 @@ function currentSize () {
   return Math.ceil(total)
 }
 
-
 let storage = {
   set: function (key, value) {
     if (window.localStorage == null) {
@@ -126,14 +125,16 @@ export function set (key, data) {
 }
 
 export function setStorage (args) {
+  const res = {
+    errMsg: 'setStorage:ok'
+  }
   if (args.key == null || args.data == null) {
     args.fail && args.fail(args)
   }
   storage.set(args.key, args.data)
-  args.success && args.success(args)
-  args.complete && args.complete(args)
+  args.success && args.success(res)
+  args.complete && args.complete(res)
 }
-
 
 export function get (key) {
   return storage.get(key)
@@ -144,8 +145,17 @@ export function getStorage (args) {
     args.fail && args.fail()
   }
   var rt = storage.get(args.key)
-  args.success && args.success(rt)
-  args.complete && args.complete(rt)
+  let res = null
+  if (rt.data == null) {
+    res = {
+      errMsg: 'getStorage:fail data not fosund'
+    }
+    args.fail && args.fail(res)
+  } else {
+    res = rt
+    args.success && args.success(res)
+  }
+  args.complete && args.complete(res)
 }
 
 export function clearStorageSync (data) {
