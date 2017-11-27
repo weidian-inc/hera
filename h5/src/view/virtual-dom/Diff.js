@@ -15,19 +15,20 @@ const diffNode = function (oriEle, newEle, patches, index) {
     let patch = patches[index]
     if (newEle == null) {
       patch = appendPatch(patch, new VPatch(Enums.PATCH_TYPE.REMOVE, oriEle))
-    } else if (Utils.isVirtualNode(newEle))
-    {
+    } else if (Utils.isVirtualNode(newEle)) {
       if (Utils.isVirtualNode(oriEle)) {
         if (
-          oriEle.tagName === newEle.tagName && oriEle.wxKey === newEle.wxKey
+          oriEle.tagName === newEle.tagName &&
+          oriEle.wxKey === newEle.wxKey
         ) {
-          if (oriEle.tagName === 'virtual' && oriEle.wxVkey !== newEle.wxVkey) {//虚拟节点变化
+          if (oriEle.tagName === 'virtual' && oriEle.wxVkey !== newEle.wxVkey) {
+            // 虚拟节点变化
             patch = appendPatch(
               patch,
               new VPatch(Enums.PATCH_TYPE.VNODE, oriEle, newEle)
             )
           } else {
-            let propPatches = diffProps(newEle.props, newEle.newProps)//属性变化
+            let propPatches = diffProps(newEle.props, newEle.newProps) // 属性变化
             propPatches &&
               (patch = appendPatch(
                 patch,
@@ -69,12 +70,14 @@ const diffChildren = function (old, newEle, patches, patch, index) {
   let oldChildren = old.children
   let orderedSet = ListDiff.listDiff(oldChildren, newEle.children)
   let newChildren = orderedSet.children
-  let len = oldChildren.length > newChildren.length
-    ? oldChildren.length
-    : newChildren.length
+  let len =
+    oldChildren.length > newChildren.length
+      ? oldChildren.length
+      : newChildren.length
   let idx = 0
   for (; idx < len; ++idx) {
-    let oldChild = oldChildren[idx], newChild = newChildren[idx]
+    let oldChild = oldChildren[idx],
+      newChild = newChildren[idx]
     ++index
 
     if (oldChild) {
@@ -96,16 +99,16 @@ const diffChildren = function (old, newEle, patches, patch, index) {
     ))
   return patch
 }
-//设置属性
-const diffProps = function (props, propKeys) {
+// 设置属性
+const diffProps = function (props, newProps) {
   let tempObj = {}
-  for (let key in propKeys) {
-    let propName = propKeys[key]
-    tempObj[propName] = props[propName]
+  for (let key in newProps) {
+    let newPropName = newProps[key]
+    tempObj[newPropName] = props[newPropName]
   }
   return Utils.isEmptyObject(tempObj) ? void 0 : tempObj
 }
-//将newPatch加入到patches数组
+// 将newPatch加入到patches数组
 const appendPatch = function (patches, newPatch) {
   if (patches) {
     patches.push(newPatch)

@@ -71,7 +71,8 @@ const listDiff = function (aChildren, bChildren) {
   // Iterate through b and append any new keys
   // O(M) time
   for (let idx = 0; idx < bChildren.length; ++idx) {
-    let newItem = bChildren[idx],bItemKey = getItemKey(newItem)
+    let newItem = bChildren[idx]
+    let bItemKey = getItemKey(newItem)
     if (bItemKey) {
       aKeys.hasOwnProperty(bItemKey) || newChildren.push(newItem)
     } else if (idx >= lastFreeIndex) {
@@ -115,15 +116,11 @@ const listDiff = function (aChildren, bChildren) {
             })
           } else {
             // if an insert doesn't put this key in place, it needs to move
-            removes.push(
-              remove(simulate, simulateIndex, newItemKey)
-            )
+            removes.push(remove(simulate, simulateIndex, newItemKey))
             simulateItem = simulate[simulateIndex]
 
             // items are matching, so skip ahead
-            if (
-              simulateItem && getItemKey(simulateItem) === itemKey
-            ) {
+            if (simulateItem && getItemKey(simulateItem) === itemKey) {
               ++simulateIndex
             } else {
               // if the remove didn't put the wanted item in place, we need to insert it
@@ -139,8 +136,8 @@ const listDiff = function (aChildren, bChildren) {
             key: itemKey,
             index: idx
           })
-          ++idx
         }
+        ++idx
       } else {
         // a key in simulate has no matching wanted key, remove it
         removes.push(remove(simulate, simulateIndex, newItemKey))
@@ -157,7 +154,7 @@ const listDiff = function (aChildren, bChildren) {
     removes.push(remove(simulate, simulateIndex, itemKey))
   }
 
-  if (removes.length === deletedItems && inserts.length == 0) {
+  if (removes.length === deletedItems && inserts.length === 0) {
     return {
       children: newChildren,
       moves: null
@@ -174,11 +171,22 @@ const listDiff = function (aChildren, bChildren) {
 }
 
 const makeKeyAndFreeIndexes = function (children) {
-  let keyIndexes = {}, freeIndexes = []
+  let keyIndexes = {}
+  let freeIndexes = []
   for (let idx = 0; idx < children.length; ++idx) {
     let child = children[idx]
     let wxKey = getItemKey(child)
-    wxKey ? (keyIndexes[wxKey] = idx) : freeIndexes.push(idx)
+    if (wxKey) {
+      if (keyIndexes.hasOwnProperty(wxKey)) {
+        console.error(`多次使用 ${wxKey} 作为 wxKey`)
+        child.wxKey = void 0
+        freeIndexes.push(idx)
+      } else {
+        keyIndexes[wxKey] = idx
+      }
+    } else {
+      freeIndexes.push(idx)
+    }
   }
   return {
     keyIndexes: keyIndexes,

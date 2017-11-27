@@ -128,7 +128,7 @@ export function setStorage (args) {
   const res = {
     errMsg: 'setStorage:ok'
   }
-  if (args.key == null || args.data == null) {
+  if (args.key === undefined || args.data === undefined) {
     args.fail && args.fail(args)
   }
   storage.set(args.key, args.data)
@@ -146,9 +146,9 @@ export function getStorage (args) {
   }
   var rt = storage.get(args.key)
   let res = null
-  if (rt.data == null) {
+  if (rt.data === undefined) {
     res = {
-      errMsg: 'getStorage:fail data not fosund'
+      errMsg: 'getStorage:fail data not found'
     }
     args.fail && args.fail(res)
   } else {
