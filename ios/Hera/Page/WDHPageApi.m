@@ -241,7 +241,7 @@
 
 - (void) hideLoading {
 	// 隐藏Loading原则 首先隐藏当前页面的Loading 如果当前页没有Loading 则移除队首的页面的Loading
-	WDHPageBaseViewController *currentPage = [self.pageManager.pageStack currentPage];
+	WDHBaseViewController *currentPage = [self.pageManager.pageStack currentPage];
 	[currentPage stopLoading];
 }
 

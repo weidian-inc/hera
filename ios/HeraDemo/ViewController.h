@@ -25,8 +25,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Hera/WDHodoer.h>
 
-@interface ViewController : UIViewController
+@interface ViewController : WDHAppletViewController
 
 
 @end

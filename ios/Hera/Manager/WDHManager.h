@@ -44,6 +44,7 @@
 
 @property (nonatomic, strong) WDHPageApi *pageApi;
 
+@property (nonatomic, strong) dispatch_block_t startRootCompletion;
 /**
  设置小程序的入口
 

@@ -30,6 +30,7 @@
 #import "WDHBaseViewController+Extension.h"
 #import "WDHTabBarViewController.h"
 #import "NSString+WDH.h"
+#import "WDHAppletViewController.h"
 
 @implementation WDHPageStack
 
@@ -96,7 +97,7 @@
  
  @return 小程序当前显示的页面
  */
-- (WDHPageBaseViewController *)currentPage {
+- (WDHBaseViewController *)currentPage {
 	
 	WDHPageBaseViewController *page = nil;
 	WDHBaseViewController *topVC = [self top];
@@ -271,125 +272,137 @@
 
 //开始跳页
 - (void)startPage:(NSString *)basePath pagePath:(NSString *)pagePath isRoot:(BOOL)isRoot {
-//	[self startPage:basePath pagePath:pagePath openNewPage:YES];
 	[self startPage:basePath pagePath:pagePath isRoot:isRoot openNewPage:YES];
 }
+
 - (void)startPage:(NSString *)basePath pagePath:(NSString *)pagePath openNewPage:(BOOL)openNewPage {
 	[self startPage:basePath pagePath:pagePath isRoot:NO openNewPage:openNewPage];
 }
 
 - (void)startPage:(NSString *)basePath pagePath:(NSString *)pagePath isRoot:(BOOL)isRoot openNewPage:(BOOL)openNewPage
 {
-	//统计
-	NSString *openType;
-	NSDictionary *config = _config;
-	if (isRoot) {
-		openType = @"appLaunch";
-	}else if (openNewPage) {
-		openType = @"navigateTo";
-	} else {
-		openType = @"redirectTo";
-	}
-	
-	WDHPageModel *model = [WDHPageModel new];
-	
-	//根据使用老的
-	NSString *visitPagePath = pagePath;
-	
-	NSArray *pagePathArray = [visitPagePath componentsSeparatedByString:@"?"];
-	if (pagePathArray.count >= 2) {
-		model.query = pagePathArray[1];
-	}
-	
-	model.pagePath = pagePath;
-	model.pageRootDir = basePath;
-	model.openType = openType;
-	
-	[self parseConfig:config model:model];
-	
-	if (!openNewPage) {
-		
-		WDHPageBaseViewController * topVC = [self.pageStack currentPage];
-		topVC.pageModel = model;
-		[topVC loadData];
-		[topVC loadStyle];
-		
-	} else {
-		WDHPageBaseViewController *vc = [self createPage:model];
-		[self gotoPage:vc];
-		
-		if (isRoot) {
-			self.rootViewController = vc;
-		}
-	}
+    [self startPage:basePath pagePath:pagePath isRoot:isRoot openNewPage:openNewPage isTabPage:NO];
 }
 
-- (void)startTabarPage:(NSDictionary *)config basePath:(NSString *)basePath defaultPagePath:(NSString *)defaultPagePath
+- (void)startPage:(NSString *)basePath
+         pagePath:(NSString *)pagePath
+           isRoot:(BOOL)isRoot
+      openNewPage:(BOOL)openNewPage
+        isTabPage:(BOOL)isTabPage
 {
-	//统计
-	NSDictionary *tabBar = config[@"tabBar"];
-	
-	//配置tabbar
-	WDHTabbarStyle *style= [[WDHTabbarStyle alloc] init];
-	style.color = tabBar[@"color"];
-	style.selectedColor = tabBar[@"selectedColor"];
-	style.backgroundColor = tabBar[@"backgroundColor"];
-	style.position = tabBar[@"position"];
-	style.borderStyle = tabBar[@"borderStyle"];
-	
-	NSMutableArray *list = [NSMutableArray new];
-	for (NSDictionary *item in tabBar[@"list"]) {
-		WDHTabbarItemStyle *itemStyle = [[WDHTabbarItemStyle alloc] init];
-		itemStyle.title = item[@"text"];
-		itemStyle.pagePath = item[@"pagePath"];
-		if ([itemStyle.pagePath isEqualToString:defaultPagePath]) {
-			itemStyle.isDefaultPath = YES;
-		}
-		
-		if (item[@"iconPath"]) {
-			itemStyle.iconPath = [basePath stringByAppendingPathComponent:item[@"iconPath"]];
-		}
-		
-		if (item[@"selectedIconPath"]) {
-			itemStyle.selectedIconPath = [basePath stringByAppendingPathComponent:item[@"selectedIconPath"]];
-		}
-		
-		[list addObject:itemStyle];
-	}
-	style.list = list;
-	
-	WDHTabBarViewController *vc = [[WDHTabBarViewController alloc] init];
-	vc.tabbarStyle = style;
-	vc.pageManager = self;
-	
-	NSMutableArray *controllers = [NSMutableArray new];
-	for (WDHTabbarItemStyle *itemStyle in list) {
-		WDHPageModel *model = [WDHPageModel new];
-		//根据使用老的
-		NSString *visitPagePath = defaultPagePath;
-		
-		NSArray *pagePathArray = [visitPagePath componentsSeparatedByString:@"?"];
-		if (pagePathArray.count >= 2) {
-			model.query = pagePathArray[1];
-		}
-		
-		model.pagePath = itemStyle.pagePath;
-		model.pageRootDir = basePath;
-		model.openType = itemStyle.isDefaultPath ? @"appLaunch" : @"switchTab";
-		
-		[self parseConfig:self.config model:model];
-		
-		WDHPageBaseViewController *vc = [self createPage:model];
-		vc.isTabBarVC = YES;
-		[controllers addObject:vc];
-		
-	}
-	vc.viewControllers = [controllers copy];
-	
-	self.rootViewController = vc;
-	
-	[self gotoPage:vc];
-	
+    NSString *openType;
+    NSDictionary *config = _config;
+    if (isRoot) {
+        openType = @"appLaunch";
+    }else if (openNewPage) {
+        openType = @"navigateTo";
+    } else {
+        openType = @"redirectTo";
+    }
+    
+    if(isTabPage) {
+
+        //配置tabbar
+        NSDictionary *tabBar = config[@"tabBar"];
+        WDHTabbarStyle *style = [[WDHTabbarStyle alloc] init];
+        style.color = tabBar[@"color"];
+        style.selectedColor = tabBar[@"selectedColor"];
+        style.backgroundColor = tabBar[@"backgroundColor"];
+        style.position = tabBar[@"position"];
+        style.borderStyle = tabBar[@"borderStyle"];
+        NSMutableArray *list = [NSMutableArray new];
+        for (NSDictionary *item in tabBar[@"list"]) {
+            WDHTabbarItemStyle *itemStyle = [[WDHTabbarItemStyle alloc] init];
+            itemStyle.title = item[@"text"];
+            itemStyle.pagePath = item[@"pagePath"];
+            if ([itemStyle.pagePath isEqualToString:pagePath]) {
+                itemStyle.isDefaultPath = YES;
+            }
+            
+            if (item[@"iconPath"]) {
+                itemStyle.iconPath = [basePath stringByAppendingPathComponent:item[@"iconPath"]];
+            }
+            
+            if (item[@"selectedIconPath"]) {
+                itemStyle.selectedIconPath = [basePath stringByAppendingPathComponent:item[@"selectedIconPath"]];
+            }
+            
+            [list addObject:itemStyle];
+        }
+        style.list = list;
+        
+        NSMutableArray *controllers = [NSMutableArray new];
+        for (WDHTabbarItemStyle *itemStyle in list) {
+            WDHPageModel *model = [WDHPageModel new];
+            NSString *visitPagePath = pagePath;
+            NSArray *pagePathArray = [visitPagePath componentsSeparatedByString:@"?"];
+            if (pagePathArray.count >= 2) {
+                model.query = pagePathArray[1];
+            }
+            
+            model.pagePath = itemStyle.pagePath;
+            model.pageRootDir = basePath;
+            model.openType = openType;
+            
+            [self parseConfig:self.config model:model];
+            
+            WDHPageBaseViewController *vc = [self createPage:model];
+            vc.isTabBarVC = YES;
+            [controllers addObject:vc];
+            
+        }
+        
+        if(openNewPage) {
+            WDHTabBarViewController *vc = [[WDHTabBarViewController alloc] init];
+            vc.pageManager = self;
+            vc.viewControllers = [controllers copy];
+            vc.tabbarStyle = style;
+            if (isRoot) {
+                self.rootViewController = vc;
+            }
+            [self gotoPage:vc];
+        } else {
+            WDHTabBarViewController * topVC = (WDHTabBarViewController *)[self.pageStack currentPage];
+            if([topVC isKindOfClass:WDHTabBarViewController.class]) {
+                topVC.viewControllers = [controllers copy];
+                topVC.tabbarStyle = style;
+                [topVC loadTabStyle];
+            }
+        }
+    }
+    else
+    {
+        
+        WDHPageModel *model = [WDHPageModel new];
+        NSString *visitPagePath = pagePath;
+        
+        NSArray *pagePathArray = [visitPagePath componentsSeparatedByString:@"?"];
+        if (pagePathArray.count >= 2) {
+            model.query = pagePathArray[1];
+        }
+        
+        model.pagePath = pagePath;
+        model.pageRootDir = basePath;
+        model.openType = openType;
+        
+        [self parseConfig:config model:model];
+        
+        if (!openNewPage) {
+            WDHPageBaseViewController * topVC = (WDHPageBaseViewController *)[self.pageStack currentPage];
+            if([topVC isKindOfClass:WDHPageBaseViewController.class]) {
+                topVC.pageModel = model;
+                [topVC loadData];
+                [topVC loadStyle];
+            }
+        } else {
+            WDHPageBaseViewController *vc = [self createPage:model];
+            [self gotoPage:vc];
+            
+            if (isRoot) {
+                self.rootViewController = vc;
+            }
+        }
+    }
 }
 
 - (void)parseConfig:(NSDictionary *)data model:(WDHPageModel *)model {
@@ -418,16 +431,47 @@
 }
 
 - (void)setTopPageTitle:(NSString *)title {
-	WDHPageBaseViewController *vc = [self.pageStack currentPage];
+	WDHBaseViewController *vc = [self.pageStack currentPage];
 	[vc.pageModel updateTitle:title];
-	[vc loadStyle];
+    if([vc isKindOfClass: [WDHPageBaseViewController class]]) {
+        WDHPageBaseViewController *pvc = (WDHPageBaseViewController *)vc;
+        [pvc loadStyle];
+    }
 }
 
 - (void)gotoPage:(WDHBaseViewController *)page {
 	if ([self.pageStack isExist:page]) {
 		[self.pageStack popToPage:page];
 	} else {
-		[self.pageStack push:page];
+        BOOL resetPage = NO;
+        if(self.pageStack.naviController.viewControllers.count > 0 && [self.pageStack.naviController.viewControllers.lastObject isKindOfClass:[WDHAppletViewController class]]) {
+            WDHAppletViewController *home = self.pageStack.naviController.viewControllers.lastObject;
+            NSString *pid = [home valueForKey:@"wdh_applet_page_id"];
+            if([pid isKindOfClass:[NSString class]] && [pid isEqualToString:@"Weidian_Wechat_Applet_Page"]) {
+                NSMutableArray *viewControllers = @[].mutableCopy;
+                NSInteger count = self.pageStack.naviController.viewControllers.count;
+                [self.pageStack.naviController.viewControllers enumerateObjectsUsingBlock:^(__kindof UIViewController * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if(idx < count - 1) {
+                        [viewControllers addObject:obj];
+                    }
+                }];
+                [viewControllers addObject:page];
+                
+                if(home.isLoadding) {
+                    [home stopLoadingWithCompletion:^{
+                        [self.pageStack.naviController setViewControllers:viewControllers];
+                    }];
+                } else {
+                    [self.pageStack.naviController setViewControllers:viewControllers];
+                }
+                resetPage = YES;
+            }
+        }
+        
+        if(!resetPage) {
+            [self.pageStack push:page];
+        }
+        
 	}
 }
 

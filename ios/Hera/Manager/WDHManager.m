@@ -97,15 +97,13 @@
 }
 
 - (void) startRootPage {
+    if(self.startRootCompletion) {
+        self.startRootCompletion();
+    }
 	self.pageManager.config = self.service.appConfig;
 	NSDictionary *tabbar = self.service.appConfig[@"tabBar"];
-	if (tabbar) {
-		NSString *rootPagePath = self.service.appConfig[@"root"];
-		[self.pageManager startTabarPage:self.service.appConfig basePath:[WDHFileManager appSourceDirPath:_appInfo.appId] defaultPagePath:rootPagePath];
-	}else {
-		NSString *rootPagePath = self.service.appConfig[@"root"];
-		[self.pageManager startPage:[WDHFileManager appSourceDirPath:_appInfo.appId] pagePath:rootPagePath isRoot:YES];
-	}
+    NSString *rootPagePath = self.service.appConfig[@"root"];
+    [self.pageManager startPage:[WDHFileManager appSourceDirPath:_appInfo.appId] pagePath:rootPagePath isRoot:YES openNewPage:YES isTabPage:tabbar!=nil];
 }
 
 //MARK: - 实现协议方法

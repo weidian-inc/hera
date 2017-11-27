@@ -24,34 +24,14 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-
 #import <UIKit/UIKit.h>
-#import "WDHPageModel.h"
-#import "WDHBaseViewController.h"
 
-@interface WDHTabBarViewController : WDHBaseViewController
+@interface WDHAppletViewController : UIViewController
 
-/// 上次显示的tab item controller
-@property (nonatomic, weak) WDHPageBaseViewController *currentController;
+@property (nonatomic,assign) BOOL isLoadding;
 
-@property (nonatomic, strong) WDHTabbarStyle *tabbarStyle;
+- (void)startLoadingWithImage:(UIImage *)image title:(NSString *)title;
 
-/// controllers
-@property (nonatomic, strong) NSArray *viewControllers;
-
-
-/**
- 切换tab
-
- @param pagePath tab页面路径
- */
-- (void)switchTabBar:(NSString *)pagePath;
-
-
-/**
- load Tab Style
- */
-- (void)loadTabStyle;
+- (void)stopLoadingWithCompletion:(dispatch_block_t)completion;
 
 @end
-

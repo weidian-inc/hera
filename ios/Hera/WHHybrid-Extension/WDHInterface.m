@@ -114,11 +114,12 @@
 		if([[NSFileManager defaultManager] fileExistsAtPath:serviceHtml]) {
 
 			WDHApp *app = [[WDHApp alloc] initWithAppInfo:appInfo];
-			[app startAppWithEntrance:entrance];
+            [app startAppWithEntrance:entrance completion:^{
+                if (completion) {
+                    completion(YES, @"start app success!");
+                }
+            }];
 
-			if (completion) {
-				completion(YES, @"start app success!");
-			}
 		} else {
 			if (completion) {
 				completion(NO, @"service.html not found!");

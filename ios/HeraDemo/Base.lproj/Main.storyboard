@@ -20,38 +20,9 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap Me" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jz4-bg-kZp">
-                                <rect key="frame" x="159" y="323" width="56" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hera" translatesAutoresizingMaskIntoConstraints="NO" id="44F-GW-GZe">
-                                <rect key="frame" x="157" y="255" width="60" height="60"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="kW8-G5-W10"/>
-                                    <constraint firstAttribute="width" constant="60" id="uYt-Zs-VeZ"/>
-                                </constraints>
-                            </imageView>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Pjk-fl-bVP">
-                                <rect key="frame" x="178" y="227" width="20" height="20"/>
-                            </activityIndicatorView>
-                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="Pjk-fl-bVP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="6hJ-eE-Ps4"/>
-                            <constraint firstItem="Jz4-bg-kZp" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="HHa-pO-uAe"/>
-                            <constraint firstItem="44F-GW-GZe" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="MYJ-lh-641"/>
-                            <constraint firstItem="Jz4-bg-kZp" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="RS8-rc-qJQ"/>
-                            <constraint firstItem="Jz4-bg-kZp" firstAttribute="top" secondItem="44F-GW-GZe" secondAttribute="bottom" constant="8" id="RYE-CK-qrq"/>
-                            <constraint firstItem="44F-GW-GZe" firstAttribute="top" secondItem="Pjk-fl-bVP" secondAttribute="bottom" constant="8" id="XNH-CI-xNF"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="RVy-kv-l8t"/>
-                    <connections>
-                        <outlet property="indicatorView" destination="Pjk-fl-bVP" id="a1f-ll-aRf"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -74,7 +45,4 @@
             <point key="canvasLocation" x="-150" y="138"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="hera" width="60" height="60"/>
-    </resources>
 </document>

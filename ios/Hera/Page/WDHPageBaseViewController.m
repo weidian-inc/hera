@@ -54,18 +54,7 @@
     self.isFirstViewAppear = YES;
     self.view.backgroundColor = UIColor.whiteColor;
     self.navigationItem.hidesBackButton = YES;
-    
-    if (!_isTabBarVC) {
-        self.naviView = [[WDHNavigationView alloc] initWithFrame:CGRectZero];
-        
-        __weak typeof(self) weak_self = self;
-        [self.naviView setLeftClick:^(WDHNavigationView *view){
-            if (weak_self.pageManager) {
-                [weak_self.pageManager pop];
-            }
-        }];
-        [self.view addSubview:self.naviView];
-    }
+    self.naviView.hidden = self.isTabBarVC;
 	
 	WDHWeakScriptMessageDelegate *scriptMessageDelegate = [WDHWeakScriptMessageDelegate new];
 	scriptMessageDelegate.scriptDelegate = self;
@@ -111,13 +100,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-	
-	if ([[WDHSystemConfig sharedConfig] enablePopGesture]) {
-		self.navigationController.interactivePopGestureRecognizer.delegate = self;
-		self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-	} else {
-		self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-	}
 	
 	if (!_isFirstViewAppear) {
 		[self.pageManager activePageDidAppear:self];

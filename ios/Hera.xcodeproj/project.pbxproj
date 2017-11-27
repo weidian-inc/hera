@@ -228,6 +228,8 @@
 		E94AD7401FC28ADA00AC5B39 /* WDHPhotoPreviewCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E94AD73E1FC28ADA00AC5B39 /* WDHPhotoPreviewCollectionViewCell.m */; };
 		E94AD7431FC28AF900AC5B39 /* WDHPhotoPreviewLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = E94AD7411FC28AF900AC5B39 /* WDHPhotoPreviewLayout.h */; };
 		E94AD7441FC28AF900AC5B39 /* WDHPhotoPreviewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = E94AD7421FC28AF900AC5B39 /* WDHPhotoPreviewLayout.m */; };
+		E9EBB1941FC807DB003F25CA /* WDHAppletViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E9EBB1921FC807DB003F25CA /* WDHAppletViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E9EBB1951FC807DB003F25CA /* WDHAppletViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9EBB1931FC807DB003F25CA /* WDHAppletViewController.m */; };
 		F8C2FD0E99E7C67C3290272A /* libPods-Hera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F3020D76C0B31956B93E8CC /* libPods-Hera.a */; };
 /* End PBXBuildFile section */
 
@@ -461,6 +463,8 @@
 		E94AD73E1FC28ADA00AC5B39 /* WDHPhotoPreviewCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WDHPhotoPreviewCollectionViewCell.m; sourceTree = "<group>"; };
 		E94AD7411FC28AF900AC5B39 /* WDHPhotoPreviewLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WDHPhotoPreviewLayout.h; sourceTree = "<group>"; };
 		E94AD7421FC28AF900AC5B39 /* WDHPhotoPreviewLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WDHPhotoPreviewLayout.m; sourceTree = "<group>"; };
+		E9EBB1921FC807DB003F25CA /* WDHAppletViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WDHAppletViewController.h; sourceTree = "<group>"; };
+		E9EBB1931FC807DB003F25CA /* WDHAppletViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WDHAppletViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -640,6 +644,8 @@
 				468E12C21F1DA885009472E5 /* WDHPageManagerProtocol.h */,
 				468E12BE1F1CE1C0009472E5 /* WDHUtils.h */,
 				468E12BF1F1CE1C0009472E5 /* WDHUtils.m */,
+				E9EBB1921FC807DB003F25CA /* WDHAppletViewController.h */,
+				E9EBB1931FC807DB003F25CA /* WDHAppletViewController.m */,
 			);
 			path = Page;
 			sourceTree = "<group>";
@@ -902,6 +908,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9EBB1941FC807DB003F25CA /* WDHAppletViewController.h in Headers */,
 				468282F01F601DEE00FC71D8 /* WHHybridExtension.h in Headers */,
 				554AF8A21FB96D9F00FBCBB4 /* WDHInterface.h in Headers */,
 				469D623A1F14B6F400719AFE /* WDHFileManager.h in Headers */,
@@ -1219,6 +1226,7 @@
 				468282931F601DED00FC71D8 /* WHEScanView.m in Sources */,
 				468282E71F601DEE00FC71D8 /* WHE_uploadFile.m in Sources */,
 				468282ED1F601DEE00FC71D8 /* WHEBaseApi.m in Sources */,
+				E9EBB1951FC807DB003F25CA /* WDHAppletViewController.m in Sources */,
 				557478611FB6AC7C0026C8FB /* WHECryptUtil.m in Sources */,
 				4625BB7F1F172E5A0031CE7D /* WDHPageModel.m in Sources */,
 				E94AD7401FC28ADA00AC5B39 /* WDHPhotoPreviewCollectionViewCell.m in Sources */,

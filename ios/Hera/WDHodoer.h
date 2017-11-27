@@ -39,4 +39,4 @@ FOUNDATION_EXPORT const unsigned char WDHodoerVersionString[];
 #import "WDHSystemConfig.h"
 #import "WDHInterface.h"
 #import "WDHAppInfo.h"
-
+#import "WDHAppletViewController.h"

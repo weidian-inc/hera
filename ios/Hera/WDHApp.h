@@ -53,6 +53,11 @@
 - (void)startAppWithEntrance:(UINavigationController *)entrance;
 
 /**
+ 开启小程序
+ */
+- (void)startAppWithEntrance:(UINavigationController *)entrance completion:(dispatch_block_t)completion;
+
+/**
  停止小程序
  */
 - (void)stopApp;

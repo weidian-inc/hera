@@ -26,8 +26,10 @@
 
 
 #import "WDHBaseViewController.h"
+#import "WDHDeviceMacro.h"
+#import "WDHSystemConfig.h"
 
-@interface WDHBaseViewController ()
+@interface WDHBaseViewController ()<UIGestureRecognizerDelegate>
 
 @end
 
@@ -42,6 +44,40 @@
 	if (!self.navigationController.isNavigationBarHidden) {
 		[self.navigationController setNavigationBarHidden:YES animated:YES];
 	}
+    
+    //导航条
+    __weak typeof(self) weak_self = self;
+    CGFloat naviHeight = IS_IPHONE_X ? 88 : 64;
+    self.naviView = [[WDHNavigationView alloc] initWithFrame:(CGRect){0,0,self.view.bounds.size.width,naviHeight}];
+    
+    [self.naviView setLeftClick:^(WDHNavigationView *view){
+        if (weak_self.pageManager) {
+            [weak_self.pageManager pop];
+        }
+    }];
+    [self.view addSubview:self.naviView];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    UINavigationController *root = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    if(self.navigationController == root && self.navigationController.viewControllers.count > 0) {
+        self.naviView.leftButton.hidden = self == self.navigationController.viewControllers[0];
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    //是否开启系统手势返回
+    if ([[WDHSystemConfig sharedConfig] enablePopGesture]) {
+        self.navigationController.interactivePopGestureRecognizer.delegate = self;
+        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    } else {
+        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
 }
 
 #pragma mark - Loading

@@ -25,61 +25,42 @@
 //
 
 #import "ViewController.h"
-#import <Hera/WDHodoer.h>
 
 @interface ViewController ()
-
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *indicatorView;
 
 @end
 
 @implementation ViewController
 
-- (void)viewWillDisappear:(BOOL)animated {
-	[super viewWillDisappear:animated];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"Hera";
-	
-    UITapGestureRecognizer *ges = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap)];
-    [self.view addGestureRecognizer:ges];
-	
-	self.indicatorView.alpha = 0;
-}
-
-- (void)didTap {
-	
-	WDHAppInfo *appInfo = [[WDHAppInfo alloc] init];
-	//小程序标识
-	appInfo.appId = @"demoapp";
-	
-	//标识宿主app业务用户id
-	appInfo.userId = @"userId";
-	
-	//小程序资源zip路径,如果为空或未找到资源 则读取MainBundle下以appId命名的资源包(appId.zip)
-	appInfo.appPath = @"";
-	
-	[self.indicatorView startAnimating];
-	[UIView animateWithDuration:0.25 animations:^{
-		self.indicatorView.alpha = 1.0;
-	}];
-	
-	self.view.userInteractionEnabled = NO;
-	[[WDHInterface sharedInterface] startAppWithAppInfo:appInfo entrance:self.navigationController completion:^(BOOL success, NSString *msg) {
-		
-		NSLog(@"%@", msg);
-		
-		[UIView animateWithDuration:0.5 animations:^{
-			self.indicatorView.alpha = 0.0;
-		} completion:^(BOOL finished) {
-			[self.indicatorView stopAnimating];
-			self.view.userInteractionEnabled = YES;
-		}];
-	}];
-
+    //初始加载的动画
+    [self startLoadingWithImage:[UIImage imageNamed:@"AppIcon"] title:@"Hera"];
+    
+    WDHAppInfo *appInfo = [[WDHAppInfo alloc] init];
+    //小程序标识
+    appInfo.appId = @"demoapp";
+    
+    //标识宿主app业务用户id
+    appInfo.userId = @"userId";
+    
+    //小程序资源zip路径,如果为空或未找到资源 则读取MainBundle下以appId命名的资源包(appId.zip)
+    appInfo.appPath = @"";
+    
+    //启动
+    __weak typeof(self) wself = self;
+    [[WDHInterface sharedInterface] startAppWithAppInfo:appInfo entrance:self.navigationController completion:^(BOOL success, NSString *msg) {
+        
+        if(!success) {
+            [wself stopLoadingWithCompletion:nil];
+        }
+        NSLog(@"%@", msg);
+    }];
 }
 
 @end
+
+
+
+

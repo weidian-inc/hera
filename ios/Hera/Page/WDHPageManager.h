@@ -50,7 +50,7 @@
 
  @return 小程序当前显示的页面控制器
  */
-- (WDHPageBaseViewController *)currentPage;
+- (WDHBaseViewController *)currentPage;
 
 @end
 
@@ -87,14 +87,7 @@
 
 - (void)startPage:(NSString *)basePath pagePath:(NSString *)pagePath isRoot:(BOOL)isRoot openNewPage:(BOOL)openNewPage;
 
-/**
- 开启Tab类型的页面
-
- @param config 页面配置
- @param basePath 页面根目录拒绝
- @param defaultPagePath 默认页面路径
- */
-- (void)startTabarPage:(NSDictionary *)config basePath:(NSString *)basePath defaultPagePath:(NSString *)defaultPagePath;
+- (void)startPage:(NSString *)basePath pagePath:(NSString *)pagePath isRoot:(BOOL)isRoot openNewPage:(BOOL)openNewPage isTabPage:(BOOL)isTabPage;
 
 /**
  加载页面配置

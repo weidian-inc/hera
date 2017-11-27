@@ -58,6 +58,7 @@
 
 - (void)setViewControllers:(NSArray *)viewControllers
 {
+    _viewControllers = viewControllers;
 	for (UIViewController *vc in viewControllers) {
 		[self addChildViewController:vc];
 	}
@@ -72,42 +73,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.view.backgroundColor = UIColor.whiteColor;
-    
-    WDHTabbarStyle *style = self.tabbarStyle;
-    WDHTabBar *tabbar = [[WDHTabBar alloc] init];
-    UIView *view = [tabbar generateWDHTabbarWithPoistion:style.position];
-    tabbar.color = style.color;
-    tabbar.selectedColor = style.selectedColor;
-    tabbar.backgroundColor = style.backgroundColor;
-    tabbar.borderStyle = style.borderStyle;
-    [tabbar configTabbarItemList:style.list];
-    
-    __weak typeof(self) weak_self = self;
-    [tabbar didTapItem:^(NSString *pagePath, NSUInteger pageIndex) {
-        [weak_self startPage:pagePath pageIndex:pageIndex];
-    }];
-    [tabbar didInitDefaultItem:^(NSString *pagePath, NSUInteger pageIndex) {
-        [weak_self startRootPage:pagePath pageIndex:pageIndex];
-    }];
-    [self.view addSubview:view];
-	
-	CGFloat naviHeight = IS_IPHONE_X ? 88 : 64;
-	self.naviView = [[WDHNavigationView alloc] initWithFrame:(CGRect){0,0,self.view.bounds.size.width,naviHeight}];
-    
-    [self.naviView setLeftClick:^(WDHNavigationView *view){
-        if (weak_self.pageManager) {
-            [weak_self.pageManager pop];
-        }
-    }];
-    [self.view addSubview:self.naviView];
-    
-    self.tabbar = tabbar;
-    [self.tabbar showDefaultTabarItem];
-	
 	//系统navigationBar item置空
 	self.navigationItem.hidesBackButton = YES;
+    
+    [self createTab];
 }
 
 - (void)viewDidLayoutSubviews{
@@ -142,7 +112,35 @@
 	vc.frame = (CGRect){0,webViewTop,w,h-naviHeight-tabbarFrame.size.height};
 }
 
+- (void)createTab
+{
+    WDHTabbarStyle *style = self.tabbarStyle;
+    _tabbar = [[WDHTabBar alloc] init];
+    UIView *view = [_tabbar generateWDHTabbarWithPoistion:style.position];
+    _tabbar.color = style.color;
+    _tabbar.selectedColor = style.selectedColor;
+    _tabbar.backgroundColor = style.backgroundColor;
+    _tabbar.borderStyle = style.borderStyle;
+    [_tabbar configTabbarItemList:style.list];
+    [self.view addSubview:view];
+    
+    __weak typeof(self) weak_self = self;
+    [_tabbar didTapItem:^(NSString *pagePath, NSUInteger pageIndex) {
+        [weak_self startPage:pagePath pageIndex:pageIndex];
+    }];
+    [_tabbar didInitDefaultItem:^(NSString *pagePath, NSUInteger pageIndex) {
+        [weak_self startRootPage:pagePath pageIndex:pageIndex];
+    }];
+    
+    [self.tabbar showDefaultTabarItem];
+}
+
+
 #pragma mark - Load Data
+- (void)loadTabStyle
+{
+    [self createTab];
+}
 
 - (void)loadStyle:(WDHPageModel *)pageModel
 {
@@ -195,6 +193,9 @@
 
 - (void)startRootPage:(NSString *)pagePath pageIndex:(NSUInteger)pageIndex
 {
+    if(self.childViewControllers.count <= pageIndex) {
+        return;
+    }
     [[self.view viewWithTag:WDHTabBarViewTag] removeFromSuperview];
     WDHPageBaseViewController *vc = self.childViewControllers[pageIndex];
     vc.view.tag = WDHTabBarViewTag;
@@ -207,8 +208,10 @@
 
 - (void)startPage:(NSString *)pagePath pageIndex:(NSUInteger)pageIndex
 {
+    if(self.childViewControllers.count <= pageIndex) {
+        return;
+    }
     NSLog(@"<switchTap>----->startPage:%lu",(unsigned long)pageIndex);
-    
     [_currentController viewWillDisappear:YES];
     [_currentController viewDidDisappear:YES];
     

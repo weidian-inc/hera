@@ -61,12 +61,18 @@
 
 - (void)startAppWithEntrance:(UINavigationController *)entrance {
 	
-	_manager = [[WDHManager alloc] initWithAppInfo:self.appInfo];
-	[_manager setupEntrance:entrance];
-	[_manager startService];
-	
-	[[WDHAppManager sharedManager] addApp:self];
+    [self startAppWithEntrance:entrance completion:nil];
 }
+
+- (void)startAppWithEntrance:(UINavigationController *)entrance completion:(dispatch_block_t)completion {
+    _manager = [[WDHManager alloc] initWithAppInfo:self.appInfo];
+    _manager.startRootCompletion = completion;
+    [_manager setupEntrance:entrance];
+    [_manager startService];
+    
+    [[WDHAppManager sharedManager] addApp:self];
+}
+
 
 - (void)stopApp {
 	
