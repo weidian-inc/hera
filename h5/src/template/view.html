@@ -3,21 +3,30 @@
 <head>
   <link href="https://res.wx.qq.com/mpres/htmledition/images/favicon218877.ico" rel="Shortcut Icon">
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+  />
   <script>
-      __path__ = '{{= _.path}}'
-      __wxConfig = {{= _.config}}
-      __bridgeVersion = navigator.userAgent.match(/Hera\([^\(]*?JSBridgeVersion\/([\d\.]+)[^\)]*?\)/);
-      __bridgeVersion && (__bridgeVersion = __bridgeVersion[1])
-
+    var heraLog = []
+    console.log = (function (oriLogFunc) {
+      return function () {
+        heraLog.push(arguments)
+        oriLogFunc.call(console, arguments);
+      }
+    })(console.log)
+  </script>
+  <script>
+    __path__ = '{{= _.path}}'
+    __wxConfig = {{= _.config }}
+    __bridgeVersion = navigator.userAgent.match(/Hera\([^\(]*?JSBridgeVersion\/([\d\.]+)[^\)]*?\)/);
+    __bridgeVersion && (__bridgeVersion = __bridgeVersion[1])
   </script>
   <link rel="stylesheet" href="../../../framework/css/index.css">
   <script src="../../../framework/script/view.js?v={{= _.version}}" type="text/javascript"></script>
   <script>
     window.__pageFrameStartTime__ = Date.now()
-    {{= _.inject_js}}
+    {{= _.inject_js }}
     window.__pageFrameEndTime__ = Date.now()
-    inlineCss('{{= _.css}}',window.innerWidth,window.devicePixelRatio,__path__)
+    inlineCss('{{= _.css}}', window.innerWidth, window.devicePixelRatio, __path__)
   </script>
   <script>
     document.dispatchEvent(new CustomEvent("generateFuncReady", {
@@ -27,7 +36,9 @@
     }))
   </script>
 </head>
+
 <body>
   <div></div>
 </body>
+
 </html>
