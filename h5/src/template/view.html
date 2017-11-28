@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <link href="https://res.wx.qq.com/mpres/htmledition/images/favicon218877.ico" rel="Shortcut Icon">
   <meta charset="UTF-8" />
@@ -7,12 +8,14 @@
   />
   <script>
     var heraLog = []
-    console.log = 0 && (function (oriLogFunc) {
-      return function () {
-        heraLog.push(arguments)
-        oriLogFunc.call(console, arguments);
-      }
-    })(console.log)
+    if (0) {
+      console.log = (function (oriLogFunc) {
+        return function () {
+          heraLog.push([arguments, new Date()])
+          oriLogFunc.call(console, arguments);
+        }
+      })(console.log)
+    }
   </script>
   <script>
     __path__ = '{{= _.path}}'
