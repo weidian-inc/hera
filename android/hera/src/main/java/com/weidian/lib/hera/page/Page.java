@@ -82,8 +82,8 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
         //设置标题栏背景色（通过应用配置信息获取）
         String textColor = appConfig.getNavigationBarTextColor();
         String bgColor = appConfig.getNavigationBarBackgroundColor();
-        getNavigationBar().setTextColor(ColorUtil.parseColor(textColor));
-        getNavigationBar().setBGColor(ColorUtil.parseColor(bgColor));
+        getNavigationBar().setTitleTextColor(ColorUtil.parseColor(textColor));
+        getNavigationBar().setBackgroundColor(ColorUtil.parseColor(bgColor));
     }
 
     @Override
@@ -241,7 +241,8 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
         int index = path.lastIndexOf(".");
         if (index > 0) {
             String dirPath = url.substring(0, index);
-            getNavigationBar().setText(appConfig.getPageTitle(dirPath));
+            getNavigationBar().disableNavigationBack(appConfig.isDisableNavigationBack(dirPath));
+            getNavigationBar().setTitle(appConfig.getPageTitle(dirPath));
             SwipeRefreshLayout refreshLayout = getSwipeRefreshLayout();
             if (refreshLayout != null) {
                 refreshLayout.setEnabled(appConfig.isEnablePullDownRefresh(dirPath));
@@ -278,7 +279,7 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
      */
     public void setNavigationBarTitle(String title) {
         HeraTrace.d(pageTag(), String.format("setNavigationBarTitle view@%s", getViewId()));
-        getNavigationBar().setText(title);
+        getNavigationBar().setTitle(title);
     }
 
     /**
@@ -288,8 +289,8 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
      * @param backgroundColor 背景颜色值
      */
     public void setNavigationBarColor(int frontColor, int backgroundColor) {
-        getNavigationBar().setTextColor(frontColor);
-        getNavigationBar().setBGColor(backgroundColor);
+        getNavigationBar().setTitleTextColor(frontColor);
+        getNavigationBar().setBackgroundColor(backgroundColor);
     }
 
     /**

@@ -122,11 +122,11 @@ public class ImageModule extends AbsModule implements OnActivityResultListener {
                     if (b) {
                         tempFilePaths.put(StorageUtil.SCHEME_WDFILE + saveName);
                         tempFile.put("path", StorageUtil.SCHEME_WDFILE + saveName);
-                        tempFile.put("size", getFileSize(saveFile.getAbsolutePath()));
+                        tempFile.put("size", FileUtil.getFileSize(saveFile.getAbsolutePath()));
                     } else {
                         tempFilePaths.put(StorageUtil.SCHEME_FILE + photoPath);
                         tempFile.put("path", StorageUtil.SCHEME_FILE + photoPath);
-                        tempFile.put("size", getFileSize(photoPath));
+                        tempFile.put("size", FileUtil.getFileSize(photoPath));
                     }
                     tempFiles.put(tempFile);
                 }
@@ -192,58 +192,46 @@ public class ImageModule extends AbsModule implements OnActivityResultListener {
     }
 
     private void previewImage(String params, IApiCallback callback) {
-        //String currentUrl = "";
-        ArrayList<String> imageUrls;
-        int curIndex = 0;
         try {
             JSONObject object = new JSONObject(params);
             String currentUrl = object.optString("current", "");
             JSONArray urls = object.optJSONArray("urls");
 
-
-            if (urls != null && urls.length() > 0) {
-                imageUrls = new ArrayList<>(urls.length());
-                for (int i = 0; i < urls.length(); i++) {
-                    String uriString = urls.optString(i);
-                    HeraTrace.d(TAG, uriString);
-                    if (!TextUtils.isEmpty(currentUrl) && currentUrl.equals(uriString)) {
-                        curIndex = i;
-                    }
-
-                    imageUrls.add(uriString);
-                }
-
-                if (mActivity != null) {
-                    PhotoPreview.builder()
-                            .setPhotos(imageUrls)
-                            .setCurrentItem(curIndex)
-                            .start(mActivity);
-
-                } else {
-                    HeraTrace.e(getClass().getSimpleName(), "context is null");
-                    callback.onResult(packageResultData("previewImage", RESULT_FAIL, null));
-                }
-            } else {
-                HeraTrace.e(getClass().getSimpleName(), "urls is null");
+            if (urls == null || urls.length() == 0) {
+                HeraTrace.w(TAG, "urls is null");
                 callback.onResult(packageResultData("previewImage", RESULT_FAIL, null));
-
+                return;
             }
+
+            int curIndex = 0;
+            int len = urls.length();
+            ArrayList<String> imageUrls = new ArrayList<>(len);
+            for (int i = 0; i < len; i++) {
+                String uriString = urls.optString(i);
+                if (TextUtils.isEmpty(uriString)) {
+                    continue;
+                }
+
+                if (uriString.equals(currentUrl)) {
+                    curIndex = i;
+                }
+
+                String imagePath = uriString;
+                if (uriString.startsWith(StorageUtil.SCHEME_WDFILE)) {
+                    imagePath = mMiniAppTempDir + uriString.substring(
+                            StorageUtil.SCHEME_WDFILE.length());
+                }
+                imageUrls.add(imagePath);
+            }
+
+            PhotoPreview.builder()
+                    .setPhotos(imageUrls)
+                    .setCurrentItem(curIndex)
+                    .start(mActivity);
         } catch (JSONException e) {
             callback.onResult(packageResultData("previewImage", RESULT_FAIL, null));
             HeraTrace.e(TAG, e);
         }
     }
 
-
-    private long getFileSize(String path) {
-        if (TextUtils.isEmpty(path)) {
-            return 0;
-        }
-        File file = new File(path);
-        if (file.exists()) {
-            return file.length();
-        } else {
-            return 0;
-        }
-    }
 }

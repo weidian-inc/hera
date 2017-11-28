@@ -1,13 +1,13 @@
 package com.weidian.lib.hera.sample;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.weidian.lib.hera.main.HeraService;
 
-public class SampleActivity extends Activity {
+public class SampleActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

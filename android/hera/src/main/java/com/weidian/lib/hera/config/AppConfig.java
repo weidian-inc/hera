@@ -260,6 +260,21 @@ public class AppConfig {
     }
 
     /**
+     * 判断页面是否禁用了导航栏返回按钮
+     *
+     * @param pagePath 页面路径
+     * @return true：禁用了导航栏返回按钮，否则亦然
+     */
+    public boolean isDisableNavigationBack(String pagePath) {
+        if (TextUtils.isEmpty(pagePath) || mWindowConfig == null || mWindowConfig.pages == null) {
+            return false;
+        }
+
+        JSONObject pageConfig = mWindowConfig.pages.optJSONObject(pagePath);
+        return pageConfig != null && pageConfig.optBoolean("disableNavigationBack");
+    }
+
+    /**
      * 获取TabBar背景色
      *
      * @return TabBar背景色

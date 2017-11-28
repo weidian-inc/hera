@@ -206,7 +206,7 @@ public class TabPage extends Page implements TabBar.OnSwitchTabListener {
             uri = uri.buildUpon().path(pagePath + ".html").build();
         }
 
-        mNavigationBar.setText(appConfig.getPageTitle(pagePath));
+        mNavigationBar.setTitle(appConfig.getPageTitle(pagePath));
         mTabBar.switchTab(pagePath);
         int count = mWebLayout.getChildCount();
         for (int i = 0; i < count; i++) {

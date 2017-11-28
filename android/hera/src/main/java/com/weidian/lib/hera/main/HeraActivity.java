@@ -31,7 +31,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Window;
 import android.widget.FrameLayout;
@@ -51,7 +51,7 @@ import java.util.Arrays;
 /**
  * 页面逻辑控制
  */
-public class HeraActivity extends FragmentActivity implements OnEventListener {
+public class HeraActivity extends AppCompatActivity implements OnEventListener {
 
     private static final String TAG = "HeraActivity";
     public static final String APP_ID = "app_id";

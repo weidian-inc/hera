@@ -1,23 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Light"/>
-
-    <style name="SlideNoTittle" parent="android:Theme.Light.NoTitleBar">
-        <item name="android:windowAnimationStyle">@style/activityAnim</item>
-    </style>
-
-    <!-- 使用style方式定义activity切换动画无效 -->
-    <style name="activityAnim" parent="@android:style/Animation.Translucent">
-        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
-
-        <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
-
-        <item name="android:activityCloseEnterAnimation">@android:anim/slide_in_left</item>
-
-        <item name="android:activityCloseExitAnimation">@android:anim/slide_out_right</item>
-
-    </style>
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar"/>
 
     <style name="TransparentDialog" parent="android:Theme.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>

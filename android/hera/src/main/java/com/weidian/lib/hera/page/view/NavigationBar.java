@@ -32,23 +32,21 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 
 import com.weidian.lib.hera.R;
+import com.weidian.lib.hera.utils.DensityUtil;
 
 /**
  * 自定义导航栏
  */
-public class NavigationBar extends LinearLayout {
+public class NavigationBar extends Toolbar {
 
-    private View mNavigationBar;
-    private ImageView mClose;
-    private TextView mTitle;
-    private View mProgress;
+    private ProgressBar mProgress;
 
     public NavigationBar(Context context) {
         super(context);
@@ -66,12 +64,8 @@ public class NavigationBar extends LinearLayout {
     }
 
     private void init(Context context) {
-        inflate(context, R.layout.hera_navigation_bar, this);
-        mNavigationBar = findViewById(R.id.navigation_bar);
-        mClose = (ImageView) findViewById(R.id.close);
-        mTitle = (TextView) findViewById(R.id.title);
-        mProgress = findViewById(R.id.progress);
-        mClose.setOnClickListener(new OnClickListener() {
+        setNavigationIcon(R.drawable.hera_ic_arrow_back);
+        setNavigationOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Context ctx = v.getContext();
@@ -81,38 +75,36 @@ public class NavigationBar extends LinearLayout {
             }
         });
 
-
+        mProgress = new ProgressBar(context);
+        mProgress.setIndeterminateDrawable(
+                getResources().getDrawable(R.drawable.hera_anim_navigation_loading));
+        int size = DensityUtil.dip2px(context, 20);
+        LayoutParams params = new LayoutParams(size, size);
+        params.gravity = Gravity.END;
+        params.rightMargin = size;
+        addView(mProgress, params);
+        hideLoading();
     }
 
-    /**
-     * 设置导航栏文字
-     *
-     * @param text 导航栏文字
-     */
-    public void setText(String text) {
-        mTitle.setText(text);
-    }
-
-    /**
-     * 设置导航栏文字颜色
-     *
-     * @param color 文字颜色
-     */
-    public void setTextColor(int color) {
-        mTitle.setTextColor(color);
-        Drawable drawable = mClose.getDrawable();
+    @Override
+    public void setTitleTextColor(int color) {
+        super.setTitleTextColor(color);
+        Drawable drawable = getNavigationIcon();
         if (drawable != null) {
             drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
         }
     }
 
     /**
-     * 设置导航栏背景颜色
+     * 禁用导航栏返回按钮
      *
-     * @param color 导航栏背景颜色
+     * @param disable 是否禁用
      */
-    public void setBGColor(int color) {
-        mNavigationBar.setBackgroundColor(color);
+    public void disableNavigationBack(boolean disable) {
+        if (disable) {
+            setNavigationIcon(null);
+            setNavigationOnClickListener(null);
+        }
     }
 
     /**

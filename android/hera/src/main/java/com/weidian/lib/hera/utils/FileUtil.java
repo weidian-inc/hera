@@ -333,6 +333,21 @@ public class FileUtil {
     }
 
     /**
+     * 获取文件大小
+     *
+     * @param path 文件路径
+     * @return 文件大小或-1
+     */
+    public static long getFileSize(String path) {
+        if (path == null || path.trim().length() == 0) {
+            return -1;
+        }
+
+        File file = new File(path);
+        return file.exists() && file.isFile() ? file.length() : -1;
+    }
+
+    /**
      * 将文件转换为uri字符串返回
      *
      * @param file 被转换的文件

@@ -42,14 +42,12 @@
         <activity
             android:name="com.weidian.lib.hera.main.HeraActivity"
             android:process=":hera"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.weidian.lib.hera.scancode.ui.activity.ScanCaptureActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:process=":hera"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:screenOrientation="portrait" />
 
 
     </application>
