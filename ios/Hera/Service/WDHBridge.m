@@ -28,6 +28,7 @@
 #import "WDHBridge.h"
 #import "NSObject+WDHJson.h"
 #import "WDHScriptMessageHandlerDelegate.h"
+#import "WDHLog.h"
 
 @interface WDHBridge()<WKScriptMessageHandler>
 
@@ -71,13 +72,13 @@ NSString * const WHServiceBridgeMethod_InvokeCallbackHandler = @"invokeCallbackH
     NSString *oc_method = [NSString stringWithFormat:@"%@:",name];
     SEL selector = NSSelectorFromString(oc_method);
 	
-	NSLog(@"service2app_get---->desc: %@", @{@"event":name,@"info":body});
+	HRLog(@"service2app_get---->desc: %@", @{@"event":name,@"info":body});
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     if ([self respondsToSelector:selector]) {
         [self performSelector:selector withObject:body];
     }else {
-        NSLog(@"[\(self)]未实行方法：%@", oc_method);
+        HRLog(@"[\(self)]未实行方法：%@", oc_method);
     }
 #pragma clang diagnostic pop
 }
@@ -86,7 +87,7 @@ NSString * const WHServiceBridgeMethod_InvokeCallbackHandler = @"invokeCallbackH
 
 - (void)invokeHandler:(NSDictionary *)data
 {
-    NSLog(@"<service> invokeHandler: %@",data);
+    HRLog(@"<service> invokeHandler: %@",data);
     
     NSString *command = data[@"C"];
     NSString *paramsString = data[@"paramsString"];
@@ -107,7 +108,7 @@ NSString * const WHServiceBridgeMethod_InvokeCallbackHandler = @"invokeCallbackH
 
 - (void)publishHandler:(NSDictionary *)data {
     
-    NSLog(@"<Service> publishHandler:%@",data);
+    HRLog(@"<Service> publishHandler:%@",data);
     NSString *event = data[@"event"];
     NSString *paramsString = data[@"paramsString"];
     NSArray *webviewIds = [data[@"webviewIds"] wdh_jsonObject];
@@ -125,7 +126,7 @@ NSString * const WHServiceBridgeMethod_InvokeCallbackHandler = @"invokeCallbackH
 
 - (void)loadConfigFileWithCompletion:(void(^)(NSDictionary *))completion
 {
-	NSLog(@"read_serviceConfig");
+	HRLog(@"read_serviceConfig");
     
     [self injectScriptString:@"__wxConfig__" completionHandler:^(id result, NSError *error) {
         if (completion) {
@@ -136,7 +137,7 @@ NSString * const WHServiceBridgeMethod_InvokeCallbackHandler = @"invokeCallbackH
 
 - (void)injectScriptString:(NSString *)script completionHandler:(void(^)(id result,NSError *error))completion
 {
-    NSLog(@"<Service> injectScriptString: %@",script);
+    HRLog(@"<Service> injectScriptString: %@",script);
 	
     if (self.webViewDelegate && [self.webViewDelegate respondsToSelector:@selector(serviceBridgeDidNeedInjectScript:completionHandler:)]) {
         [self.webViewDelegate serviceBridgeDidNeedInjectScript:script completionHandler:completion];
@@ -145,7 +146,7 @@ NSString * const WHServiceBridgeMethod_InvokeCallbackHandler = @"invokeCallbackH
 
 - (void)callSubscribeHandlerWithEvent:(NSString *)eventName jsonParam:(NSString *)jsonParam webId:(unsigned long long)webId  {
     NSString *js = [NSString stringWithFormat:@"ServiceJSBridge.subscribeHandler('%@',%@, %llu)",eventName,jsonParam,webId];
-    NSLog(@"<Service> 执行: %@",js);
+    HRLog(@"<Service> 执行: %@",js);
     [self injectScriptString:js completionHandler:^(id result, NSError *error) {
         
     }];
@@ -153,7 +154,7 @@ NSString * const WHServiceBridgeMethod_InvokeCallbackHandler = @"invokeCallbackH
 
 - (void)callSubscribeHandlerWithEvent:(NSString *)eventName jsonParam:(NSString *)jsonParam {
 	NSString *js = [NSString stringWithFormat:@"ServiceJSBridge.subscribeHandler('%@',%@)",eventName,jsonParam];
-	NSLog(@"<Service> 执行: %@",js);
+	HRLog(@"<Service> 执行: %@",js);
 	[self injectScriptString:js completionHandler:^(id result, NSError *error) {
 		
 	}];
@@ -162,7 +163,7 @@ NSString * const WHServiceBridgeMethod_InvokeCallbackHandler = @"invokeCallbackH
 - (void)invokeCallbackHandlerWithCallbackId:(int)callbackId param:(NSString *)param
 {
     NSString *js = [NSString stringWithFormat:@"%@.%@('%d',%@)",WHServiceBridgeObject,WHServiceBridgeMethod_InvokeCallbackHandler,callbackId,param];
-    NSLog(@"<Service> 执行: %@",js);
+    HRLog(@"<Service> 执行: %@",js);
     
     [self injectScriptString:js completionHandler:NULL];
     

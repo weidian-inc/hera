@@ -36,6 +36,7 @@
 #import "WDHDeviceMacro.h"
 #import <MJRefresh/MJRefresh.h>
 #import "WDHSystemConfig.h"
+#import "WDHLog.h"
 
 @interface WDHPageBaseViewController ()<WKScriptMessageHandler,UIWebViewDelegate,WKUIDelegate,WKNavigationDelegate, UIGestureRecognizerDelegate>
 
@@ -57,7 +58,7 @@
     
     [self loadData];
 	
-    NSLog(@"<page>: did load");
+    HRLog(@"<page>: did load");
 }
 
 
@@ -66,7 +67,7 @@
 }
 
 - (void)dealloc {
-    NSLog(@"deinit WDHPageBaseViewController");
+    HRLog(@"deinit WDHPageBaseViewController");
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -95,7 +96,7 @@
 	
 	[WDHLoadingView startAnimationInView:self.view];
 	
-    NSLog(@"<page>: viewDidAppear");
+    HRLog(@"<page>: viewDidAppear");
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -170,7 +171,7 @@
 	if (html) {
 		[self.webView loadHTMLString:html baseURL:baseUrl];
 	}else {
-		NSLog(@"%@", error.localizedDescription);
+		HRLog(@"%@", error.localizedDescription);
 		[self track_open_page_failure:error.localizedDescription];
 	}
 }
@@ -320,7 +321,7 @@
 //MARK: - WKNavigationDelegate
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation
 {
-    NSLog(@"<page>WEBVIEW START");
+    HRLog(@"<page>WEBVIEW START");
 }
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler{

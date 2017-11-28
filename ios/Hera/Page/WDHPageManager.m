@@ -31,6 +31,7 @@
 #import "WDHTabBarViewController.h"
 #import "NSString+WDH.h"
 #import "WDHAppletViewController.h"
+#import "WDHLog.h"
 
 @implementation WDHPageStack
 
@@ -527,7 +528,7 @@
 
 - (void)callSubscribeHandler:(NSString *)eventName jsonParam:(NSString *)jsonParam webIds:(NSArray *)webIds {
 	
-	NSLog(@"huck");
+	HRLog(@"huck");
 	for (NSString *webId in webIds) {
 		unsigned long long index = [webId unsignedLongLongValue];
 		for (WDHPageBaseViewController *c in [self.pageStack nodes]) {
@@ -569,7 +570,7 @@
 
 - (void)switchTabbar:(NSDictionary *)itemInfo
 {
-	NSLog(@"itemInfo:%@",itemInfo);
+	HRLog(@"itemInfo:%@",itemInfo);
 	NSArray *arr = self.pageStack.naviController.viewControllers;
 	[arr enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(WDHTabBarViewController  *controller, NSUInteger idx, BOOL * _Nonnull stop) {
 		if ([controller isKindOfClass:[WDHTabBarViewController class]]) {

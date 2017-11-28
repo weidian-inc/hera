@@ -29,6 +29,7 @@
 #import "WDHBridge.h"
 #import "NSObject+WDHJson.h"
 #import "WDHScriptMessageHandlerDelegate.h"
+#import "WDHLog.h"
 
 @interface WDHService ()<WDHServiceBridgeProtocol>
 
@@ -48,7 +49,7 @@ NSString * kWDHServiceOpenTypeRedirectTo = @"redirectTo";
 
 - (void)dealloc
 {
-	NSLog(@"deinit WDHService");
+	HRLog(@"deinit WDHService");
 }
 
 - (instancetype)initWithAppConfiguration:(NSDictionary *)appConfiguration manager:(WDHManager *)manager
@@ -70,7 +71,7 @@ NSString * kWDHServiceOpenTypeRedirectTo = @"redirectTo";
 		self.webView = webView;
     }
     
-    NSLog(@"<service>:finish load html------");
+    HRLog(@"<service>:finish load html------");
     
     return self;
 }

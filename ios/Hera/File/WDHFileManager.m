@@ -29,6 +29,7 @@
 #import "ZipArchive.h"
 #import "WDHAppInfo.h"
 #import "NSData+WDH.h"
+#import "WDHLog.h"
 
 
 static NSString *APP_CRC32_Cached_Key = @"WHBundleZip";
@@ -151,13 +152,13 @@ static NSString *PROJECT_ROOT_Framework = @"framework";
     NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"HeraRes" ofType:@"bundle"];
     NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
     if (!bundle) {
-        NSLog(@"HeraRes.bundle is missing");
+        HRLog(@"HeraRes.bundle is missing");
 		return NO;
     }
 	
     NSString *resourcesPath = [bundle pathForResource:@"framework" ofType:@"zip"];
     if (!resourcesPath) {
-        NSLog(@"framework.zip is missing");
+        HRLog(@"framework.zip is missing");
         return NO;
     }
 	
@@ -176,7 +177,7 @@ static NSString *PROJECT_ROOT_Framework = @"framework";
     if (success) {
 		[WDHFileManager removePath:[WDHFileManager tempZipPath]];
 	} else {
-		NSLog(@"unzip and move framework failed!");
+		HRLog(@"unzip and move framework failed!");
 	}
 	
 	return success;
@@ -217,17 +218,17 @@ static NSString *PROJECT_ROOT_Framework = @"framework";
             unzipAndMoveSuccess = didSuccess;
 
             if (didSuccess) {
-				NSLog(@"copyFile_success");
+				HRLog(@"copyFile_success");
             }else {
-				NSLog(@"copyFile_failure");
+				HRLog(@"copyFile_failure");
             }
             
         }else {
-			NSLog(@"unzipFile_failure");
+			HRLog(@"unzipFile_failure");
         }
         
     }else {
-		NSLog(@"unzipFile_failure");
+		HRLog(@"unzipFile_failure");
     }
     
     return unzipAndMoveSuccess;
@@ -238,7 +239,7 @@ static NSString *PROJECT_ROOT_Framework = @"framework";
     BOOL unzipAndMoveSuccess = false;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
-	NSLog(@"unzipFramework");
+	HRLog(@"unzipFramework");
     
     //解压缩
     ZipArchive *archive = [[ZipArchive alloc] initWithFileManager:fileManager];
@@ -248,7 +249,7 @@ static NSString *PROJECT_ROOT_Framework = @"framework";
         
         //unzip
         if ([archive UnzipFileTo:zipTempFolder overWrite:true]) {
-			NSLog(@"unzipFramework_success");
+			HRLog(@"unzipFramework_success");
             
             NSString *osxPath = [zipTempFolder stringByAppendingPathComponent:@"__MACOSX"];
             [WDHFileManager removePath:osxPath];
@@ -256,18 +257,18 @@ static NSString *PROJECT_ROOT_Framework = @"framework";
             
             BOOL didSuccess = [fileManager moveItemAtPath:zipTempFolder toPath:[WDHFileManager frameworkRootPath] error:nil];
             unzipAndMoveSuccess = didSuccess;
-			NSLog(@"copyFramework");
+			HRLog(@"copyFramework");
             
             if (didSuccess) {
-				NSLog(@"copyFramework_success");
+				HRLog(@"copyFramework_success");
             }else {
-                NSLog(@"copyFramework_failure");
+                HRLog(@"copyFramework_failure");
             }   
         }else {
-			NSLog(@"unzipFramework_failure  error: 解压文件失败");
+			HRLog(@"unzipFramework_failure  error: 解压文件失败");
         }
     }else {
-		NSLog(@"unzipFramework_failure  error: 文件不能解压");
+		HRLog(@"unzipFramework_failure  error: 文件不能解压");
     }
     
     return unzipAndMoveSuccess;

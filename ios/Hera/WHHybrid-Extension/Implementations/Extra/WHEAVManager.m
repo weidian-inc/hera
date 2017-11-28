@@ -161,7 +161,7 @@
 #pragma mark - AVAudioRecord Delegate
 
 - (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)flag {
-    NSLog(@"%@", recorder.url.absoluteString);
+    
     NSString *filePath = recorder.url.lastPathComponent;
     if (flag) {
         if (self.recordSuccess) {

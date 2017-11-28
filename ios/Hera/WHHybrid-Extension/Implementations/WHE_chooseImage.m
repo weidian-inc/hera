@@ -37,6 +37,7 @@
 #import "WDHFileManager.h"
 #import "WDHAppInfo.h"
 #import "WHEImageProcessor.h"
+#import "WDHLog.h"
 
 @interface WHE_chooseImage()
 
@@ -99,7 +100,7 @@
 
     if (cameraEnabled){
         UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"相机" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            NSLog(@"相机");
+            HRLog(@"相机");
             WHEImagePickerView *pickerView = [[WHEImagePickerView alloc] init];
             pickerView.completeBlock = ^(BOOL isCancel,UIImage *image) {
                 //图片处理

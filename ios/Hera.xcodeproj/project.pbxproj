@@ -166,6 +166,8 @@
 		46E55AA01F1CCDF1007D7C9E /* WDHPageBaseViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 46E55A9E1F1CCDF1007D7C9E /* WDHPageBaseViewController.h */; };
 		46E55AA11F1CCDF1007D7C9E /* WDHPageBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E55A9F1F1CCDF1007D7C9E /* WDHPageBaseViewController.m */; };
 		46FCE4131F208E8400A84199 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46FCE4121F208E8400A84199 /* WebKit.framework */; };
+		551675621FCD6E2E0037CF8F /* WDHLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 551675601FCD6E2E0037CF8F /* WDHLog.h */; };
+		551675631FCD6E2E0037CF8F /* WDHLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 551675611FCD6E2E0037CF8F /* WDHLog.m */; };
 		553A77181F46CC5C003F33F5 /* NSURLProtocol+WebKitSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 553A77141F46CC5C003F33F5 /* NSURLProtocol+WebKitSupport.h */; };
 		553A77191F46CC5C003F33F5 /* NSURLProtocol+WebKitSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 553A77151F46CC5C003F33F5 /* NSURLProtocol+WebKitSupport.m */; };
 		553A771A1F46CC5C003F33F5 /* WDHURLProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 553A77161F46CC5C003F33F5 /* WDHURLProtocol.h */; };
@@ -398,6 +400,8 @@
 		46E55A9E1F1CCDF1007D7C9E /* WDHPageBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDHPageBaseViewController.h; sourceTree = "<group>"; };
 		46E55A9F1F1CCDF1007D7C9E /* WDHPageBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDHPageBaseViewController.m; sourceTree = "<group>"; };
 		46FCE4121F208E8400A84199 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		551675601FCD6E2E0037CF8F /* WDHLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WDHLog.h; sourceTree = "<group>"; };
+		551675611FCD6E2E0037CF8F /* WDHLog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WDHLog.m; sourceTree = "<group>"; };
 		553A77141F46CC5C003F33F5 /* NSURLProtocol+WebKitSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLProtocol+WebKitSupport.h"; sourceTree = "<group>"; };
 		553A77151F46CC5C003F33F5 /* NSURLProtocol+WebKitSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLProtocol+WebKitSupport.m"; sourceTree = "<group>"; };
 		553A77161F46CC5C003F33F5 /* WDHURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDHURLProtocol.h; sourceTree = "<group>"; };
@@ -702,6 +706,8 @@
 				46DB2B221F387AEC001F5279 /* NSString+WDH.m */,
 				469D62481F14DA0300719AFE /* NSData+WDH.h */,
 				469D62491F14DA0300719AFE /* NSData+WDH.m */,
+				551675601FCD6E2E0037CF8F /* WDHLog.h */,
+				551675611FCD6E2E0037CF8F /* WDHLog.m */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -949,6 +955,7 @@
 				468282981F601DED00FC71D8 /* WHE_addPhoneContact.h in Headers */,
 				E94AD6AB1FB9559800AC5B39 /* WHEImagePickerManager.h in Headers */,
 				468282C61F601DEE00FC71D8 /* WHE_removeStorage.h in Headers */,
+				551675621FCD6E2E0037CF8F /* WDHLog.h in Headers */,
 				553A77201F46D4AF003F33F5 /* NSString+ACObfuscation.h in Headers */,
 				468E12CE1F1DECAD009472E5 /* WDHBaseViewController+Extension.h in Headers */,
 				E94AD6CC1FB9667800AC5B39 /* WHEAssetsGroupCell.h in Headers */,
@@ -1059,7 +1066,7 @@
 				TargetAttributes = {
 					469D61DB1F146E8000719AFE = {
 						CreatedOnToolsVersion = 8.3;
-						LastSwiftMigration = 0830;
+						LastSwiftMigration = 0910;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -1206,6 +1213,7 @@
 				46A8DE171F3075A700C6DAF3 /* WDHTabBarViewController.m in Sources */,
 				E94AD6D51FB968DE00AC5B39 /* WHEAssetsPreviewViewController.m in Sources */,
 				468282C11F601DEE00FC71D8 /* WHE_playVoice.m in Sources */,
+				551675631FCD6E2E0037CF8F /* WDHLog.m in Sources */,
 				469D62331F14AE2C00719AFE /* NSObject+WDHJson.m in Sources */,
 				469D623F1F14B9D400719AFE /* WDHSystemConfig.m in Sources */,
 				46E55A931F1C6062007D7C9E /* WDHBridge.m in Sources */,

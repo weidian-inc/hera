@@ -33,6 +33,7 @@
 #import "WDHApp.h"
 #import "WDHAppInfo.h"
 #import "WDHFileManager.h"
+#import "WDHLog.h"
 
 @implementation WHE_uploadFile
 
@@ -84,7 +85,7 @@
 	} error:&error];
 	
 	if (error) {
-		NSLog(@"WDHodoer upload file fail: %@", error);
+		HRLog(@"WDHodoer upload file fail: %@", error);
 		return;
 	}
 	
@@ -108,7 +109,7 @@
 		
 		if (responseObj) {
 			// 留给h5来做json解析 我们返回json字符串
-			NSLog(@"WHERequest response:%@", responseObj);
+			HRLog(@"WHERequest response:%@", responseObj);
 			if (success) {
 				if ([responseObj isKindOfClass:NSDictionary.class]) {
 					success(@{@"data":[responseObj wdh_jsonString],@"statusCode":@(statusCode)});

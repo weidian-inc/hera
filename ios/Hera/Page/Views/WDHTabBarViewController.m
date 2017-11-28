@@ -31,6 +31,7 @@
 #import "WDHPageBaseViewController.h"
 #import "WDHUtils.h"
 #import "WDHDeviceMacro.h"
+#import "WDHLog.h"
 
 @interface WDHTabBarViewController ()
 
@@ -68,7 +69,7 @@
 #pragma mark - View Life Cycle
 
 - (void)dealloc {
-	NSLog(@"deinit WDHTabBarViewController");
+	HRLog(@"deinit WDHTabBarViewController");
 }
 
 - (void)viewDidLoad {
@@ -211,7 +212,7 @@
     if(self.childViewControllers.count <= pageIndex) {
         return;
     }
-    NSLog(@"<switchTap>----->startPage:%lu",(unsigned long)pageIndex);
+    HRLog(@"<switchTap>----->startPage:%lu",(unsigned long)pageIndex);
     [_currentController viewWillDisappear:YES];
     [_currentController viewDidDisappear:YES];
     

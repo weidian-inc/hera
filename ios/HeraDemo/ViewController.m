@@ -69,6 +69,9 @@
 	appInfo.appPath = @"";
 	
 	[self.indicatorView startAnimating];
+	
+	WDHSystemConfig *config = [WDHSystemConfig sharedConfig];
+	config.enableLog = NO;
 
 	//启动
 	[[WDHInterface sharedInterface] startAppWithAppInfo:appInfo entrance:self.navigationController completion:^(BOOL success, NSString *msg) {

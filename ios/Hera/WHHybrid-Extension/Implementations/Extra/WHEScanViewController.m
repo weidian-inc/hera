@@ -29,6 +29,7 @@
 #import "WHEScanView.h"
 #import <AVFoundation/AVFoundation.h>
 #import "WHEMaskView.h"
+#import "WDHLog.h"
 
 #define kActivityViewTag 1001
 
@@ -213,7 +214,7 @@
 
 - (void)tappedOnRightBarItem {
     if(![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
-        NSLog(@"获取图片库失败");
+        HRLog(@"获取图片库失败");
         return;
     }
     

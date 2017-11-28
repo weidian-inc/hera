@@ -28,6 +28,7 @@
 #import "WDHPageBridge.h"
 #import "WDHBaseViewController+Extension.h"
 #import "WDHPageModel.h"
+#import "WDHLog.h"
 
 @implementation WDHPageBridge
 
@@ -37,7 +38,7 @@
     self.controller = controller;
 
     NSString *pageName = controller.pageModel.pagePath;
-	NSLog(@"view2app_get--->desc: %@", @{@"page":pageName ,@"event":name,@"info":body});
+	HRLog(@"view2app_get--->desc: %@", @{@"page":pageName ,@"event":name,@"info":body});
 
     if ([name isEqualToString:@"invokeHandler"]) {
         [self invokeHandler:body];
@@ -53,12 +54,12 @@
 
 //MARK: - wk js invoke/publish handler
 - (void)invokeHandler:(id)data {
-    NSLog(@"<page> invokeHandler: %@",data);
+    HRLog(@"<page> invokeHandler: %@",data);
 }
 
 - (void)publishHandler:(id)data
 {
-    NSLog(@"<page> publishHandler: %@",data);
+    HRLog(@"<page> publishHandler: %@",data);
 
     if (data) {
         NSString *e = data[@"event"];
@@ -78,13 +79,13 @@
 }
 
 - (void)callJS:(NSString *)js controller:(WDHPageBaseViewController *)controller callback:(void (^)(id result))callback {
-    NSLog(@"<page> 执行: %@",js);
+    HRLog(@"<page> 执行: %@",js);
 
     NSString *pageName = controller.pageModel.pagePath;
-	NSLog(@"app2view--->: desc: %@", @{@"page":pageName,@"info":js});
+	HRLog(@"app2view--->: desc: %@", @{@"page":pageName,@"info":js});
 
     [controller.webView evaluateJavaScript:js completionHandler:^(id _Nullable result, NSError * _Nullable error) {
-        // NSLog(@"<page> %@ 执行结果：%@",js,result);
+        // HRLog(@"<page> %@ 执行结果：%@",js,result);
         if (callback) {
             callback(result);
         }
