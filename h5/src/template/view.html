@@ -7,7 +7,7 @@
   />
   <script>
     var heraLog = []
-    console.log = (function (oriLogFunc) {
+    console.log = 0 && (function (oriLogFunc) {
       return function () {
         heraLog.push(arguments)
         oriLogFunc.call(console, arguments);

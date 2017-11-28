@@ -10,12 +10,14 @@
     var __eval = eval
     var global = {}
     var heraLog = []
-    console.log = (function (oriLogFunc) {
+    console.log = 0 && (function (oriLogFunc) {
       return function () {
         heraLog.push([arguments, new Date()])
         oriLogFunc.call(console, arguments);
       }
     })(console.log)
+
+
   </script>
   <script src="script/service-config.js?v={{= _.version}}"></script>
   <script>
