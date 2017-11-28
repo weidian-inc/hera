@@ -145,44 +145,38 @@
 - (void)page_publishHandler:(NSString *)eventName param:(NSString *)param pageModel:(WDHPageModel *)pageModel callbackId:(NSString *)callbackId
 {
 	
-	NSString *url = [pageModel pagePathUrl];
-	NSString * query = pageModel.query;
+
 	unsigned long long webId = pageModel.pageId;
 	
 	//根据具体事件进行分发
 	if ([eventName isEqualToString:@"custom_event_DOMContentLoaded"]) {
 		NSString *opentype = pageModel.openType;
-		if (opentype == nil) {
-			opentype = @"appLaunch";
-		}
-		
-		//MARK:发送onAppRoute事件
+		NSString *url = [pageModel pagePathUrl];
+		NSString * query = pageModel.query == nil ? @"appLaunch": pageModel.query;
 		[self.service onAppRoute:opentype htmlPath:url queryString:query webId:webId];
 	}else if ([eventName isEqualToString:@"custom_event_getConfig"]) {
 		NSDictionary *jsonParam = [param wdh_jsonObject];
 		[self.pageManager loadPageConfig:webId pageConfig:jsonParam];
-	}else if ([eventName isEqualToString:@"custom_event_PAGE_EVENT"]
-			  || [eventName isEqualToString:@"custom_event_SPECIAL_PAGE_EVENT"]
-			  || [eventName isEqualToString:@"custom_event_canvasInsert"]) {
-		[self.service callSubscribeHandlerWithEvent:eventName jsonParam:param webId:webId];
-	}else if ([eventName isEqualToString:@"custom_event_H5_LOG_MSG"]) {
-		NSLog(@"custom_event_H5_LOG_MSG: %@", param);
-	}else if ([eventName isEqualToString:@"custom_event_INVOKE_METHOD"]) {
-		//demo使用方法
+	}else if ([eventName isEqualToString:@"custom_event_PAGE_EVENT"]) {
 		[self.service callSubscribeHandlerWithEvent:eventName jsonParam:param webId:webId];
 	} else if ([eventName isEqualToString:@"custom_event_SPECIAL_PAGE_EVENT"]) {
 		[self.service callSubscribeHandlerWithEvent:eventName jsonParam:param webId:webId];
 	} else if ([eventName isEqualToString:@"custom_event_canvasInsert"]) {
 		[self.service callSubscribeHandlerWithEvent:eventName jsonParam:param webId:webId];
-		
+	} else if ([eventName isEqualToString:@"custom_event_video"]) {
+		[self.service callSubscribeHandlerWithEvent:eventName jsonParam:param webId:webId];
+	} else if ([eventName isEqualToString:@"custom_event_H5_LOG_MSG"]) {
+		NSLog(@"custom_event_H5_LOG_MSG: %@", param);
+	}else if ([eventName isEqualToString:@"custom_event_INVOKE_METHOD"]) {
+		[self.service callSubscribeHandlerWithEvent:eventName jsonParam:param webId:webId];
+	} else if ([eventName isEqualToString:@"custom_event_SPECIAL_PAGE_EVENT"]) {
+		[self.service callSubscribeHandlerWithEvent:eventName jsonParam:param webId:webId];
+	} else if ([eventName isEqualToString:@"custom_event_canvasInsert"]) {
+		[self.service callSubscribeHandlerWithEvent:eventName jsonParam:param webId:webId];
 	} else if ([eventName isEqualToString:@"custom_event_H5_CONSOLE_LOG"]) {
-		//控制台输出H5log
 		NSLog(@"WDHodoer custom_event_H5_CONSOLE_LOG: %@", param);
 	}
 	
-	//    else {
-	//       [self.service callSubscribeHandlerWithEvent:eventName jsonParam:param webId:webId];
-	//    }
 	
 }
 
