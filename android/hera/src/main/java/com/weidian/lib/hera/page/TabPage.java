@@ -75,7 +75,7 @@ public class TabPage extends Page implements TabBar.OnSwitchTabListener {
 
         //添加导航栏
         topLayout.addView(mNavigationBar, new LayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT));
+                mNavigationBar.getMaximumHeight()));
 
         //添加tab栏
         mTabBar = new TabBar(context, appConfig);

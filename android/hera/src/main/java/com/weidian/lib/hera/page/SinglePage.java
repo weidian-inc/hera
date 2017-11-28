@@ -66,7 +66,7 @@ public class SinglePage extends Page {
         LinearLayout topLayout = (LinearLayout) findViewById(R.id.top_layout);
         mNavigationBar = new NavigationBar(context);
         topLayout.addView(mNavigationBar, new LayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT));
+                mNavigationBar.getMaximumHeight()));
 
         mWebLayout = (FrameLayout) findViewById(R.id.web_layout);
         SwipeRefreshLayout refreshLayout = new SwipeRefreshLayout(context);
