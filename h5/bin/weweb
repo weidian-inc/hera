@@ -54,7 +54,8 @@ if (program.list) {
   open('https://github.com/Weidian-developer/hera')
   process.exit()
 }
-var tmpFolderName, curPath = process.cwd()
+var tmpFolderName,
+  curPath = process.cwd()
 var folder = program.args[0]
 if (folder) {
   var stats
@@ -68,7 +69,9 @@ if (folder) {
     if (folder.match(/\.zip$/i)) {
       tmpFolderName =
         '/tmp/__weapp' +
-        Math.random().toString(16).substr(2) +
+        Math.random()
+          .toString(16)
+          .substr(2) +
         new Date().getTime()
       childProcess.execSync(`unzip ${folder} -d ${tmpFolderName}`)
       console.log(folder)
@@ -169,10 +172,12 @@ function doTransformFile () {
               viewTpl.then(viewFn =>
                 viewFn(
                   {
-                    css: appCss +
+                    css:
+                      appCss +
                       arr[1]
                         .replace(/\/\*#\s*sourceMappingURL=.*\*\/$/, '')
-                        .replace(/(\})\s*/g, '$1'),
+                        .replace(/(\})\s*/g, '$1')
+                        .replace(/'/g, '"'),
                     config: config,
                     version: json.version,
                     inject_js: arr[0],
