@@ -84,7 +84,7 @@ public class SystemInfoModule extends AbsModule {
         this.version = "1.0";
         this.system = Build.VERSION.RELEASE;
         this.platform = "android";
-        this.SDKVersion = "0.1";
+        this.SDKVersion = "1.0";
     }
 
     @Override
@@ -108,6 +108,7 @@ public class SystemInfoModule extends AbsModule {
             json.put("system", system);
             json.put("platform", platform);
             json.put("SDKVersion", SDKVersion);
+            json.put("inHera", true);
         } catch (JSONException e) {
             HeraTrace.e(TAG, "systemInfo to json exception!");
         }
