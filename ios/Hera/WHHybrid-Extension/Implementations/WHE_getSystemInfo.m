@@ -59,7 +59,9 @@
                                  @"pixelRatio":pixelRatio,@"screenWidth":screenWidth,
                                  @"screenHeight":screenHeight,@"windowWidth":windowWidth,
                                  @"windowHeight":windowHeight,@"language":language,
-                                 @"version":version,@"system":system,@"platform":platform};
+                                 @"version":version,@"system":system,@"platform":platform,
+								 @"inHera":@(YES)
+								 };
         success(result);
     }
 }
