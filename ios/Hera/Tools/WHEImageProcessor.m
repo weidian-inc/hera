@@ -26,6 +26,7 @@
 
 
 #import "WHEImageProcessor.h"
+#import "WDHLog.h"
 
 @implementation WHEImageProcessor
 
@@ -59,8 +60,8 @@
         UIGraphicsEndImageContext();
         
 #ifdef DEBUG
-        NSLog(@"原图片width = %f height = %f scale = %f", image.size.width, image.size.height, image.size.width / image.size.height);
-        NSLog(@"新图片width = %f height = %f scale = %f", newSize.width, newSize.height, newSize.width/newSize.height);
+        HRLog(@"原图片width = %f height = %f scale = %f", image.size.width, image.size.height, image.size.width / image.size.height);
+        HRLog(@"新图片width = %f height = %f scale = %f", newSize.width, newSize.height, newSize.width/newSize.height);
 #endif
         
         return scaledImage;

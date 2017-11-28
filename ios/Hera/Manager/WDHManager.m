@@ -31,6 +31,7 @@
 #import "WDHURLProtocol.h"
 #import "NSURLProtocol+WebKitSupport.h"
 #import "WDHFileManager.h"
+#import "WDHLog.h"
 
 @interface WDHManager()
 
@@ -42,7 +43,7 @@
 
 - (void)dealloc
 {
-	NSLog(@"deinit WDHManager");
+	HRLog(@"deinit WDHManager");
 }
 
 - (instancetype)initWithAppInfo:(WDHAppInfo *)appInfo;
@@ -62,7 +63,7 @@
 }
 
 - (void)handleRefresh:(NSNotification *)notification {
-	NSLog(@"%@", notification.object);
+	HRLog(@"%@", notification.object);
 	[self.service callSubscribeHandlerWithEvent:notification.name jsonParam:@"{}" webId:[notification.object unsignedLongLongValue]];
 }
 
@@ -73,7 +74,7 @@
 
 - (void)startService
 {
-	NSLog(@"load_app_service");
+	HRLog(@"load_app_service");
 	
 	//拦截schema
 	[NSURLProtocol registerClass:[WDHURLProtocol class]];
@@ -113,7 +114,7 @@
 	if ([eventName isEqualToString:@"custom_event_appDataChange"]) {
 		[self.pageManager callSubscribeHandler:eventName jsonParam:param webIds:webIds];
 	}else if ([eventName isEqualToString:@"custom_event_serviceReady"]) {
-		NSLog(@"app_service_ready");
+		HRLog(@"app_service_ready");
 		[self.service loadConfigFileWithCompletion:^(NSDictionary *dic) {
 			//startLoad Page RootHtml
 			[self startRootPage];
@@ -121,7 +122,7 @@
 		
 	}else if ([eventName isEqualToString:@"custom_event_H5_LOG_MSG"]) {
 		NSDictionary *jsonParam = [param wdh_jsonObject];
-		NSLog(@"custom_event_H5_LOG_MSG: %@", jsonParam);
+		HRLog(@"custom_event_H5_LOG_MSG: %@", jsonParam);
 	}else if ([eventName isEqualToString:@"custom_event_getConfig"]) {
 		//加载项目配置文件
 		NSDictionary *config = [param wdh_jsonObject];
@@ -166,7 +167,7 @@
 	} else if ([eventName isEqualToString:@"custom_event_video"]) {
 		[self.service callSubscribeHandlerWithEvent:eventName jsonParam:param webId:webId];
 	} else if ([eventName isEqualToString:@"custom_event_H5_LOG_MSG"]) {
-		NSLog(@"custom_event_H5_LOG_MSG: %@", param);
+		HRLog(@"custom_event_H5_LOG_MSG: %@", param);
 	}else if ([eventName isEqualToString:@"custom_event_INVOKE_METHOD"]) {
 		[self.service callSubscribeHandlerWithEvent:eventName jsonParam:param webId:webId];
 	} else if ([eventName isEqualToString:@"custom_event_SPECIAL_PAGE_EVENT"]) {
@@ -174,7 +175,7 @@
 	} else if ([eventName isEqualToString:@"custom_event_canvasInsert"]) {
 		[self.service callSubscribeHandlerWithEvent:eventName jsonParam:param webId:webId];
 	} else if ([eventName isEqualToString:@"custom_event_H5_CONSOLE_LOG"]) {
-		NSLog(@"WDHodoer custom_event_H5_CONSOLE_LOG: %@", param);
+		HRLog(@"WDHodoer custom_event_H5_CONSOLE_LOG: %@", param);
 	}
 	
 	
@@ -182,7 +183,7 @@
 
 - (void)service_apiRequest:(NSString *)command param:(NSString *)param callbackId:(int)callbackId
 {
-	NSLog(@"service_api--->command: %@, param: %@", command, param);
+	HRLog(@"service_api--->command: %@, param: %@", command, param);
 	
 	NSDictionary *paramDic = [param wdh_jsonObject];
 	WDHApiRequest *request = [[WDHApiRequest alloc] init];
@@ -199,7 +200,7 @@
 			resultJsonString = @"{}";
 		}
 		
-		NSLog(@"service_api--->api: %@, data: %@", command, resultJsonString);
+		HRLog(@"service_api--->api: %@, data: %@", command, resultJsonString);
 		
 		[self.service invokeCallbackHandler:callbackId param:resultJsonString];
 	};

@@ -30,6 +30,7 @@
 #import <Hera/WDHodoer.h>
 #import "WDHApiRequest.h"
 #import <objc/runtime.h>
+#import "WDHLog.h"
 
 @implementation WDHybridExtensionConverter
 
@@ -38,15 +39,15 @@
     NSString *command = request.command;
     NSDictionary *param = request.param;
     
-    NSLog(@"api.command:%@",command);
-    NSLog(@"api.param:%@",param);
+    HRLog(@"api.command:%@",command);
+    HRLog(@"api.param:%@",param);
     
     //自动生成类名
     NSString *apiMethod = [NSString stringWithFormat:@"WHE_%@",command];
     Class ApiClass = NSClassFromString(apiMethod);
     
     if (!ApiClass) {
-        NSLog(@"WDHybridExtensionConverter Error");
+        HRLog(@"WDHybridExtensionConverter Error");
         return nil;
     }
     
@@ -70,7 +71,7 @@
             
             objc_property_t property = class_getProperty([api class], [propertyKey UTF8String]);
             if (!property) {
-                NSLog(@"找不到对应的属性，需要留意...");
+                HRLog(@"找不到对应的属性，需要留意...");
                 continue;
             }
             

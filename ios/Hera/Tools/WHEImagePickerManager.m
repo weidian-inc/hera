@@ -29,6 +29,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "WHEImageProcessor.h"
 #import "WHEFetchImageController.h"
+#import "WDHLog.h"
 
 @interface WHEImagePickerManager ()
 
@@ -60,7 +61,7 @@ static WHEImagePickerManager *instance = nil;
             CGFloat expectedWidth = 1080;
             // scale
             NSData * data = UIImageJPEGRepresentation(fullScreenImage, 1);
-            NSLog(@"************************** dataLength:%zd  size w:%f  size h:%f", data.length, fullScreenImage.size.width, fullScreenImage.size.height);
+            HRLog(@"************************** dataLength:%zd  size w:%f  size h:%f", data.length, fullScreenImage.size.width, fullScreenImage.size.height);
             
             if (fullScreenImage.size.width > expectedWidth) {
                 
@@ -116,7 +117,7 @@ static WHEImagePickerManager *instance = nil;
         
         // scale
         NSData * data = UIImageJPEGRepresentation(img, 1);
-        NSLog(@"************************** dataLength:%zd  size w:%f  size h:%f", data.length, img.size.width, img.size.height);
+        HRLog(@"************************** dataLength:%zd  size w:%f  size h:%f", data.length, img.size.width, img.size.height);
         
         
         if (NSClassFromString(@"WDSConfigManager")) {

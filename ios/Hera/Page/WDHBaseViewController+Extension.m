@@ -27,52 +27,53 @@
 
 #import "WDHBaseViewController+Extension.h"
 #import "WDHPageModel.h"
+#import "WDHLog.h"
 
 @implementation WDHBaseViewController(Extension)
 
 - (void) track_open_page{
     if (self.pageModel) {
-		NSLog(@"open_page--->desc: %@", @{@"page":self.pageModel.pagePath,@"openType":self.pageModel.openType});
+		HRLog(@"open_page--->desc: %@", @{@"page":self.pageModel.pagePath,@"openType":self.pageModel.openType});
     }
 }
 
 - (void)track_open_page_success{
     if (self.pageModel) {
-		NSLog(@"open_page_success--->desc: %@", @{@"page":self.pageModel.pagePath,@"openType":self.pageModel.openType});
+		HRLog(@"open_page_success--->desc: %@", @{@"page":self.pageModel.pagePath,@"openType":self.pageModel.openType});
     }
 }
 
 - (void)track_open_page_failure:(NSString *)error {
     if (self.pageModel) {
-		NSLog(@"open_page_failure--->desc: %@", @{@"page":self.pageModel.pagePath,@"openType":self.pageModel.openType});
+		HRLog(@"open_page_failure--->desc: %@", @{@"page":self.pageModel.pagePath,@"openType":self.pageModel.openType});
     }
 }
 
 - (void)track_close_page:(NSString *)pages {
-	NSLog(@"close_page----> pgae: %@", pages);
+	HRLog(@"close_page----> pgae: %@", pages);
 }
 
 - (void)track_page_ready{
     if (self.pageModel) {
-		NSLog(@"page_ready----> :%@", @{@"page":self.pageModel.pagePath,@"openType":self.pageModel.openType});
+		HRLog(@"page_ready----> :%@", @{@"page":self.pageModel.pagePath,@"openType":self.pageModel.openType});
     }
 }
 
 - (void)track_renderContainer{
     if (self.pageModel) {
-		NSLog(@"renderContainer--->desc: %@", @{@"page":self.pageModel.pagePath,@"openType":self.pageModel.openType});
+		HRLog(@"renderContainer--->desc: %@", @{@"page":self.pageModel.pagePath,@"openType":self.pageModel.openType});
     }
 }
 
 - (void)track_renderContainer_success{
     if (self.pageModel) {
-		NSLog(@"renderContainer_success--->desc: %@", @{@"page":self.pageModel.pagePath,@"openType":self.pageModel.openType});
+		HRLog(@"renderContainer_success--->desc: %@", @{@"page":self.pageModel.pagePath,@"openType":self.pageModel.openType});
     }
 }
 
 - (void)track_renderContainer_failure:(NSString *)error {
     if (self.pageModel) {
-		NSLog(@"renderContainer_failure--->desc: %@", @{@"page":self.pageModel.pagePath,@"error":error});
+		HRLog(@"renderContainer_failure--->desc: %@", @{@"page":self.pageModel.pagePath,@"error":error});
     }
 }
 
