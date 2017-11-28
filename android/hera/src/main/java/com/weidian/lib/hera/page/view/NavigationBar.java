@@ -29,6 +29,8 @@ package com.weidian.lib.hera.page.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
@@ -68,10 +70,7 @@ public class NavigationBar extends Toolbar {
         setNavigationOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Context ctx = v.getContext();
-                if (ctx instanceof Activity) {
-                    ((Activity) ctx).onBackPressed();
-                }
+                onBack(v.getContext());
             }
         });
 
@@ -86,6 +85,14 @@ public class NavigationBar extends Toolbar {
         hideLoading();
     }
 
+    private void onBack(Context context) {
+        if (context instanceof Activity) {
+            ((Activity) context).finish();
+        } else if (context instanceof ContextWrapper) {
+            onBack(((ContextWrapper) context).getBaseContext());
+        }
+    }
+
     @Override
     public void setTitleTextColor(int color) {
         super.setTitleTextColor(color);
@@ -93,6 +100,21 @@ public class NavigationBar extends Toolbar {
         if (drawable != null) {
             drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
         }
+    }
+
+    /**
+     * 获取最大显示高度
+     *
+     * @return 最大高度限制
+     */
+    public int getMaximumHeight() {
+        TypedArray typedArray = getContext().getTheme().obtainStyledAttributes(
+                new int[]{android.R.attr.actionBarSize});
+        int height = typedArray.getDimensionPixelSize(0, 0);
+        if (height <= 0) {
+            height = LayoutParams.WRAP_CONTENT;
+        }
+        return height;
     }
 
     /**

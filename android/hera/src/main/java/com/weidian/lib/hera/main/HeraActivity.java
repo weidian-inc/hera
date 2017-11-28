@@ -44,7 +44,7 @@ import com.weidian.lib.hera.service.AppService;
 import com.weidian.lib.hera.sync.HeraAppManager;
 import com.weidian.lib.hera.trace.HeraTrace;
 import com.weidian.lib.hera.utils.StorageUtil;
-import com.weidian.lib.hera.widget.LoadingDialog;
+import com.weidian.lib.hera.widget.LoadingIndicator;
 
 import java.util.Arrays;
 
@@ -64,7 +64,7 @@ public class HeraActivity extends AppCompatActivity implements OnEventListener {
     private AppService mAppService;
     private PageManager mPageManager;
 
-    private LoadingDialog mLoadingDialog;
+    private LoadingIndicator mLoadingIndicator;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,15 +99,14 @@ public class HeraActivity extends AppCompatActivity implements OnEventListener {
         mContainer = (FrameLayout) findViewById(R.id.container);
 
         //5. 初始化并同步小程序信息
-        mLoadingDialog = new LoadingDialog(this);
-        mLoadingDialog.show(getString(R.string.init_loading));
+        mLoadingIndicator = (LoadingIndicator) findViewById(R.id.loading_indicator);
+        mLoadingIndicator.setTitle(getString(R.string.app_name));
+        mLoadingIndicator.show();
         HeraAppManager.syncMiniApp(this, appId, appPath, new HeraAppManager.SyncCallback() {
             @Override
             public void onResult(boolean result) {
-                if (mLoadingDialog != null) {
-                    mLoadingDialog.dismiss();
-                }
                 if (!result || !StorageUtil.isFrameworkExists(getApplicationContext())) {
+                    mLoadingIndicator.hide();
                     finish();
                 } else {
                     loadPage(mContainer);
@@ -179,6 +178,7 @@ public class HeraActivity extends AppCompatActivity implements OnEventListener {
     @Override
     public void onServiceReady() {
         HeraTrace.d(TAG, "onServiceReady()");
+        mLoadingIndicator.hide();
         mPageManager.launchHomePage(mAppConfig.getLaunchPath(), this);
     }
 
