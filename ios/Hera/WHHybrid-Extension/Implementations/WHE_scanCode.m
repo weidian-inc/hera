@@ -43,8 +43,10 @@
         
         scanVC = nil;
     };
-    
-    [[WHECommonUtil currentNavigationController] pushViewController:scanVC animated:YES];
+	
+	UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:scanVC];
+	[[WHECommonUtil currentNavigationController] presentViewController:navi animated:YES completion:nil];
+//    [[WHECommonUtil currentNavigationController] pushViewController:scanVC animated:YES];
 }
 
 @end

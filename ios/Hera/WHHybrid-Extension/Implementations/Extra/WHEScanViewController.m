@@ -69,14 +69,20 @@
     [self setupViews];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	
+	self.view.backgroundColor = UIColor.clearColor;
+	
+	// 开启video和动画
+	[self.captureSession startRunning];
+	[self.scanView startAnimation];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:YES];
-    
-    // 开启video和动画
-    [self.captureSession startRunning];
-    [self.scanView startAnimation];
     
     // 调整导航栏和状态栏颜色
     self.navigationController.navigationBar.tintColor = UIColor.whiteColor;
@@ -90,23 +96,18 @@
     // 关闭video和动画
     [self.captureSession stopRunning];
     [self.scanView stopAnimation];
-    
-    // 还原导航栏和状态栏颜色
-//    self.navigationController.navigationBar.barStyle = self.oldBarStyle;
-//    self.navigationController.navigationBar.tintColor = self.oldNaviTintColor;
-//    [UIApplication.sharedApplication setStatusBarStyle:self.oldStatusStyle];
+
 }
 
 #pragma mark - Setup
 
 - (void)setupNavigation {
-    
-//    self.oldNaviTintColor = self.navigationController.navigationBar.tintColor;
-//    self.oldBarStyle = self.navigationController.navigationBar.barStyle;
-//    self.oldStatusStyle = [UIApplication.sharedApplication statusBarStyle];
-    
+	
     self.title = @"二维码/条码";
-    
+	
+	UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(tappedOnRightLeftItem)];
+	self.navigationItem.leftBarButtonItem = leftItem;
+	
     if (!self.isOnlyFromCamera) {
         UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc] initWithTitle:@"相册" style:UIBarButtonItemStylePlain target:self action:@selector(tappedOnRightBarItem)];
         self.navigationItem.rightBarButtonItem = rightBarItem;
@@ -150,7 +151,9 @@
     
     CGFloat width = UIScreen.mainScreen.bounds.size.width;
     CGFloat height = UIScreen.mainScreen.bounds.size.height;
-    
+	
+	self.view.backgroundColor = UIColor.blackColor;
+	
     // 添加扫描视图
     _scanView = [[WHEScanView alloc] initWithFrame:CGRectMake((width - 250) / 2, (height - 250) / 2, 250, 250)];
     _scanView.backgroundColor = UIColor.clearColor;
@@ -211,6 +214,10 @@
 
 
 #pragma mark - User Interaction
+
+- (void)tappedOnRightLeftItem {
+	[self dismissViewControllerAnimated:YES completion:nil];
+}
 
 - (void)tappedOnRightBarItem {
     if(![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
