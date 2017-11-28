@@ -25,8 +25,11 @@
 //
 
 #import "ViewController.h"
+#import "AppTransitionViewController.h"
 
 @interface ViewController ()
+
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *indicatorView;
 
 @end
 
@@ -34,29 +37,45 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    //初始加载的动画
-    [self startLoadingWithImage:[UIImage imageNamed:@"AppIcon"] title:@"Hera"];
-    
-    WDHAppInfo *appInfo = [[WDHAppInfo alloc] init];
-    //小程序标识
-    appInfo.appId = @"demoapp";
-    
-    //标识宿主app业务用户id
-    appInfo.userId = @"userId";
-    
-    //小程序资源zip路径,如果为空或未找到资源 则读取MainBundle下以appId命名的资源包(appId.zip)
-    appInfo.appPath = @"";
-    
-    //启动
-    __weak typeof(self) wself = self;
-    [[WDHInterface sharedInterface] startAppWithAppInfo:appInfo entrance:self.navigationController completion:^(BOOL success, NSString *msg) {
-        
-        if(!success) {
-            [wself stopLoadingWithCompletion:nil];
-        }
-        NSLog(@"%@", msg);
-    }];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	
+	[self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
+- (IBAction)tappedOnButton:(UIButton *)sender {
+	
+	NSString *titlte = [sender titleForState:UIControlStateNormal];
+	if ([titlte isEqualToString:@"有过渡场景"]) {
+		AppTransitionViewController *vc = [[AppTransitionViewController alloc] init];
+		[self.navigationController pushViewController:vc animated:YES];
+	} else if ([titlte isEqualToString:@"无过渡场景"]) {
+		[self startApp];
+	}
+}
+
+- (void)startApp {
+
+	WDHAppInfo *appInfo = [[WDHAppInfo alloc] init];
+	//小程序标识
+	appInfo.appId = @"demoapp";
+
+	//标识宿主app业务用户id
+	appInfo.userId = @"userId";
+
+	//小程序资源zip路径,如果为空或未找到资源 则读取MainBundle下以appId命名的资源包(appId.zip)
+	appInfo.appPath = @"";
+	
+	[self.indicatorView startAnimating];
+
+	//启动
+	[[WDHInterface sharedInterface] startAppWithAppInfo:appInfo entrance:self.navigationController completion:^(BOOL success, NSString *msg) {
+		[self.indicatorView stopAnimating];
+		
+		NSLog(@"%@", msg);
+	}];
 }
 
 @end

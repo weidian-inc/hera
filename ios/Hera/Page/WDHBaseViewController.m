@@ -40,10 +40,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	
-	if (!self.navigationController.isNavigationBarHidden) {
-		[self.navigationController setNavigationBarHidden:YES animated:YES];
-	}
     
     //导航条
     __weak typeof(self) weak_self = self;
@@ -61,6 +57,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+	
+	if (!self.navigationController.isNavigationBarHidden) {
+		[self.navigationController setNavigationBarHidden:YES animated:YES];
+	}
 }
 
 - (void)viewDidAppear:(BOOL)animated

@@ -47,6 +47,12 @@
 	[self.view addSubview:button];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	
+	[self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
 - (void)foo {
 	self.apiCompletion(@{@"result": @"heheh"});
 	[self.navigationController popViewControllerAnimated:YES];

@@ -10,6 +10,7 @@
 		5526E6451FBBD8CB0014ACE6 /* RetrieveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E6441FBBD8CB0014ACE6 /* RetrieveViewController.m */; };
 		5526E64B1FBC177E0014ACE6 /* demoapp.zip in Resources */ = {isa = PBXBuildFile; fileRef = 5526E64A1FBC177E0014ACE6 /* demoapp.zip */; };
 		5526E64E1FBC37EC0014ACE6 /* LinkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E64D1FBC37EC0014ACE6 /* LinkViewController.m */; };
+		5591AEE21FCC332C00D79F47 /* AppTransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5591AEE11FCC332C00D79F47 /* AppTransitionViewController.m */; };
 		639123BB2E30375E1AE1F3E4 /* libPods-HeraDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 70A368766FF0A5275194A974 /* libPods-HeraDemo.a */; };
 		E94AD6991FB4546600AC5B39 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E94AD68C1FB4546600AC5B39 /* AppDelegate.m */; };
 		E94AD69A1FB4546600AC5B39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E94AD68D1FB4546600AC5B39 /* Assets.xcassets */; };
@@ -30,6 +31,8 @@
 		5526E64A1FBC177E0014ACE6 /* demoapp.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = demoapp.zip; sourceTree = "<group>"; };
 		5526E64C1FBC37EC0014ACE6 /* LinkViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinkViewController.h; sourceTree = "<group>"; };
 		5526E64D1FBC37EC0014ACE6 /* LinkViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LinkViewController.m; sourceTree = "<group>"; };
+		5591AEE01FCC332C00D79F47 /* AppTransitionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppTransitionViewController.h; sourceTree = "<group>"; };
+		5591AEE11FCC332C00D79F47 /* AppTransitionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppTransitionViewController.m; sourceTree = "<group>"; };
 		70A368766FF0A5275194A974 /* libPods-HeraDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HeraDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		960E6830EC73C28305304025 /* Pods-HeraDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HeraDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-HeraDemo/Pods-HeraDemo.release.xcconfig"; sourceTree = "<group>"; };
 		E94AD68B1FB4546600AC5B39 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -114,6 +117,8 @@
 				E94AD6971FB4546600AC5B39 /* ViewController.m */,
 				5526E6431FBBD8CB0014ACE6 /* RetrieveViewController.h */,
 				5526E6441FBBD8CB0014ACE6 /* RetrieveViewController.m */,
+				5591AEE01FCC332C00D79F47 /* AppTransitionViewController.h */,
+				5591AEE11FCC332C00D79F47 /* AppTransitionViewController.m */,
 				5526E64C1FBC37EC0014ACE6 /* LinkViewController.h */,
 				5526E64D1FBC37EC0014ACE6 /* LinkViewController.m */,
 				E94AD6981FB4546600AC5B39 /* HeraRes.bundle */,
@@ -155,8 +160,7 @@
 				TargetAttributes = {
 					46D239111F20466400751BF0 = {
 						CreatedOnToolsVersion = 8.3;
-						DevelopmentTeam = S38HQFK7S4;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -249,6 +253,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5526E64E1FBC37EC0014ACE6 /* LinkViewController.m in Sources */,
+				5591AEE21FCC332C00D79F47 /* AppTransitionViewController.m in Sources */,
 				5526E6451FBBD8CB0014ACE6 /* RetrieveViewController.m in Sources */,
 				E94AD6A01FB4546600AC5B39 /* ViewController.m in Sources */,
 				E94AD69E1FB4546600AC5B39 /* main.m in Sources */,
@@ -374,7 +379,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = S38HQFK7S4;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -385,6 +391,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.koudai.weidian.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -396,7 +403,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = S38HQFK7S4;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

@@ -73,22 +73,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+	
     self.view.backgroundColor = UIColor.whiteColor;
 
-    //系统navigationBar item置空
-	self.navigationItem.hidesBackButton = YES;
-    
     [self createTab];
-	
-	CGFloat naviHeight = [UIApplication sharedApplication].statusBarFrame.size.height + 44;
-	self.naviView = [[WDHNavigationView alloc] initWithFrame:(CGRect){0,0,self.view.bounds.size.width,naviHeight}];
-    __weak typeof(self) weak_self = self;
-    [self.naviView setLeftClick:^(WDHNavigationView *view){
-        if (weak_self.pageManager) {
-            [weak_self.pageManager pop];
-        }
-    }];
-    [self.view addSubview:self.naviView];
 }
 
 - (void)viewDidLayoutSubviews{
@@ -156,15 +144,6 @@
 {
     //window 样式
 	self.naviView.leftButton.hidden = pageModel.pageStyle.disableNavigationBack;
-    
-    // 如果是rootViewController则要隐藏Back按钮
-    UINavigationController *root = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    if(self.navigationController == root && self.navigationController.viewControllers.count > 0) {
-        BOOL isRoot = self == self.navigationController.viewControllers[0];
-        if(isRoot) {
-            self.naviView.leftButton.hidden = YES;
-        }
-    }
     
     if (pageModel.pageStyle.navigationBarTitleText) {
         self.naviView.title = pageModel.pageStyle.navigationBarTitleText;

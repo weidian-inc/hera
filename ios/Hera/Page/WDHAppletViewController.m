@@ -184,6 +184,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+	self.view.backgroundColor = UIColor.whiteColor;
     self.wdh_applet_page_id = @"Weidian_Wechat_Applet_Page";
     if (!self.navigationController.isNavigationBarHidden) {
         [self.navigationController setNavigationBarHidden:YES animated:YES];

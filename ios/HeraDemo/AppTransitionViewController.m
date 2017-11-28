@@ -24,11 +24,42 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import <UIKit/UIKit.h>
-#import <Hera/WDHodoer.h>
 
-@interface ViewController : UIViewController
+#import "AppTransitionViewController.h"
 
+@interface AppTransitionViewController ()
 
 @end
 
+@implementation AppTransitionViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+	
+	//初始加载的动画
+	[self startLoadingWithImage:[UIImage imageNamed:@"AppIcon"] title:@"Hera"];
+	
+	WDHAppInfo *appInfo = [[WDHAppInfo alloc] init];
+	//小程序标识
+	appInfo.appId = @"demoapp";
+	
+	//标识宿主app业务用户id
+	appInfo.userId = @"userId";
+	
+	//小程序资源zip路径,如果为空或未找到资源 则读取MainBundle下以appId命名的资源包(appId.zip)
+	appInfo.appPath = @"";
+	
+	//启动
+	__weak typeof(self) wself = self;
+	[[WDHInterface sharedInterface] startAppWithAppInfo:appInfo entrance:self.navigationController completion:^(BOOL success, NSString *msg) {
+		
+		if(!success) {
+			[wself stopLoadingWithCompletion:nil];
+		}
+		NSLog(@"%@", msg);
+	}];
+}
+
+
+
+@end

@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Hodoer-OC-->
+        <!--Hera-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="ViewControllerID" title="Hodoer-OC" id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ViewControllerID" title="Hera" id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -20,9 +20,49 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kle-rs-wBH">
+                                <rect key="frame" x="149" y="271" width="77" height="30"/>
+                                <state key="normal" title="无过渡场景"/>
+                                <connections>
+                                    <action selector="tappedOnButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vss-1A-bU9"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l6O-hl-OyV">
+                                <rect key="frame" x="0.0" y="333" width="375" height="1"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="1AJ-qV-IMg"/>
+                                </constraints>
+                            </view>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="GvJ-gB-PVc">
+                                <rect key="frame" x="177" y="205" width="20" height="20"/>
+                            </activityIndicatorView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bRC-NR-TRk">
+                                <rect key="frame" x="149" y="233" width="77" height="30"/>
+                                <state key="normal" title="有过渡场景"/>
+                                <connections>
+                                    <action selector="tappedOnButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bDp-K5-Rc3"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="l6O-hl-OyV" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="92w-Rs-pCO"/>
+                            <constraint firstItem="bRC-NR-TRk" firstAttribute="top" secondItem="GvJ-gB-PVc" secondAttribute="bottom" constant="8" id="OFA-nh-h9L"/>
+                            <constraint firstItem="bRC-NR-TRk" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Z49-J2-mx9"/>
+                            <constraint firstItem="Kle-rs-wBH" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="dxc-D2-AW0"/>
+                            <constraint firstItem="l6O-hl-OyV" firstAttribute="top" secondItem="Kle-rs-wBH" secondAttribute="bottom" constant="32" id="f6i-9L-jhI"/>
+                            <constraint firstItem="l6O-hl-OyV" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="hOg-kP-mIU"/>
+                            <constraint firstItem="Kle-rs-wBH" firstAttribute="top" secondItem="bRC-NR-TRk" secondAttribute="bottom" constant="8" id="jlB-mC-xIJ"/>
+                            <constraint firstItem="GvJ-gB-PVc" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ti9-pg-T7I"/>
+                            <constraint firstItem="l6O-hl-OyV" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="x8j-4J-exG"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="RVy-kv-l8t"/>
+                    <navigationItem key="navigationItem" title="Hera" id="RVy-kv-l8t"/>
+                    <connections>
+                        <outlet property="indicatorView" destination="GvJ-gB-PVc" id="ilU-kz-hKR"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

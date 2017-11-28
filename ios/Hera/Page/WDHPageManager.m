@@ -456,7 +456,7 @@
                     }
                 }];
                 [viewControllers addObject:page];
-                
+
                 if(home.isLoadding) {
                     [home stopLoadingWithCompletion:^{
                         [self.pageStack.naviController setViewControllers:viewControllers];
@@ -464,6 +464,7 @@
                 } else {
                     [self.pageStack.naviController setViewControllers:viewControllers];
                 }
+
                 resetPage = YES;
             }
         }

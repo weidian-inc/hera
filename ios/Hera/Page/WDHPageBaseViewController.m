@@ -52,24 +52,8 @@
     
     self.isBack = NO;
     self.isFirstViewAppear = YES;
-    self.view.backgroundColor = UIColor.whiteColor;
-    self.navigationItem.hidesBackButton = YES;
-    self.naviView.hidden = self.isTabBarVC;
-	
-	WDHWeakScriptMessageDelegate *scriptMessageDelegate = [WDHWeakScriptMessageDelegate new];
-	scriptMessageDelegate.scriptDelegate = self;
-	
-	WKUserContentController *userContentController = [WKUserContentController new];
-	[userContentController addScriptMessageHandler:scriptMessageDelegate name:@"invokeHandler"];
-	[userContentController addScriptMessageHandler:scriptMessageDelegate name:@"publishHandler"];
 
-	WKWebViewConfiguration *wkWebViewConfiguration = [WKWebViewConfiguration new];
-	wkWebViewConfiguration.userContentController = userContentController;
-	
-	self.webView = [[WKWebView alloc] initWithFrame:self.view.bounds configuration:wkWebViewConfiguration];
-	self.webView.UIDelegate = self;
-	self.webView.navigationDelegate = self;
-	[self.view addSubview:self.webView];
+	[self setupViews];
     
     [self loadData];
 	
@@ -142,6 +126,31 @@
 	self.webView.frame = (CGRect){0,webViewTop,w,h-naviHeight};
 }
 
+#pragma mark - Private
+
+- (void)setupViews {
+	
+	self.view.backgroundColor = UIColor.whiteColor;
+	
+	self.naviView.hidden = self.isTabBarVC;
+	
+	WDHWeakScriptMessageDelegate *scriptMessageDelegate = [WDHWeakScriptMessageDelegate new];
+	scriptMessageDelegate.scriptDelegate = self;
+	
+	WKUserContentController *userContentController = [WKUserContentController new];
+	[userContentController addScriptMessageHandler:scriptMessageDelegate name:@"invokeHandler"];
+	[userContentController addScriptMessageHandler:scriptMessageDelegate name:@"publishHandler"];
+	
+	WKWebViewConfiguration *wkWebViewConfiguration = [WKWebViewConfiguration new];
+	wkWebViewConfiguration.allowsInlineMediaPlayback = YES;
+	wkWebViewConfiguration.userContentController = userContentController;
+	
+	self.webView = [[WKWebView alloc] initWithFrame:self.view.bounds configuration:wkWebViewConfiguration];
+	self.webView.UIDelegate = self;
+	self.webView.navigationDelegate = self;
+	[self.view addSubview:self.webView];
+}
+
 #pragma mark - Load Data
 
 - (void)loadData {
@@ -176,15 +185,6 @@
 		
 		// 是否隐藏Back按钮
 		self.naviView.leftButton.hidden = self.pageModel.pageStyle.disableNavigationBack;
-        
-        // 如果是rootViewController则要隐藏Back按钮
-        UINavigationController *root = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-        if(self.navigationController == root && self.navigationController.viewControllers.count > 0) {
-            BOOL isRoot = self == self.navigationController.viewControllers[0];
-            if(isRoot) {
-                self.naviView.leftButton.hidden = YES;
-            }
-        }
         
 		//window 样式
 		if (self.pageModel.pageStyle.navigationBarTitleText) {
