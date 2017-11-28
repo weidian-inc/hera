@@ -56,7 +56,6 @@ const createWXVirtualNodeRec = function (opt) {
     return createWxVirtualText(String(opt))
   }
   let children = []
-  console.log(opt.tag)
   opt.children.forEach(function (child) {
     children.push(createWXVirtualNodeRec(child))
   })
