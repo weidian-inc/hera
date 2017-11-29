@@ -29,11 +29,10 @@ function parseImports(file, wxss, cb) {
   let fn = wxss ? 'parseCssImports' : 'parseImports'
   let srcs = []
   util[fn](srcs, file, function (err) {
-    if (err) return cb(err)
-    srcs = srcs.map(src => {
-      let p = /^\//.test(src) ? src.replace(/^\//, '') : src
-      return util.normalizePath(p)
-    })
+    if (err) {
+      console.error(file+'=> ParseImports Error <='+err)
+      return cb(err)
+    }
     srcs.unshift(file)
     return cb(null, srcs.map(src => `./${src}`))
   })
@@ -118,7 +117,7 @@ module.exports = function (full_path) {
       })
     } else if (/\.js$/.test(full_path)) {
       config().then(function (obj) {
-        util.parseJavascript(obj, full_path, config.babel)
+        util.parseJavascript(obj, full_path)
           .then(function ({code, map}) {
             code = code + "\n" + convert.fromJSON(map).toComment()
             cache[full_path] = code
