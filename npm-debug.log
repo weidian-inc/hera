@@ -1,0 +1,24 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'run', 'dev' ]
+2 info using npm@4.2.0
+3 info using node@v7.10.0
+4 verbose config Skipping project config: /Users/daiyueyue/.npmrc. (matches userconfig)
+5 verbose stack Error: missing script: dev
+5 verbose stack     at run (/usr/local/lib/node_modules/npm/lib/run-script.js:151:19)
+5 verbose stack     at /usr/local/lib/node_modules/npm/lib/run-script.js:61:5
+5 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:356:5
+5 verbose stack     at checkBinReferences_ (/usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:320:45)
+5 verbose stack     at final (/usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:354:3)
+5 verbose stack     at then (/usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:124:5)
+5 verbose stack     at ReadFileContext.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:295:20)
+5 verbose stack     at ReadFileContext.callback (/usr/local/lib/node_modules/npm/node_modules/graceful-fs/graceful-fs.js:78:16)
+5 verbose stack     at FSReqWrap.readFileAfterOpen [as oncomplete] (fs.js:359:13)
+6 verbose cwd /Users/daiyueyue/hera
+7 error Darwin 16.5.0
+8 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "run" "dev"
+9 error node v7.10.0
+10 error npm  v4.2.0
+11 error missing script: dev
+12 error If you need help, you may report this error at:
+12 error     <https://github.com/npm/npm/issues>
+13 verbose exit [ 1, true ]
