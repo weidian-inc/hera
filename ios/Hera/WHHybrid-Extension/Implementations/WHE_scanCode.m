@@ -37,8 +37,8 @@
     scanVC.isOnlyFromCamera = self.onlyFromCamera;
     
     scanVC.completionBlock = ^(NSString *result, NSString *scanType) {
-        [scanVC.navigationController popViewControllerAnimated:YES];
-        
+		[scanVC dismissViewControllerAnimated:YES completion:nil];
+		
         success(@{@"result": result, @"scanType": scanType, @"charSet": @"Unicode"});
         
         scanVC = nil;
@@ -46,7 +46,6 @@
 	
 	UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:scanVC];
 	[[WHECommonUtil currentNavigationController] presentViewController:navi animated:YES completion:nil];
-//    [[WHECommonUtil currentNavigationController] pushViewController:scanVC animated:YES];
 }
 
 @end
