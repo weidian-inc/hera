@@ -26,6 +26,7 @@ import IOSImplDetail from '../../../../zh-cn/iOS/impl-detail.md';
 
 //Others
 import APIList from '../../../../zh-cn/Others/API.md';
+import Components from '../../../../zh-cn/Others/components.md';
 import APIExtend from '../../../../zh-cn/Others/API-Extend.md';
 import HavaAAPP from '../../../../zh-cn/Others/HavaAWXAPP.md';
 import ChangeLog from '../../../../zh-cn/Others/ChangeLog.md';
@@ -50,6 +51,7 @@ const mdList = {
   'ios-how-to-import': IOSHowToImport,
   'ios-real-device': IOSRealDevice,
   'ios-impl-detail': IOSImplDetail,
+  'components':Components,
   'api-list': APIList,
   'api-extend': APIExtend,
   'hava-a-wxapp': HavaAAPP,

@@ -7,14 +7,17 @@
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
   />
   <script>
-    var heraLog = []
+    var heraLog = { log: [], error: [], info:[] }
     if (0) {
-      console.log = (function (oriLogFunc) {
-        return function () {
-          heraLog.push([arguments, new Date()])
-          oriLogFunc.call(console, arguments);
-        }
-      })(console.log)
+      var logMethods = ['log', 'error', 'info']
+      logMethods.map(function (method) {
+        console[method] = (function (oriLogFunc) {
+          return function () {
+            heraLog[method].push(Array.prototype.slice.call(arguments))
+            oriLogFunc.apply(console, arguments);
+          }
+        })(console[method])
+      })
     }
   </script>
   <script>
