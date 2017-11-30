@@ -130,5 +130,5 @@
     "events": "component-events",
     "request": "request-component"
   },
-  "license": "BSD 2-Clause"
+  "license": "BSD-2-Clause"
 }
