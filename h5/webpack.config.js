@@ -62,8 +62,9 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
-        query: {
-          presets: ['env', 'stage-0']
+               query: {
+          presets: ['env', 'stage-0'],
+          babelrc: false
         }
       },
       {

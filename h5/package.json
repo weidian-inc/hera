@@ -12,18 +12,17 @@
     "build:dev": "webpack --progress",
     "dev": "WATCH=true webpack --config webpack.config.js --progress",
     "precommit": "lint-staged",
-    "format":
-      "prettier-standard './*.js' && prettier-standard 'src/**/*.js' && prettier-standard 'lib/**/*.js'"
+    "format": "prettier-standard './*.js' && prettier-standard 'src/**/*.js' && prettier-standard 'lib/**/*.js'"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/weidian-inc/hera.git"
   },
   "lint-staged": {
-    "gitDir": "../",
-    "linters": {
-      "h5/**/{*.js,*weweb,*.json}": ["prettier-standard", "git add"]
-    }
+    "{*.js,*weweb,*.json}": [
+      "prettier-standard",
+      "git add"
+    ]
   },
   "dependencies": {
     "archiver": "^2.1.0",
@@ -75,9 +74,6 @@
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-plugin-transform-runtime": "^6.15.0",
-    "babel-preset-env": "^1.6.0",
-    "babel-preset-es2015-without-strict": "^0.0.4",
-    "babel-preset-stage-0": "^6.16.0",
     "classnames": "^2.2.5",
     "component-classes": "^1.2.6",
     "component-closest": "^1.0.1",
@@ -103,7 +99,7 @@
     "husky": "^0.14.3",
     "jr-qrcode": "^1.0.5",
     "json-loader": "^0.5.4",
-    "lint-staged": "^4.3.0",
+    "lint-staged": "^6.0.0",
     "nodemon": "^1.11.0",
     "nprogress": "^0.2.0",
     "pinch-zoom": "^0.3.8",
