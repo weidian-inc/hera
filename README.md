@@ -24,7 +24,6 @@ hera run web
 
 运行于客户端上请参考：[快速上手](https://weidian-inc.github.io/hera/#/basics/quickstart)
 
-
 ## 项目目录
 
 目前该项目源码由以下部分构成：
@@ -52,12 +51,11 @@ hera run web
 - iOS:  何欣宇、孙宇、王艺桥
 - H5：戴越越、丁俊杰、彭观发
 
-
 ## 分享交流
 
-微信群|QQ群
+加小助手进微信群|QQ群
 :---:|:---:
-<img src="docs/zh-cn/Others/assets/wechat-group.jpg" height="350"/>  |  <img src="docs/zh-cn/Others/assets/qq-group.png" height="350"/>
+<img src="docs/zh-cn/Others/assets/wechat-group.jpg" width="200"/>  |  <img src="docs/zh-cn/Others/assets/qq-group.png" width="200"/>
 
 ## Licence
 
