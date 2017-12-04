@@ -12,24 +12,24 @@
     "build:dev": "webpack --progress",
     "dev": "WATCH=true webpack --config webpack.config.js --progress",
     "precommit": "lint-staged",
-    "format":
-      "prettier-standard './*.js' && prettier-standard 'src/**/*.js' && prettier-standard 'lib/**/*.js'"
+    "format": "prettier-standard './*.js' && prettier-standard 'src/**/*.js' && prettier-standard 'lib/**/*.js'"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/weidian-inc/hera.git"
   },
   "lint-staged": {
-    "gitDir": "../",
-    "linters": {
-      "h5/**/{*.js,*weweb,*.json}": ["prettier-standard", "git add"]
-    }
+    "{*.js,*weweb,*.json}": [
+      "prettier-standard",
+      "git add"
+    ]
   },
   "dependencies": {
     "archiver": "^2.1.0",
-    "babel-core": "^6.18.2",
-    "babel-polyfill": "^6.16.0",
-    "babel-preset-es2015": "^6.18.0",
+    "babel-core": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-stage-0": "^6.24.1",
     "babel-runtime": "^6.18.0",
     "boxen": "^0.8.1",
     "chalk": "^1.1.3",
@@ -40,14 +40,12 @@
     "convert-source-map": "^1.3.0",
     "copy-dir": "^0.3.0",
     "copyfiles": "^1.2.0",
-    "debounce": "^1.0.0",
     "et-improve": "^0.1.3",
     "faye-websocket": "^0.11.0",
     "glob": "^7.1.1",
     "growl": "^1.10.0",
     "jsondiffpatch": "^0.2.4",
     "koa": "^1.2.4",
-    "koa-better-body": "^3.0.2",
     "koa-compress": "^1.0.9",
     "koa-formidable": "^1.0.0",
     "koa-logger": "^1.3.0",
@@ -63,12 +61,11 @@
     "open": "0.0.5",
     "promisify-node": "^0.4.0",
     "source-map": "^0.5.6",
-    "throttleit": "^1.0.0",
     "tunnel": "0.0.4",
     "update-notifier": "^1.0.2",
     "whatwg-fetch": "^2.0.3",
-    "wxml-transpiler": "^1.0.2",
-    "wxss-transpiler": "^0.1.6"
+    "wxml-transpiler": "^1.0.4",
+    "wxss-transpiler": "^1.0.0"
   },
   "devDependencies": {
     "actionsheet": "^0.1.2",
@@ -77,9 +74,6 @@
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-plugin-transform-runtime": "^6.15.0",
-    "babel-preset-env": "^1.6.0",
-    "babel-preset-es2015-without-strict": "^0.0.4",
-    "babel-preset-stage-0": "^6.16.0",
     "classnames": "^2.2.5",
     "component-classes": "^1.2.6",
     "component-closest": "^1.0.1",
@@ -105,7 +99,7 @@
     "husky": "^0.14.3",
     "jr-qrcode": "^1.0.5",
     "json-loader": "^0.5.4",
-    "lint-staged": "^4.3.0",
+    "lint-staged": "^6.0.0",
     "nodemon": "^1.11.0",
     "nprogress": "^0.2.0",
     "pinch-zoom": "^0.3.8",
@@ -131,5 +125,6 @@
     "query": "component-query",
     "events": "component-events",
     "request": "request-component"
-  }
+  },
+  "license": "BSD-2-Clause"
 }

@@ -8,12 +8,18 @@ const Parallel = require('node-parallel')
 const babel = require('babel-core')
 const isWin = /^win/.test(process.platform)
 const Concat = require('concat-with-sourcemaps')
+const UglifyJS = require('uglify-js')
 const ni = require('os').networkInterfaces()
 const copyfiles = require('copyfiles')
 const BASE_DEVICE_WIDTH = 750
 const EPS = 0.0001
 const RPXRE = /%%\?[+-]?\d+(\.\d+)?rpx\?%%/g
 
+function normalizePath (p) {
+  if (isWin) return p.replace(/\\/g, '/')
+  return p
+}
+exports.normalizePath = normalizePath
 exports.globJSfiles = function () {
   return new Promise(function (resolve, reject) {
     glob(
@@ -130,12 +136,13 @@ exports.parseImports = function parseImports (res, file, cb) {
     let arr = []
     let p = new Parallel()
     while ((arr = re.exec(xml)) !== null) {
-      let ms = arr[0].match(/src="([^"]+)"/)
-      if (ms && ms[1]) {
-        let f = /^\//.test(ms[1])
-          ? ms[1].replace(/^\//, '')
-          : path.join(path.dirname(file), ms[1])
+      let ms = arr[0].match(/src=(['"])([^\1]+)\1/)
+      if (ms && ms[2]) {
+        let f = /^\//.test(ms[2])
+          ? ms[2].replace(/^\//, '')
+          : path.join(path.dirname(file), ms[2])
         f = /\.wxml/.test(f) ? f : `${f}.wxml`
+        f = normalizePath(f)
         if (res.indexOf(f) == -1) {
           res.push(f)
           p.add(done => {
@@ -154,12 +161,14 @@ exports.parseCssImports = function parseCssImports (res, file, cb) {
     if (err) return cb(err)
     let arr = []
     let p = new Parallel()
+    content = content.replace(/\/\*[\s\S]*?\*\//g, '')
     while ((arr = re.exec(content)) !== null) {
       let ms = arr[0].match(/(['"])([^\1]+)\1/)
       if (ms && ms[2]) {
         let f = /^\//.test(ms[2])
           ? ms[2].replace(/^\//, '')
           : path.join(path.dirname(file), ms[2])
+        f = normalizePath(f)
         if (res.indexOf(f) == -1) {
           res.push(f)
           p.add(done => {
@@ -229,11 +238,6 @@ exports.groupFiles = function (files, config) {
   return [utils, routes]
 }
 
-exports.normalizePath = function (p) {
-  if (isWin) return p.replace(/\\/g, '/')
-  return p
-}
-
 exports.parseJavascript = function (config, full_path) {
   return new Promise(function (resolve, reject) {
     let isModule =
@@ -256,22 +260,27 @@ exports.parseJavascript = function (config, full_path) {
   })
 }
 
+const inProd = process.env.NODE_ENV === 'production'
 function loadJavascript (full_path, useBabel, cb) {
-  if (useBabel) {
+  if (useBabel && useBabel != '0') {
     babel.transformFile(
       full_path,
       {
-        presets: ['babel-preset-es2015'].map(require.resolve),
-        sourceMaps: true,
+        presets: ['babel-preset-env', 'babel-preset-stage-0'].map(
+          require.resolve
+        ),
+        sourceMaps: !inProd,
         sourceRoot: process.cwd(),
         sourceFileName: full_path,
         babelrc: false,
         ast: false,
-        resolveModuleSource: false,
-        minified: true
+        resolveModuleSource: false
       },
       function (err, result) {
         if (err) return cb(err)
+        if (inProd) {
+          result.code = UglifyJS.minify(result.code, { fromString: true }).code
+        }
         cb(null, result)
       }
     )

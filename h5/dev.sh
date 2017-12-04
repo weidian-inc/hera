@@ -35,7 +35,7 @@ appSrc='dist/app.zip'
 fraSrc='dist/framework.zip'
 
 if [ "$1" == "app" ]; then
-    echo "=> Building app"
+    echo "=> Building app: "$app
     ./bin/weweb $app
     cp $appSrc ../ios/HeraDemo/demoapp.zip
     cp $appSrc ../android/sample/src/main/assets/demoapp.zip
@@ -51,7 +51,7 @@ else
     cp $fraSrc ../ios/Hera/Resources/HeraRes.bundle/framework.zip
     cp $fraSrc ../ios/HeraDemo/HeraRes.bundle/framework.zip
     cp $fraSrc ../android/hera/src/main/assets/framework.zip
-    echo "=> Building app"
+    echo "=> Building app: "$app
     ./bin/weweb $app
     cp $appSrc ../ios/HeraDemo/demoapp.zip
     cp $appSrc ../android/sample/src/main/assets/demoapp.zip

@@ -125,7 +125,8 @@ var renderOnDataChange = function (event) {
 }
 
 window.onerror = function (e, t, n, i, o) {
-  console.error(o.stack)
+  console.log(arguments)
+  console.log(o.stack)
   Reporter.errorReport({
     key: 'webviewScriptError',
     error: o

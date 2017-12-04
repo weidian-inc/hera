@@ -111,6 +111,10 @@ export default {
       ],
       others: [
         {
+          en: 'components',
+          zh: '支持的组件',
+        },
+        {
           en: 'api-list',
           zh: '支持的 API',
         },
