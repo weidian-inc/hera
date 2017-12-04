@@ -93,6 +93,9 @@
 - (void)stopService
 {
 	self.service = nil;
+	self.pageManager = nil;
+	self.pageApi = nil;
+	self.extensionApi = nil;
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }

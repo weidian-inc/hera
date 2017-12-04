@@ -76,8 +76,8 @@
 
 - (void)stopApp {
 	
-	[self.manager stopService];
 	[self.manager.pageManager resetNavigationBarHidden];
+	[self.manager stopService];
 	[[WDHAppManager sharedManager] removeApp:self];
 }
 
