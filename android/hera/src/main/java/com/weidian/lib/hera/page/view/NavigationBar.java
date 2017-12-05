@@ -87,7 +87,7 @@ public class NavigationBar extends Toolbar {
 
     private void onBack(Context context) {
         if (context instanceof Activity) {
-            ((Activity) context).finish();
+            ((Activity) context).onBackPressed();
         } else if (context instanceof ContextWrapper) {
             onBack(((ContextWrapper) context).getBaseContext());
         }
