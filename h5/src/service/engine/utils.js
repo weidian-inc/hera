@@ -1,88 +1,95 @@
-
-var isDevTools = function() {
+var isDevTools = function () {
   return true
-};
-var addHtmlSuffixToUrl = function(url) {//给url增加.html后缀
-  if ("string" != typeof url) {
-    return url;
+}
+var addHtmlSuffixToUrl = function (url) {
+  // 给url增加.html后缀
+  if (typeof url !== 'string') {
+    return url
   }
-  var uri = url.split("?")[0],
-      query = url.split("?")[1];
-  uri += ".html";
-  if ("undefined" != typeof query) {
-    return uri + "?" + query;
+  var uri = url.split('?')[0],
+    query = url.split('?')[1]
+  uri += '.html'
+  if (typeof query !== 'undefined') {
+    return uri + '?' + query
   } else {
-    return uri;
+    return uri
   }
-};
-var removeHtmlSuffixFromUrl = function(url) {//去除url后面的.html
-  if ("string" == typeof url && url.indexOf(".html") === url.length - 4) {
-    return  url.substring(0, url.length - 5);
+}
+var removeHtmlSuffixFromUrl = function (url) {
+  // 去除url后面的.html
+  if (typeof url === 'string' && url.indexOf('.html') === url.length - 4) {
+    return url.substring(0, url.length - 5)
   } else {
-    return url;
+    return url
   }
-};
+}
 
-var hasOwnProperty = Object.prototype.hasOwnProperty;
+var hasOwnProperty = Object.prototype.hasOwnProperty
 
-var toString = Object.prototype.toString;
+var toString = Object.prototype.toString
 class AppServiceEngineKnownError extends Error {
-  constructor(e) {
-    super("APP-SERVICE-Engine:" + e);
-    this.type = "AppServiceEngineKnownError";
+  constructor (e) {
+    super('APP-SERVICE-Engine:' + e)
+    this.type = 'AppServiceEngineKnownError'
   }
 }
 var pageEngine = {
-  getPlatform:function () {//get platform
-    return "devtools";
+  getPlatform: function () {
+    // get platform
+    return 'devtools'
   },
-  safeInvoke: function() {//do page method
+  safeInvoke: function () {
+    // do page method
     var res = void 0,
-        args = Array.prototype.slice.call(arguments),
-        fn = args[0];
-    args = args.slice(1);
+      args = Array.prototype.slice.call(arguments),
+      fn = args[0]
+    args = args.slice(1)
     try {
-      var startTime = Date.now();
-      res = this[fn].apply(this, args);
-      var doTime = Date.now() - startTime;
-      doTime > 1e3 && Reporter.slowReport({
-        key: "pageInvoke",
-        cost: doTime,
-        extend: "at " + this.__route__ + " page " + fn + " function"
-      });
-    } catch(e) {
+      var startTime = Date.now()
+      res = this[fn].apply(this, args)
+      var doTime = Date.now() - startTime
+      doTime > 1e3 &&
+        Reporter.slowReport({
+          key: 'pageInvoke',
+          cost: doTime,
+          extend: 'at ' + this.__route__ + ' page ' + fn + ' function'
+        })
+    } catch (e) {
       Reporter.thirdErrorReport({
         error: e,
-        extend: 'at "' + this.__route__ + '" page ' + fn + " function"
-      });
+        extend: 'at "' + this.__route__ + '" page ' + fn + ' function'
+      })
     }
-    return res;
+    return res
   },
-  isEmptyObject:function(obj) {
+  isEmptyObject: function (obj) {
     for (var t in obj) {
       if (obj.hasOwnProperty(t)) {
-        return false;
+        return false
       }
     }
-    return true;
+    return true
   },
-  extend:function(target, obj) {
+  extend: function (target, obj) {
     for (var keys = Object.keys(obj), o = keys.length; o--;) {
-      target[keys[o]] = obj[keys[o]];
+      target[keys[o]] = obj[keys[o]]
     }
-    return target;
+    return target
   },
-  noop:function() {},
-  getDataType:function(param) {
-    return Object.prototype.toString.call(param).split(" ")[1].split("]")[0];
+  noop: function () {},
+  getDataType: function (param) {
+    return Object.prototype.toString
+      .call(param)
+      .split(' ')[1]
+      .split(']')[0]
   },
-  isObject:function(param) {
-    return null !== param && "object" === typeof(param)
+  isObject: function (param) {
+    return param !== null && typeof param === 'object'
   },
-  hasOwn:function(obj, attr) {
-    return hasOwnProperty.call(obj, attr);
+  hasOwn: function (obj, attr) {
+    return hasOwnProperty.call(obj, attr)
   },
-  def:function(obj, attr, value, enumerable) {
+  def: function (obj, attr, value, enumerable) {
     Object.defineProperty(obj, attr, {
       value: value,
       enumerable: !!enumerable,
@@ -90,57 +97,63 @@ var pageEngine = {
       configurable: true
     })
   },
-  isPlainObject:function(e) {
-    return toString.call(e) === "[object Object]";
+  isPlainObject: function (e) {
+    return toString.call(e) === '[object Object]'
   },
-  error:function(title, err) {
-    console.group(new Date + " " + title);
-    console.error(err);
-    console.groupEnd();
+  error: function (title, err) {
+    console.group(new Date() + ' ' + title)
+    console.error(err)
+    console.groupEnd()
   },
-  warn:function(title, warn) {
-    console.group(new Date + " " + title);
-    console.warn(warn);
-    console.groupEnd();
+  warn: function (title, warn) {
+    console.group(new Date() + ' ' + title)
+    console.warn(warn)
+    console.groupEnd()
   },
-  info:function(msg) {
-    __wxConfig__ && __wxConfig__.debug && console.info(msg);
+  info: function (msg) {
+    __wxConfig__ && __wxConfig__.debug && console.info(msg)
   },
-  surroundByTryCatch: function(fn, extend) {
-    var self = this;
-    return function() {
+  surroundByTryCatch: function (fn, extend) {
+    var self = this
+    return function () {
       try {
-        return fn.apply(fn, arguments);
-      } catch(e) {
-        self.errorReport(e, extend);
-        return function() {};
-
+        return fn.apply(fn, arguments)
+      } catch (e) {
+        console.log(e)
+        self.errorReport(e, extend)
+        return function () {}
       }
     }
   },
-  errorReport:function(err, extend) {//d
-    if ("[object Error]" === Object.prototype.toString.apply(err)) {
-      if ("AppServiceEngineKnownError" === err.type) {
-        throw err;
+  errorReport: function (err, extend) {
+    // d
+    if (Object.prototype.toString.apply(err) === '[object Error]') {
+      if (err.type === 'AppServiceEngineKnownError') {
+        throw err
       }
       Reporter.errorReport({
-        key: "jsEnginScriptError",
+        key: 'jsEnginScriptError',
         error: err,
         extend: extend
-      });
+      })
     }
   },
-  publish:function() {
+  publish: function () {
     var params = Array.prototype.slice.call(arguments),
-        defaultOpt = {
-          options: {
-            timestamp: Date.now()
-          }
-        };
-    params[1] ? params[1].options = this.extend(params[1].options || {},defaultOpt.options) : params[1] = defaultOpt;
-    ServiceJSBridge.publish.apply(ServiceJSBridge, params);
+      defaultOpt = {
+        options: {
+          timestamp: Date.now()
+        }
+      }
+    params[1]
+      ? (params[1].options = this.extend(
+          params[1].options || {},
+          defaultOpt.options
+        ))
+      : (params[1] = defaultOpt)
+    ServiceJSBridge.publish.apply(ServiceJSBridge, params)
   },
-  AppServiceEngineKnownError:AppServiceEngineKnownError
+  AppServiceEngineKnownError: AppServiceEngineKnownError
 }
 
 // export default Object.assi{},{},pageEngine,htmlSuffix);
