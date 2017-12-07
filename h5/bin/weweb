@@ -15,7 +15,6 @@ var chalk = require('chalk')
 var archiver = require('archiver')
 var path = require('path')
 var copydir = promisify(require('copy-dir'))
-// var co = require('co')
 
 program
   .version(json.version)

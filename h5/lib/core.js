@@ -7,7 +7,6 @@ const cache = require('./cache')
 const parser = require('./parser')
 const version = require('../package.json').version
 const builder = require('./builder')
-const co = require('co')
 
 function escape (x) {
   return x
