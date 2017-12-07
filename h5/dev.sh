@@ -47,7 +47,7 @@ buildAPP() {
 
 zipFramework() {
 	echo "=> Zipping framework"
-	./bin/weweb $gatherLog -b
+	./bin/weweb -b
 	cp $fraSrc ../ios/Hera/Resources/HeraRes.bundle/framework.zip
 	cp $fraSrc ../ios/HeraDemo/HeraRes.bundle/framework.zip
 	cp $fraSrc ../android/hera/src/main/assets/framework.zip

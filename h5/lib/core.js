@@ -124,7 +124,7 @@ exports.getHeraConfig = async function () {
 }
 
 exports.getServiceJs = async function () {
-  await builder.load()
+  return builder.load()
 }
 
 exports.getPage = function (path) {
