@@ -25,7 +25,12 @@ exports.globJSfiles = function () {
     glob(
       '**/*.js',
       {
-        ignore: ['node_modules/**/*.js', 'heraTmp/**', 'heraPlatforms/**','heraConf.js']
+        ignore: [
+          'node_modules/**/*.js',
+          'heraTmp/**',
+          'heraPlatforms/**',
+          'heraConf.js'
+        ]
       },
       function (err, files) {
         if (err) return reject(err)
@@ -319,6 +324,17 @@ exports.getIp = function () {
   }
 }
 
+exports.logMethods = `var heraLog = { log: [], error: [], info:[] }
+var logMethods = ['log', 'error', 'info']
+logMethods.map(function (method) {
+  console[method] = (function (oriLogFunc) {
+    return function () {
+      heraLog[method].push(Array.prototype.slice.call(arguments))
+      oriLogFunc.apply(console, arguments);
+    }
+  })(console[method])
+})`
+
 exports.parseCss = function (content, width, ratio) {
   var b
   b = content.match(RPXRE)
@@ -394,7 +410,7 @@ exports.createFile = function (distPath, fileName, text, cb) {
       if (err) {
         throw err
       }
-      console.log(chalk.green(` ✓ Export ${fileName} Success!`))
+      // console.log(chalk.green(` ✓ Export ${fileName} Success!`))
     })
   })
 }

@@ -12,12 +12,12 @@ const wcscLinux = 'wine ' + wcscWin
 const wccMac = path.resolve(__dirname, '../bin/wcc')
 const wccWin = wccMac + '.exe'
 const wccLinux = 'wine ' + wccWin
-const wcsc = isWin ? wcscWin : (isMac ? wcscMac : wcscLinux)
-const wcc = isWin ? wccWin : (isMac ? wccMac : wccLinux)
+const wcsc = isWin ? wcscWin : isMac ? wcscMac : wcscLinux
+const wcc = isWin ? wccWin : isMac ? wccMac : wccLinux
 const util = require('./util')
 const wxssSourcemap = require('./wxss')
 const wxml_args = ['-d']
-const wxss_args = ['-lc']//, '-db'这个参数貌似跟sourcemap相关，用wine跑的时偶尔会报错，所以不用
+const wxss_args = ['-lc'] //, '-db'这个参数貌似跟sourcemap相关，用wine跑的时偶尔会报错，所以不用
 const chalk = require('chalk')
 
 const wxssTranspile = require('wxss-transpiler')
@@ -25,12 +25,12 @@ const wxmlTranspiler = require('wxml-transpiler')
 
 const convert = require('convert-source-map')
 
-function parseImports(file, wxss, cb) {
+function parseImports (file, wxss, cb) {
   let fn = wxss ? 'parseCssImports' : 'parseImports'
   let srcs = []
   util[fn](srcs, file, function (err) {
     if (err) {
-      console.error(file+'=> ParseImports Error <='+err)
+      console.error(file + '=> ParseImports Error <=' + err)
       return cb(err)
     }
     srcs.unshift(file)
@@ -51,25 +51,31 @@ module.exports = function (full_path) {
         if (err) return reject(err)
         let execWcc = execFile.bind(null, wcc, wxml_args.concat(srcs))
         if (isLinux) {
-          execWcc = exec.bind(null, [wcc].concat(wxml_args).concat(srcs).join(' '))
+          execWcc = exec.bind(
+            null,
+            [wcc]
+              .concat(wxml_args)
+              .concat(srcs)
+              .join(' ')
+          )
         }
         if (useDefaultCompiler) {
           if (wxmlMsgFlag) {
             console.log(chalk.yellow('Using wcc.exe to transpile wxml:'))
             wxmlMsgFlag = 0
           }
-          execWcc( {maxBuffer: 1024 * 600}, (err, stdout, stderr) => {
+          execWcc({ maxBuffer: 1024 * 600 }, (err, stdout, stderr) => {
             if (err) {
               console.error(err.stack)
               return reject(new Error(`${full_path} 编译失败，请检查`))
             }
-              //if (stderr) return reject(new Error(stderr))
+            // if (stderr) return reject(new Error(stderr))
             cache[full_path] = stdout
             resolve(stdout)
           })
         } else {
           if (wxmlMsgFlag) {
-            console.log(chalk.yellow('Using wxml-compiler to transpile wxml:'))
+            console.log(chalk.yellow('Using wxml-compiler to transpile wxml'))
             wxmlMsgFlag = 0
           }
           const res = wxmlTranspiler.wxmlCompile(srcs).render
@@ -83,7 +89,13 @@ module.exports = function (full_path) {
         cache.setWxssMap(srcs)
         let execWcsc = execFile.bind(null, wcsc, wxss_args.concat(srcs))
         if (isLinux) {
-          execWcsc = exec.bind(null, [wcsc].concat(wxss_args).concat(srcs).join(' '))
+          execWcsc = exec.bind(
+            null,
+            [wcsc]
+              .concat(wxss_args)
+              .concat(srcs)
+              .join(' ')
+          )
         }
         if (useDefaultCompiler) {
           if (wxssMsgFlag) {
@@ -103,7 +115,7 @@ module.exports = function (full_path) {
         } else {
           if (wxssMsgFlag) {
             console.log(
-              chalk.yellow('Using wxss-transpiler to transpile wxss: ')
+              chalk.yellow('Using wxss-transpiler to transpile wxss ')
             )
             wxssMsgFlag = 0
           }
@@ -117,15 +129,17 @@ module.exports = function (full_path) {
       })
     } else if (/\.js$/.test(full_path)) {
       config().then(function (obj) {
-        util.parseJavascript(obj, full_path)
-          .then(function ({code, map}) {
-            code = code + "\n" + convert.fromJSON(map).toComment()
+        util.parseJavascript(obj, full_path).then(
+          function ({ code, map }) {
+            code = code + '\n' + convert.fromJSON(map).toComment()
             cache[full_path] = code
             resolve(code)
-          }, function (err) {
+          },
+          function (err) {
             console.error(err.stack)
             return reject(new Error(`${full_path} 编译失败，请检查`))
-          })
+          }
+        )
       }, reject)
     } else {
       resolve()

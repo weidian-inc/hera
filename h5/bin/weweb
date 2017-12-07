@@ -23,9 +23,9 @@ program
   .option('-b, --build', '打包出Framework')
   .option('-o, --open', '使用 Chrome 打开小程序，仅对 Mac 有效')
   .option('-l, --list', '使用默认浏览器打开更新历史')
+  .option('--log', '收集 log（供 iOS 调试用）')
   .option('-p, --port <n>', '指定服务端口，默认 3000', parseInt)
   .option('-d, --dist <p>', '指定生成的路径')
-  .option('-t, --zip', '打包')
 
 program.parse(process.argv)
 
@@ -54,8 +54,8 @@ if (program.list) {
   open('https://github.com/Weidian-developer/hera')
   process.exit()
 }
-var tmpFolderName,
-  curPath = process.cwd()
+var tmpFolderName
+var curPath = process.cwd()
 var folder = program.args[0]
 if (folder) {
   var stats
@@ -109,7 +109,7 @@ var util = require('../lib/util')
 var rootPath = path.resolve(__dirname, '../tmp')
 var distPath = path.resolve(curPath, program.dist || './dist')
 
-var step = 0
+let step = 0
 function doTransformFile () {
   let commonDir = distPath + '/framework'
 
@@ -126,11 +126,13 @@ function doTransformFile () {
 
     core
       .getOtherFiles(folder, distPath)
-      .then(() => zipFiles())
+      .then(() => {
+        zipFiles('转移其它格式文件')
+      })
       .catch(e => console.log(e))
 
-    core.getService(true).then(function (content) {
-      util.createFile(distPath, 'service.html', content, zipFiles)
+    core.getService({ showLog: program.log || false }).then(function (content) {
+      util.createFile(distPath, 'service.html', content, zipFiles('构建入口'))
     })
 
     core.getServiceConfig(true).then(function (content) {
@@ -138,16 +140,26 @@ function doTransformFile () {
         distPath + '/script',
         'service-config.js',
         content,
-        zipFiles
+        zipFiles('构建配置信息')
       )
     })
 
     core.getHeraConfig(true).then(function (content) {
-      util.createFile(distPath + '/script', 'config.js', content, zipFiles)
+      util.createFile(
+        distPath + '/script',
+        'config.js',
+        content,
+        zipFiles('构建拓展 api 配置文件')
+      )
     })
 
     core.getServiceJs(true).then(function (content) {
-      util.createFile(distPath + '/script', 'app-service.js', content, zipFiles)
+      util.createFile(
+        distPath + '/script',
+        'app-service.js',
+        content,
+        zipFiles('构建小程序 JS 部分')
+      )
     })
 
     let viewTpl = util.loadTemplate('view')
@@ -179,6 +191,7 @@ function doTransformFile () {
                         .replace(/(\})\s*/g, '$1')
                         .replace(/'/g, '"'),
                     config: config,
+                    logMethods: program.log ? util.logMethods : '',
                     version: json.version,
                     inject_js: arr[0],
                     path: fullpath
@@ -196,7 +209,7 @@ function doTransformFile () {
                 () => {
                   count++
                   if (count === pages.length) {
-                    zipFiles()
+                    zipFiles('构建各小程序 View')
                   }
                 }
               )
@@ -204,22 +217,15 @@ function doTransformFile () {
         })
       })
     })
-    if (program.zip) {
-      zipFiles()
-    }
   }
 }
 
 var zipFiles = (function () {
   let step = 6
-  return function () {
+  return function (stepName) {
     step--
     if (step === 0) {
-      console.log(`Done, zipping files`)
-      // exec(`cd ${distPath} && zip -r -q ${distPath}.zip ./*`, (err, out) => {
-      //   err && console.log(err)
-      //   console.log('文件已生成到:' + distPath)
-      // })
+      console.log(chalk.green(`${stepName}完成, 开始压缩文件`))
 
       // create a file to stream archive data to.
       var output = fs.createWriteStream(`${distPath}.zip`)
@@ -228,10 +234,8 @@ var zipFiles = (function () {
       })
 
       output.on('close', function () {
-        console.log(archive.pointer() + ' total bytes')
-        // console.log(
-        //   'archiver has been finalized and the output file descriptor has closed.'
-        // )
+        const size = archive.pointer()
+        console.log(chalk.green(`压缩完成：${size} bytes (${size / 1024} kb)`))
         console.log('文件已生成到:' + distPath)
       })
 
@@ -254,7 +258,7 @@ var zipFiles = (function () {
       archive.directory(`${distPath}`, false)
       archive.finalize()
     } else {
-      console.log(`${step} step left`)
+      console.log(chalk.green(`${stepName || ''}完成，${step} step left`))
     }
   }
 })()
