@@ -7,15 +7,16 @@ const cache = require('./cache')
 const parser = require('./parser')
 const version = require('../package.json').version
 const builder = require('./builder')
-const co = require('co')
 
-function escape(x) { return x}
+function escape (x) {
+  return x
+}
 
-function noext(str) {
+function noext (str) {
   return str.replace(/\.\w+$/, '')
 }
 
-function loadFile(p, throwErr = true) {
+function loadFile (p, throwErr = true) {
   if (/\.wxss$/.test(p)) throwErr = false
   return new Promise((resolve, reject) => {
     fs.stat(`./${p}`, (err, stats) => {
@@ -36,21 +37,18 @@ function loadFile(p, throwErr = true) {
     })
   })
 }
-function getHeraConf() {
+function getHeraConf () {
   return new Promise(function (resolve, reject) {
     fs.readFile('./heraConf.js', 'utf8', (err, data) => {
       if (err) return reject('')
       try {
-
-        resolve(data.replace(/module.exports\s*=\s*/,''))
-        //resolve(conf)
-      } catch(e) {
+        resolve(data.replace(/module.exports\s*=\s*/, ''))
+        // resolve(conf)
+      } catch (e) {
         return reject('')
       }
     })
-  }).catch(function (err) {
-
-  })
+  }).catch(function (err) {})
 }
 /*
 exports.getIndex = co.wrap(function *() {
@@ -73,50 +71,66 @@ exports.getIndex = co.wrap(function *() {
 })(true)
 */
 
-exports.getService = co.wrap(function *() {
-  let  serviceFn = yield util.loadTemplate('service')  
-  return serviceFn({
-    version
-  }, {noext}, escape)
-})
-
-exports.getOtherFiles = function (src, dest) {
-  return co(function*() {
-    let fileList = yield util.getOtherFileList(src)
-    return yield util.copyFiles(fileList, dest)
-  })
+exports.getService = async function (opts) {
+  let serviceFn = await util.loadTemplate('service')
+  return serviceFn(
+    {
+      version,
+      logMethods: opts.showLog ? util.logMethods : ''
+    },
+    { noext },
+    escape
+  )
 }
 
-exports.getServiceConfig = co.wrap(function *() {
-  let [config, serviceFn] = yield [loadConfig(), util.loadJSTemplate('service-config')]
-  let pageConfig = yield util.loadJSONfiles(config.pages)
+exports.getOtherFiles = async function (src, dest) {
+  let fileList = await util.getOtherFileList(src)
+  return util.copyFiles(fileList, dest)
+}
+
+exports.getServiceConfig = async function () {
+  let [config, serviceFn] = await Promise.all([
+    loadConfig(),
+    util.loadJSTemplate('service-config')
+  ])
+  let pageConfig = await util.loadJSONfiles(config.pages)
   config['window'].pages = pageConfig
   config = JSON.stringify(config)
-  config = config.replace(/(['"](selectedIconPath|iconPath)['"]\s*:\s*['"])\//ig,"$1")
-  return serviceFn({
-    config: config
-  }, {noext}, escape)
-})
-
-exports.getHeraConfig = co.wrap(function *() {
-  let [config, serviceFn] = yield [getHeraConf(), util.loadJSTemplate('config')]
-  return serviceFn({
-    conf: config || null
-  }, {noext}, escape)
-})
-
-exports.getServiceJs = co.wrap(function* () {
-  return yield builder.load()
-})
-
-exports.getPage = function(path){
-  return co(function* () {
-    return yield [loadFile(path + '.wxml'),loadFile(path + '.wxss')]
-  })
+  config = config.replace(
+    /(['"](selectedIconPath|iconPath)['"]\s*:\s*['"])\//gi,
+    '$1'
+  )
+  return serviceFn(
+    {
+      config: config
+    },
+    { noext },
+    escape
+  )
 }
 
-exports.getAppWxss = function(path){
-  return co(function* () {
-    return yield loadFile(path + '.wxss')
-  })
+exports.getHeraConfig = async function () {
+  let [config, serviceFn] = await Promise.all([
+    getHeraConf(),
+    util.loadJSTemplate('config')
+  ])
+  return serviceFn(
+    {
+      conf: config || null
+    },
+    { noext },
+    escape
+  )
+}
+
+exports.getServiceJs = async function () {
+  return builder.load()
+}
+
+exports.getPage = function (path) {
+  return Promise.all([loadFile(path + '.wxml'), loadFile(path + '.wxss')])
+}
+
+exports.getAppWxss = async function (path) {
+  return loadFile(path + '.wxss')
 }

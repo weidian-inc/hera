@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <script>
@@ -9,19 +8,7 @@
     var __wxRouteBegin
     var __eval = eval
     var global = {}
-    var heraLog = { log: [], error: [], info:[] }
-    if (0) {
-      var logMethods = ['log', 'error', 'info']
-      logMethods.map(function (method) {
-        console[method] = (function (oriLogFunc) {
-          return function () {
-            heraLog[method].push(Array.prototype.slice.call(arguments))
-            oriLogFunc.apply(console, arguments);
-          }
-        })(console[method])
-      })
-    }
-
+    {{= _.logMethods}}
   </script>
   <script src="script/service-config.js?v={{= _.version}}"></script>
   <script>

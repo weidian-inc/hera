@@ -110,6 +110,10 @@ export default {
         },
       ],
       others: [
+      {
+          en: 'demo',
+          zh: 'Demo体验',
+        },
         {
           en: 'components',
           zh: '支持的组件',

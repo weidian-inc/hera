@@ -7,22 +7,9 @@
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
   />
   <script>
-    var heraLog = { log: [], error: [], info:[] }
-    if (0) {
-      var logMethods = ['log', 'error', 'info']
-      logMethods.map(function (method) {
-        console[method] = (function (oriLogFunc) {
-          return function () {
-            heraLog[method].push(Array.prototype.slice.call(arguments))
-            oriLogFunc.apply(console, arguments);
-          }
-        })(console[method])
-      })
-    }
-  </script>
-  <script>
     __path__ = '{{= _.path}}'
-    __wxConfig = {{= _.config }}
+    __wxConfig = {{= _.config}}
+    {{= _.logMethods}}
     __bridgeVersion = navigator.userAgent.match(/Hera\([^\(]*?JSBridgeVersion\/([\d\.]+)[^\)]*?\)/);
     __bridgeVersion && (__bridgeVersion = __bridgeVersion[1])
   </script>
