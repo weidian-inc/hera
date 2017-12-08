@@ -27,10 +27,7 @@
 
 package com.weidian.lib.hera.service;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
-import android.webkit.ValueCallback;
 import android.widget.LinearLayout;
 
 import com.weidian.lib.hera.api.ApiCallback;
@@ -94,9 +91,7 @@ public class AppService extends LinearLayout implements IBridgeHandler {
         HeraTrace.d(TAG, String.format("service handlePublish(), event=%s, params=%s, viewIds=%s",
                 event, params, viewIds));
         if ("custom_event_serviceReady".equals(event)) {
-            onEventServiceReady();
-        } else if ("custom_event_getConfig".equals(event)) {
-            onReceivedConfig(params);
+            onEventServiceReady(params);
         } else if ("custom_event_appDataChange".equals(event)) {
             onEventAppDataChanged(event, params, viewIds);
         } else if ("custom_event_H5_LOG_MSG".equals(event)) {
@@ -130,34 +125,9 @@ public class AppService extends LinearLayout implements IBridgeHandler {
     }
 
     /**
-     * service.html加载完成，获取应用的配置信息，android4.4及之上版本有效，以下版本会将配置信息主动推过来
+     * service.html加载完成，初始化应用的配置信息
      */
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    private void onEventServiceReady() {
-        if (AppConfig.CHANNEL_JSBRIDGE.equals(AppConfig.getChannelVersion())) {
-            return;
-        }
-        mServiceWebView.evaluateJavascript("__wxConfig__", new ValueCallback<String>() {
-            /**
-             * 从H5拉取业务页面配置后，要完成两项工作：
-             * I. 解析业务页面加载路径，通知AppWebView加载页面首页
-             * II.解析并根据配置项对Native页面设置
-             * 该方法在UI线程执行
-             * @param value
-             */
-            @Override
-            public void onReceiveValue(String value) {
-                onReceivedConfig(value);
-            }
-        });
-    }
-
-    /**
-     * 收到应用的配置信息
-     *
-     * @param params
-     */
-    private void onReceivedConfig(String params) {
+    private void onEventServiceReady(String params) {
         //初始化应用配置信息
         mAppConfig.initConfig(params);
         if (mEventListener != null) {

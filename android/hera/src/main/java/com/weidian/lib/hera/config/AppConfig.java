@@ -50,9 +50,6 @@ import java.util.List;
  */
 public class AppConfig {
 
-    public static final String CHANNEL_JSBRIDGE = "2.0";//JSBridge通道
-    public static final String CHANNEL_JSINTERFACE = "3.0";//JavaScriptInterface通道
-
     private static final String TAG = "AppConfig";
     private static String sHostVersion;
     private JSONObject mConfig;
@@ -61,19 +58,6 @@ public class AppConfig {
 
     private String mUserId;
     private String mAppId;
-
-    /**
-     * 根据系统版本返回JSBridge的版本号，用于切换JSBridge通道
-     *
-     * @return 使用的通道版本
-     */
-    public static String getChannelVersion() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            return CHANNEL_JSBRIDGE;
-        } else {
-            return CHANNEL_JSINTERFACE;
-        }
-    }
 
     /**
      * 获取宿主版本号
