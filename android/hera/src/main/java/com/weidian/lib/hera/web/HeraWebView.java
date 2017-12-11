@@ -37,7 +37,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 
-import com.weidian.lib.hera.config.AppConfig;
+import com.weidian.lib.hera.config.HeraConfig;
 import com.weidian.lib.hera.interfaces.IBridgeHandler;
 import com.weidian.lib.hera.trace.HeraTrace;
 
@@ -47,7 +47,6 @@ import java.lang.reflect.Method;
 public class HeraWebView extends WebView {
 
     private Boolean mIsAccessibilityEnabledOriginal;
-    private IBridgeHandler mBridgeHandler;
 
     public HeraWebView(Context context) {
         super(context);
@@ -81,21 +80,18 @@ public class HeraWebView extends WebView {
         webSetting.setUseWideViewPort(true);
         webSetting.setCacheMode(WebSettings.LOAD_NO_CACHE);
         String ua = webSetting.getUserAgentString();
-        webSetting.setUserAgentString(String.format("%s Hera(JSBridgeVersion/%s)", ua,
-                AppConfig.getChannelVersion()));
+        webSetting.setUserAgentString(String.format("%s Hera(version/%s)", ua, HeraConfig.VERSION));
         setVerticalScrollBarEnabled(false);
         setHorizontalScrollBarEnabled(false);
     }
 
     public void setJsHandler(IBridgeHandler handler) {
-        mBridgeHandler = handler;
-        addJavascriptInterface(new JSInterface(mBridgeHandler), "HeraJSCore");
+        addJavascriptInterface(new JSInterface(handler), "HeraJSCore");
     }
 
     @Override
     public void destroy() {
         try {
-            mBridgeHandler = null;
             setWebChromeClient(null);
             removeJavascriptInterface("HeraJSCore");
             releaseConfigCallback();
