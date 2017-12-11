@@ -1,6 +1,6 @@
 {
   "name": "hera-weweb",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "wx 2 app",
   "main": "bin/weweb",
   "bin": {
