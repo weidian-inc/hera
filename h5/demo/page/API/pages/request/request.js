@@ -34,5 +34,39 @@ Page({
         })
       }
     })
+  },
+  makePostRequest: function () {
+    var self = this
+
+    self.setData({
+      PostLoading: true
+    })
+
+    wx.request({
+      url: `https://httpbin.org/post`,
+      method: 'POST',
+      data: {
+        noncestr: Date.now()
+      },
+      success: function (result) {
+        wx.showToast({
+          title: '请求成功',
+          icon: 'success',
+          mask: true,
+          duration: duration
+        })
+        self.setData({
+          PostLoading: false
+        })
+        console.log('request success', result)
+      },
+
+      fail: function ({ errMsg }) {
+        console.log('request fail', errMsg)
+        self.setData({
+          PostLoading: false
+        })
+      }
+    })
   }
 })

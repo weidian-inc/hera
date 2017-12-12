@@ -12,6 +12,7 @@
     </view>
     <view class="btn-area">
       <button bindtap="makeRequest" type="primary" disabled="{{buttonDisabled}}" loading="{{loading}}">request</button>
+      <button bindtap="makePostRequest" type="primary" disabled="{{buttonPostDisabled}}" loading="{{PostLoading}}">request(post)</button>
     </view>
   </view>
 
