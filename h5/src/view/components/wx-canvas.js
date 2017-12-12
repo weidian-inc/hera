@@ -419,35 +419,39 @@ export default window.exparser.registerElement({
               if (_method === 'fillText') {
                 ctx.fillText.apply(ctx, _data)
               } else {
+                function transformUrl (uri) {
+                  if (!/https?:/i.test(uri)) {
+                    if (uri.substring(0, 1) === '/') {
+                      uri = uri.substr(1)
+                    } else {
+                      const currPath = window.__path__.split('/').slice(0, -1)
+                      if (currPath.length) {
+                        uri = `${currPath.join('/')}/${uri}`
+                      }
+                    }
+                  }
+                  return uri
+                }
                 if (_method === 'drawImage') {
-                  !(function () {
-                    var _arr = _toArray(_data),
-                      _url = _arr[0],
-                      params = _arr.slice(1)
-                    self._images = self._images || {}
-                    /*
-                                         _url = _url.replace(
-                                         'wdfile://',
-                                         'http://wxfile.open.weixin.qq.com/'
-                                         )
-                                         */
-
-                    if (self._images[_url]) {
+                  var _arr = _toArray(_data),
+                    _url = transformUrl(_arr[0]),
+                    params = _arr.slice(1)
+                  self._images = self._images || {}
+                  if (self._images[_url]) {
+                    ctx.drawImage.apply(
+                      ctx,
+                      [self._images[_url]].concat(_toCopyArray(params))
+                    )
+                  } else {
+                    self._images[_url] = new Image()
+                    self._images[_url].src = _url
+                    self._images[_url].onload = function () {
                       ctx.drawImage.apply(
                         ctx,
                         [self._images[_url]].concat(_toCopyArray(params))
                       )
-                    } else {
-                      self._images[_url] = new Image()
-                      self._images[_url].src = _url
-                      self._images[_url].onload = function () {
-                        ctx.drawImage.apply(
-                          ctx,
-                          [self._images[_url]].concat(_toCopyArray(params))
-                        )
-                      }
                     }
-                  })()
+                  }
                 } else {
                   ctx[_method].apply(ctx, _data)
                 }
