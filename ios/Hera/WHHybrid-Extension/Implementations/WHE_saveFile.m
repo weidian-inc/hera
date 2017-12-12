@@ -51,7 +51,7 @@
     }
 	
 	WDHApp *app = [[WDHAppManager sharedManager] currentApp];
-    NSString *cacheDir = [WDHFileManager appTempDirPath:app.appInfo.userId];
+    NSString *cacheDir = [WDHFileManager appTempDirPath:app.appInfo.appId];
     NSString *fileRealPath = [cacheDir stringByAppendingPathComponent:tempfileName];
     
     NSFileManager *fileManager = [NSFileManager defaultManager];

@@ -329,7 +329,8 @@ var logMethods = ['log', 'error', 'info']
 logMethods.map(function (method) {
   console[method] = (function (oriLogFunc) {
     return function () {
-      heraLog[method].push(Array.prototype.slice.call(arguments))
+      var args = Array.prototype.slice.call(arguments)
+      heraLog[method].push(args.length == 1 ? args[0] : args)
       oriLogFunc.apply(console, arguments);
     }
   })(console[method])

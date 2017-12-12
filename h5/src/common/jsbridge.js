@@ -15,7 +15,7 @@
       defaultEventHandlers = {},
       eventPrefix = 'custom_event_',
       handlers = {},
-      PROTOCAL = 'wdhybrid',
+            PROTOCAL = 'hera',
       IFRAME_PREFIX = 'hybridjsbrige_'
     if (hasDocument) {
       var userAgent = global.navigator.userAgent,

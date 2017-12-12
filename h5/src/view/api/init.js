@@ -33,9 +33,7 @@ bridge.subscribe("initLogs", function (params) {
 
 execOnReady(function () {
   setTimeout(function () {
-      bridge.publish("DOMContentLoaded", {})
-      if(__bridgeVersion=='2.0'){
-          bridge.publish('getConfig', __wxConfig);
-      }
+    bridge.publish("DOMContentLoaded", {})
+    //bridge.publish('getConfig', __wxConfig);
   }, 1e2)
 })

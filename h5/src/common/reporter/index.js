@@ -120,6 +120,7 @@ var utils = {
             extend: ext
           })
       } catch (e) {
+        console.log(e)
         utils.thirdErrorReport({
           error: e,
           extend: ext
@@ -227,6 +228,7 @@ var utils = {
   thirdErrorReport: function (params) {
     var error = params.error,
       extend = params.extend
+    console.log(error)
     utils.errorReport({
       key: 'thirdScriptError',
       error: error,

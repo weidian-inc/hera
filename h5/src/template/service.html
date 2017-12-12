@@ -11,10 +11,6 @@
     {{= _.logMethods}}
   </script>
   <script src="script/service-config.js?v={{= _.version}}"></script>
-  <script>
-    var __bridgeVersion = navigator.userAgent.match(/Hera\([^\(]*?JSBridgeVersion\/([\d\.]+)[^\)]*?\)/);
-    __bridgeVersion && (__bridgeVersion = __bridgeVersion[1])
-  </script>
   <script src="script/config.js?v={{= _.version}}" type="text/javascript"></script>
   <script src="../../../framework/script/service.js?v={{= _.version}}" type="text/javascript"></script>
   <script src="script/app-service.js?v={{= _.version}}"></script>
@@ -22,10 +18,7 @@
 
 <body>
   <script>
-    ServiceJSBridge.publish('serviceReady', {}, [100000]);
-    if (__bridgeVersion == '2.0') {
-      ServiceJSBridge.publish('getConfig', __wxConfig__, [100000]);
-    }
+    ServiceJSBridge.publish('serviceReady', __wxConfig__, [100000]);
   </script>
 </body>
 
