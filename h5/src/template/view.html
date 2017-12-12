@@ -13,11 +13,15 @@
   </script>
   <link rel="stylesheet" href="../../../framework/css/index.css">
   <script src="../../../framework/script/view.js?v={{= _.version}}" type="text/javascript"></script>
+  <script id="inlineCss" type="text/noexec">
+    {{= _.css}}
+  </script>
   <script>
+    inlineCss(document.getElementById('inlineCss').innerHTML, window.innerWidth, window.devicePixelRatio, __path__)
     window.__pageFrameStartTime__ = Date.now()
     {{= _.inject_js }}
     window.__pageFrameEndTime__ = Date.now()
-    inlineCss('{{= _.css}}', window.innerWidth, window.devicePixelRatio, __path__)
+
   </script>
   <script>
     document.dispatchEvent(new CustomEvent("generateFuncReady", {

@@ -164,10 +164,8 @@ function doTransformFile () {
     let viewTpl = util.loadTemplate('view')
     let appCss
     core.getAppWxss('./app').then(function (content) {
-      appCss = content
-        .replace(/\/\*#\s*sourceMappingURL=.*\*\/$/, '')
-        .replace(/(\})\s*/g, '$1')
-        .replace(/'/g, '"')
+      appCss = content.replace(/\/\*#\s*sourceMappingURL=.*\*\/$/, '')
+
       util.readFile('./app.json').then(function (config) {
         let appConfig = JSON.parse(config)
         let pages = appConfig.pages
@@ -185,10 +183,8 @@ function doTransformFile () {
                   {
                     css:
                       appCss +
-                      arr[1]
-                        .replace(/\/\*#\s*sourceMappingURL=.*\*\/$/, '')
-                        .replace(/(\})\s*/g, '$1')
-                        .replace(/'/g, '"'),
+                      '\n' +
+                      arr[1].replace(/\/\*#\s*sourceMappingURL=.*\*\/$/, ''),
                     config: config,
                     logMethods: program.log ? util.logMethods : '',
                     version: json.version,
