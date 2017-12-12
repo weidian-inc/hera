@@ -26,6 +26,7 @@
 
 
 #import "WHE_request.h"
+#import "WDHLog.h"
 
 NSString *WHERequestMethodPOST = @"POST";
 NSString *WHERequestMethodGET = @"GET";
@@ -126,14 +127,9 @@ NSString *WHERequestContentTypeJson = @"application/json";
                                             }
                                             
                                             if (data) {
-                                                id result = nil;
-                                                if ([dataType isEqualToString:WHERequestDataTypeJson]) {
-                                                    result = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-                                                }else {
-                                                    result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                                                }
+                                                NSString *result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                                                 
-                                                NSLog(@"WHERequest response:%@", result);
+                                                HRLog(@"WHERequest response:%@", result);
                                                 
                                                 if (success) {
                                                     if (result) {
