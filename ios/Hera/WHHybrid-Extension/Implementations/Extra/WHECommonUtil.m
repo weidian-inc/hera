@@ -33,6 +33,8 @@
 #import <Photos/Photos.h>
 #import <MessageUI/MessageUI.h>
 #import "WDHBundleUtil.h"
+#import "WDHFileManager.h"
+#import "WHEMacro.h"
 
 #ifndef     WHECommonUtil_m
 #define     WHECommonUtil_m
@@ -78,6 +80,22 @@ static WHECommonUtil *utilInstance_ = nil;
 
 
 #pragma mark - common UI
+
++ (NSString *)realPathForWDFile:(NSString *)wdfile appId:(NSString *)appId {
+	
+	NSString *fileRealPath = nil;
+ 	if ([wdfile hasPrefix:[WDH_FILE_SCHEMA stringByAppendingString:@"tmp_"]]) {
+		NSRange range = [wdfile rangeOfString: WDH_FILE_SCHEMA];
+		NSString *fileName = [wdfile substringFromIndex:NSMaxRange(range)];
+		fileRealPath = [[WDHFileManager appTempDirPath:appId] stringByAppendingPathComponent:fileName];
+	} else if ([wdfile hasPrefix:[WDH_FILE_SCHEMA stringByAppendingString:@"store_"]]) {
+		NSRange range = [wdfile rangeOfString: WDH_FILE_SCHEMA];
+		NSString *fileName = [wdfile substringFromIndex:NSMaxRange(range)];
+		fileRealPath = [[WDHFileManager appPersistentDirPath:appId] stringByAppendingPathComponent:fileName];
+	}
+	
+	return fileRealPath;
+}
 
 
 + (UIFont *)transferToiOSFontSize:(CGFloat)oriFontSize

@@ -34,6 +34,8 @@
 
 #pragma mark - common UI
 
++ (NSString *)realPathForWDFile:(NSString *)wdfile appId:(NSString *)appId;
+
 /**
  生成返回按钮
 

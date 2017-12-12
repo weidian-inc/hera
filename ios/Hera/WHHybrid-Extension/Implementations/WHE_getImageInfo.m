@@ -28,9 +28,9 @@
 #import "WHE_getImageInfo.h"
 #import "WDHApp.h"
 #import "WDHAppManager.h"
-#import "WDHAppInfo.h"
 #import "WDHFileManager.h"
 #import <UIKit/UIKit.h>
+#import "WHECommonUtil.h"
 
 @implementation WHE_getImageInfo
 
@@ -46,27 +46,38 @@
         
         return;
     }
-    
-    NSURL *fileURL = [NSURL URLWithString:filePath];
+	
 	WDHApp *app = [[WDHAppManager sharedManager] currentApp];
-    NSString *fileRootPath = [WDHFileManager appTempDirPath:app.appInfo.appId];
-    NSString *fileName = fileURL.lastPathComponent;
-    NSString *localFilePath = [fileRootPath stringByAppendingPathComponent:fileName];
-    
-    UIImage *image = [[UIImage alloc] initWithContentsOfFile:localFilePath];
-    
-    if (!image) {
-        if (failure) {
-            failure(@{@"error":@"本地图片不存在！"});
-        }
-        return;
-    }
-    
-    CGSize size = image.size;
-    
-    if (success) {
-        success(@{@"width":[NSString stringWithFormat:@"%@",@(size.width)],@"height":[NSString stringWithFormat:@"%@",@(size.height)],@"path":localFilePath});
-    }
+	
+	NSURL *fileURL = nil;
+	if ([filePath hasPrefix:@"wdfile://"]) {
+		fileURL = [NSURL fileURLWithPath:[WHECommonUtil realPathForWDFile:filePath appId:app.appInfo.appId]];
+	} else {
+		fileURL = [NSURL URLWithString:filePath];
+	}
+	
+	if (fileURL) {
+		
+		dispatch_async(dispatch_get_global_queue(0, 0), ^{
+			NSData *data = [NSData dataWithContentsOfURL:fileURL];
+			UIImage *image = [UIImage imageWithData:data];
+			if (image) {
+				 CGSize size = image.size;
+				if (success) {
+					success(@{@"width":[NSString stringWithFormat:@"%@",@(size.width)],@"height":[NSString stringWithFormat:@"%@",@(size.height)],@"path":[fileURL path]});
+				}
+			} else {
+				if (failure) {
+					failure(@{@"error":@"image error！"});
+				}
+			}
+		});
+		
+	} else {
+		if (failure) {
+			failure(@{@"error":@"src error！"});
+		}
+	}
 }
 
 @end
