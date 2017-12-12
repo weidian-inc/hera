@@ -1,5 +1,10 @@
 # Hera
 
+[![node](https://img.shields.io/badge/node-%3E%3D%207.6.0-brightgreen.svg?style=flat-square)]()
+[![running](https://img.shields.io/badge/Running-Android%20%7C%20iOS%20%7C%20H5%20%7C%20MiniProgram-brightgreen.svg?style=flat-square)]()
+[![dev-platform](https://img.shields.io/badge/Dev%20Platrorm-Mac%20%7C%20Win%20%7C%20Linux-brightgreen.svg?style=flat-square)]()
+
+
 Hera 是一个用小程序方式来写跨平台应用的开发框架，使用它可以让你的小程序除了在微信上运行，还可以打包成 Android 、 iOS应用，以及以h5的方式跑在浏览器端
 
 ## 快速体验
