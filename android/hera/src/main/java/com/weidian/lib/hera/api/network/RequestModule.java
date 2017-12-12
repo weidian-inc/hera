@@ -66,21 +66,20 @@ public class RequestModule extends AbsModule {
     public void invoke(final String event, String params, final IApiCallback callback) {
         String url = "";
         String method = "";
-        String dataType = "";
         JSONObject data = null;
         JSONObject header = null;
         try {
             JSONObject jsonObject = new JSONObject(params);
             url = jsonObject.optString("url");
             method = jsonObject.optString("method");
-            dataType = jsonObject.optString("dataType");
-            data = jsonObject.optJSONObject("data");
             header = jsonObject.optJSONObject("header");
+            String dataStr = jsonObject.optString("data");
+            if (!TextUtils.isEmpty(dataStr)) {
+                data = new JSONObject(dataStr);
+            }
         } catch (Exception e) {
             Log.w(TAG, "parse params exception", e);
         }
-
-        final boolean isJsonData = "json".equals(dataType);
 
         if (TextUtils.isEmpty(url)) {
             callback.onResult(packageResultData(event, RESULT_FAIL, null));
@@ -129,11 +128,7 @@ public class RequestModule extends AbsModule {
                     try {
                         data.put("statusCode", response.code());
                         String result = response.body().string();
-                        if (isJsonData) {
-                            data.put("data", new JSONObject(result));
-                        } else {
-                            data.put("data", result);
-                        }
+                        data.put("data", result);
                         JSONObject headerJson = new JSONObject();
                         Headers resHeaders = response.headers();
                         for (int i = 0, size = resHeaders.size(); i < size; i++) {
