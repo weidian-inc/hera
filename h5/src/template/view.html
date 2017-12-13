@@ -13,9 +13,9 @@
   </script>
   <link rel="stylesheet" href="../../../framework/css/index.css">
   <script src="../../../framework/script/view.js?v={{= _.version}}" type="text/javascript"></script>
-  <script id="inlineCss" type="text/noexec">
+  <style id="inlineCss" type="text/customize-css">
     {{= _.css}}
-  </script>
+  </style>
   <script>
     inlineCss(document.getElementById('inlineCss').innerHTML, window.innerWidth, window.devicePixelRatio, __path__)
     window.__pageFrameStartTime__ = Date.now()
