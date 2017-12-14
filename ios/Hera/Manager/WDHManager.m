@@ -116,26 +116,20 @@
 	//pageManager根据参数分发到具体页面
 	if ([eventName isEqualToString:@"custom_event_appDataChange"]) {
 		[self.pageManager callSubscribeHandler:eventName jsonParam:param webIds:webIds];
-	}else if ([eventName isEqualToString:@"custom_event_serviceReady"]) {
+	}
+	else if ([eventName isEqualToString:@"custom_event_serviceReady"]) {
 		HRLog(@"app_service_ready");
-		[self.service loadConfigFileWithCompletion:^(NSDictionary *dic) {
-			//startLoad Page RootHtml
-			[self startRootPage];
-		}];
-		
-	}else if ([eventName isEqualToString:@"custom_event_H5_LOG_MSG"]) {
-		NSDictionary *jsonParam = [param wdh_jsonObject];
-		HRLog(@"custom_event_H5_LOG_MSG: %@", jsonParam);
-	}else if ([eventName isEqualToString:@"custom_event_getConfig"]) {
-		//加载项目配置文件
 		NSDictionary *config = [param wdh_jsonObject];
-		if (config) {
+		if (config && [config isKindOfClass:NSDictionary.class]) {
 			self.service.appConfig = config;
-			//startLoad Page RootHtml
 			[self startRootPage];
 		}
-		
-	} else {
+	}
+	else if ([eventName isEqualToString:@"custom_event_H5_LOG_MSG"]) {
+		NSDictionary *jsonParam = [param wdh_jsonObject];
+		HRLog(@"custom_event_H5_LOG_MSG: %@", jsonParam);
+	}
+	else {
 		[self.pageManager callSubscribeHandler:eventName jsonParam:param webIds:webIds];
 	}
 	

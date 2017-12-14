@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		5526E6451FBBD8CB0014ACE6 /* RetrieveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E6441FBBD8CB0014ACE6 /* RetrieveViewController.m */; };
-		5526E64B1FBC177E0014ACE6 /* demoapp.zip in Resources */ = {isa = PBXBuildFile; fileRef = 5526E64A1FBC177E0014ACE6 /* demoapp.zip */; };
 		5526E64E1FBC37EC0014ACE6 /* LinkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E64D1FBC37EC0014ACE6 /* LinkViewController.m */; };
+		554570A71FE21D9C00FC4E7B /* demoapp.zip in Resources */ = {isa = PBXBuildFile; fileRef = 554570A61FE21D9B00FC4E7B /* demoapp.zip */; };
 		5591AEE21FCC332C00D79F47 /* AppTransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5591AEE11FCC332C00D79F47 /* AppTransitionViewController.m */; };
 		639123BB2E30375E1AE1F3E4 /* libPods-HeraDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 70A368766FF0A5275194A974 /* libPods-HeraDemo.a */; };
 		E94AD6991FB4546600AC5B39 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E94AD68C1FB4546600AC5B39 /* AppDelegate.m */; };
@@ -28,9 +28,9 @@
 		46D239121F20466400751BF0 /* HeraDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HeraDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5526E6431FBBD8CB0014ACE6 /* RetrieveViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RetrieveViewController.h; sourceTree = "<group>"; };
 		5526E6441FBBD8CB0014ACE6 /* RetrieveViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RetrieveViewController.m; sourceTree = "<group>"; };
-		5526E64A1FBC177E0014ACE6 /* demoapp.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = demoapp.zip; sourceTree = "<group>"; };
 		5526E64C1FBC37EC0014ACE6 /* LinkViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinkViewController.h; sourceTree = "<group>"; };
 		5526E64D1FBC37EC0014ACE6 /* LinkViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LinkViewController.m; sourceTree = "<group>"; };
+		554570A61FE21D9B00FC4E7B /* demoapp.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = demoapp.zip; sourceTree = "<group>"; };
 		5591AEE01FCC332C00D79F47 /* AppTransitionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppTransitionViewController.h; sourceTree = "<group>"; };
 		5591AEE11FCC332C00D79F47 /* AppTransitionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppTransitionViewController.m; sourceTree = "<group>"; };
 		70A368766FF0A5275194A974 /* libPods-HeraDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HeraDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,7 +103,7 @@
 		E94AD68A1FB4546600AC5B39 /* HeraDemo */ = {
 			isa = PBXGroup;
 			children = (
-				5526E64A1FBC177E0014ACE6 /* demoapp.zip */,
+				554570A61FE21D9B00FC4E7B /* demoapp.zip */,
 				E94AD68B1FB4546600AC5B39 /* AppDelegate.h */,
 				E94AD68C1FB4546600AC5B39 /* AppDelegate.m */,
 				E94AD68D1FB4546600AC5B39 /* Assets.xcassets */,
@@ -188,10 +188,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				E94AD6A11FB4546600AC5B39 /* HeraRes.bundle in Resources */,
+				554570A71FE21D9C00FC4E7B /* demoapp.zip in Resources */,
 				E94AD69D1FB4546600AC5B39 /* Info.plist in Resources */,
 				E94AD69C1FB4546600AC5B39 /* Main.storyboard in Resources */,
 				E94AD69A1FB4546600AC5B39 /* Assets.xcassets in Resources */,
-				5526E64B1FBC177E0014ACE6 /* demoapp.zip in Resources */,
 				E94AD69B1FB4546600AC5B39 /* LaunchScreen.storyboard in Resources */,
 				E94AD69F1FB4546600AC5B39 /* resources.xcassets in Resources */,
 			);
