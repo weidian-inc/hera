@@ -445,6 +445,7 @@ export default window.exparser.registerElement({
                   } else {
                     self._images[_url] = new Image()
                     self._images[_url].src = _url
+                    self._images[_url].crossOrigin = 'anonymous'
                     self._images[_url].onload = function () {
                       ctx.drawImage.apply(
                         ctx,
