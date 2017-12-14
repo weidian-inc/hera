@@ -46,25 +46,25 @@ export default  window.exparser.registerElement({
             return void console.error('navigator should have url attribute')
         }
         if (this.redirect) {
-            return void wx.redirectTo({
+            return void wd.redirectTo({
                 url: this.url
             })
         }
         switch (this.openType) {
             case 'navigate':
-                return void wx.navigateTo({
+                return void wd.navigateTo({
                     url: this.url
                 })
             case 'redirect':
-                return void wx.redirectTo({
+                return void wd.redirectTo({
                     url: this.url
                 })
             case 'switchTab':
-                return void wx.switchTab({
+                return void wd.switchTab({
                     url: this.url
                 })
             case"reLaunch":
-                return void wx.reLaunch({
+                return void wd.reLaunch({
                     url: this.url
                 })
             default:

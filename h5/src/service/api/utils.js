@@ -178,7 +178,7 @@ function encodeUrlQuery(url) {//把url中的参数encode
 }
 
 function addHTMLSuffix(url) {//给url加上。html的扩展名
-    if ("string" != typeof url) throw new A("wd.redirectTo: invalid url:" + url);
+    if ("string" != typeof url) throw new A("wx.redirectTo: invalid url:" + url);
     var urlArr = url.split("?");
     urlArr[0] += ".html"
     return "undefined" != typeof urlArr[1] ? urlArr[0] + "?" + urlArr[1] : urlArr[0]

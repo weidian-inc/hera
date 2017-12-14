@@ -256,7 +256,7 @@ var invokeShareAppMessage = function(params, pWebviewId) {//invoke event onShare
     }
     return shareParams;
 };
-wd.onAppRoute(utils.surroundByTryCatch(function(params) {
+wx.onAppRoute(utils.surroundByTryCatch(function(params) {
     var path = params.path,
         webviewId = params.webviewId,
         query = params.query || {},
@@ -264,7 +264,7 @@ wd.onAppRoute(utils.surroundByTryCatch(function(params) {
     skipPage(path, webviewId, query, openType);
 }), "onAppRoute");
 
-wd.onWebviewEvent(utils.surroundByTryCatch(function(params) {
+wx.onWebviewEvent(utils.surroundByTryCatch(function(params) {
     var webviewId = params.webviewId,
         eventName = params.eventName,
         data = params.data;

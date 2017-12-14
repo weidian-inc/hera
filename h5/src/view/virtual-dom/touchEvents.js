@@ -28,7 +28,7 @@ const checkScrollBottom = function () {
 
 const triggerPullUpRefresh = function () {
   if (refreshFinish && !stopedTouch) {
-    wx.publishPageEvent('onReachBottom', {})
+    wd.publishPageEvent('onReachBottom', {})
     refreshFinish = !1
     setTimeout(
       function () {

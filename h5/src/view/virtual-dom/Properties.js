@@ -124,7 +124,7 @@ function applyProperties (ele, props) {
                   !(function () {
                     const execAnimationAction = function () {
                       if (turns < actonsLen) {
-                        let styles = wx.animationToStyle(actons[turns]),
+                        let styles = wd.animationToStyle(actons[turns]),
                           transition = styles.transition,
                           transitionProperty = styles.transitionProperty,
                           transform = styles.transform,
@@ -199,7 +199,7 @@ const addEventHandler = function (ele, eventName, pageEventName, useCapture) {
   void 0 === ele.__wxEventHandleName[eventName] &&
     ele.addListener(eventName, function (event) {
       if (ele.__wxEventHandleName[eventName]) {
-        window.wx.publishPageEvent(ele.__wxEventHandleName[eventName], {
+        window.wd.publishPageEvent(ele.__wxEventHandleName[eventName], {
           type: event.type,
           timeStamp: event.timeStamp,
           target: getEleInfo(event.target),

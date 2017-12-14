@@ -66,7 +66,7 @@ window.exparser.registerBehavior({
         }
     },
     resetFormData: function () {
-        this._keyboardShow && ((this.__formResetCallback = !0), wx.hideKeyboard())
+        this._keyboardShow && ((this.__formResetCallback = !0), wd.hideKeyboard())
         this.value = ''
         this.showValue = ''
     },

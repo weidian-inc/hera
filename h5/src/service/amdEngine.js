@@ -78,7 +78,7 @@ export { define, require }
 window.define = define
 window.require = require
 
-wd.version = {
+wx.version = {
   updateTime: '2017.1.13 16:51:56',
   info: '',
   version: 32

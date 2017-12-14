@@ -81,8 +81,8 @@ class appClass{
                 );
             }
         };
-        wd.onAppEnterBackground(hide.bind(this));
-        wd.onAppEnterForeground(show.bind(this));
+        wx.onAppEnterBackground(hide.bind(this));
+        wx.onAppEnterForeground(show.bind(this));
     }
     getCurrentPage () {
         utils.warn("将被废弃", "App.getCurrentPage is deprecated, please use getCurrentPages. [It will be removed in 2016.11]");

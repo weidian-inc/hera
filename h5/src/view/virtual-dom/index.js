@@ -85,8 +85,8 @@ const firstTimeRender = function (event) {
   window.__DOMTree__ = rootNode.render()
   exparser.Element.replaceDocumentElement(window.__DOMTree__, document.body)
   setTimeout(function () {
-    wx.publishPageEvent(domReady, {})
-    wx.initReady()
+    wd.publishPageEvent(domReady, {})
+    wd.initReady()
     TouchEvents.enablePullUpRefresh()
   }, 0)
 }
@@ -131,13 +131,13 @@ window.onerror = function (e, t, n, i, o) {
     key: 'webviewScriptError',
     error: o
   })
-  if (wx.getPlatform() === 'ios') {
+  if (wd.getPlatform() === 'ios') {
     webkit.messageHandlers.publishHandler.postMessage(
       'wawebview sdk error:' + o.msg
     )
   }
 }
-wx.onAppDataChange(
+wd.onAppDataChange(
   ErrorCatcher.catchError(function (event) {
     STATE_FLAGS.dataReady = !0
     STATE_FLAGS.funcReady

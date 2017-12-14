@@ -17,7 +17,7 @@ var _slicedToArray = (function () {
   }
 })()
 var Video
-if (wx.getPlatform() !== 'ios') {
+if (wd.getPlatform() !== 'ios') {
   Video = window.exparser.registerElement({
     is: 'wx-video',
     behaviors: ['wx-base', 'wx-player'],
@@ -138,7 +138,7 @@ if (wx.getPlatform() !== 'ios') {
       if (!this._isError && srcURL) {
         var self = this
         /*
-                 if (wx.getPlatform() === 'wechatdevtools') {
+                 if (wd.getPlatform() === 'wechatdevtools') {
                  this.$.player.src = srcURL.replace(
                  'wdfile://',
                  'http://wxfile.open.weixin.qq.com/'
@@ -319,7 +319,7 @@ if (wx.getPlatform() !== 'ios') {
       }
       this.$.fullscreen.onclick = function (event) {
         event.stopPropagation()
-        wx.getPlatform() === 'android'
+        wd.getPlatform() === 'android'
           ? (self.enableFullScreen = !0)
           : (self.enableFullScreen = !self.enableFullScreen)
         self.enableFullScreen && self.$.player.webkitEnterFullscreen()
@@ -389,7 +389,7 @@ if (wx.getPlatform() !== 'ios') {
 }
 
 // wx-video on ios
-if (wx.getPlatform() === 'ios') {
+if (wd.getPlatform() === 'ios') {
   Video = window.exparser.registerElement({
     is: 'wx-video',
     behaviors: ['wx-base', 'wx-player', 'wx-native'],
@@ -678,7 +678,7 @@ if (wx.getPlatform() === 'ios') {
         }
       ])
       this.bindplay &&
-        wx.publishPageEvent(this.bindplay, {
+        wd.publishPageEvent(this.bindplay, {
           type: 'play'
         })
     },
@@ -689,12 +689,12 @@ if (wx.getPlatform() === 'ios') {
           danmuItem.style.left = getComputedStyle(danmuItem).left
         }
       ]),
-        wx.publishPageEvent(this.bindpause, {
+        wd.publishPageEvent(this.bindpause, {
           type: 'pause'
         })
     },
     onEnded: function (e) {
-      wx.publishPageEvent(this.bindended, {
+      wd.publishPageEvent(this.bindended, {
         type: 'ended'
       })
     },
@@ -853,7 +853,7 @@ if (wx.getPlatform() === 'ios') {
           self._sendDanmu(danmu)
         })
       this.bindtimeupdate &&
-        wx.publishPageEvent(this.bindtimeupdate, {
+        wd.publishPageEvent(this.bindtimeupdate, {
           type: 'timeupdate',
           detail: {
             currentTime: this.$.player.currentTime,
@@ -863,7 +863,7 @@ if (wx.getPlatform() === 'ios') {
     },
     detached: function () {
       this._isiOS() &&
-        wx.removeVideoPlayer({
+        wd.removeVideoPlayer({
           videoPlayerId: this._videoId,
           success: function (e) {}
         }),

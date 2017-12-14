@@ -274,7 +274,7 @@ export default window.exparser.registerElement({
                         ide === String(curEvent.identifier) &&
                           _changedTouches.push(curTouche)
                       }
-                      wx.publishPageEvent(self.bindlongtap, {
+                      wd.publishPageEvent(self.bindlongtap, {
                         type: 'bindlongtap',
                         timeStamp:
                           self._touchInfo[curEvent.identifier].timeStamp +
@@ -326,7 +326,7 @@ export default window.exparser.registerElement({
               })),
           self['bind' + eventName] &&
             touches.length + changedTouches.length > 0 &&
-            wx.publishPageEvent(self['bind' + eventName], {
+            wd.publishPageEvent(self['bind' + eventName], {
               type: eventName,
               timeStamp: event.timeStamp,
               target: {

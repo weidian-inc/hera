@@ -60,7 +60,7 @@ export default  window.exparser.registerElement({
             this.$.wrapper.style.backgroundImage = "url('" + url + "')"
             this.$.wrapper.addEventListener('click', function () {
                 self._isMobile()
-                    ? wx.enterContact({
+                    ? wd.enterContact({
                     sessionFrom: self.sessionFrom,
                     complete: function (e) {
                         console.log(e)
@@ -71,7 +71,7 @@ export default  window.exparser.registerElement({
         } else {
             this._box = this._getBox()
             console.log('insertContactButton', this._box)
-            wx.insertContactButton({
+            wd.insertContactButton({
                 position: this._box,
                 buttonType: this.type,
                 sessionFrom: this.sessionFrom,

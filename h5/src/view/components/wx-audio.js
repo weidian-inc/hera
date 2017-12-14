@@ -164,11 +164,11 @@ export default window.exparser.registerElement({
     HeraJSBridge.publish('audioInsert', {
       audioId: this.id
     })
-    wx.onAppEnterBackground(function (t) {
+    wd.onAppEnterBackground(function (t) {
       self.$.player.pause()
       self.isBackground = !0
     })
-    wx.onAppEnterForeground(function (t) {
+    wd.onAppEnterForeground(function (t) {
       self.isBackground = !1
     })
   }

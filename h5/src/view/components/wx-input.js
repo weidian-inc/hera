@@ -84,7 +84,7 @@ export default !(function () {
     },
     resetFormData: function () {
       this._keyboardShow &&
-        ((this.__formResetCallback = !0), wx.hideKeyboard()),
+        ((this.__formResetCallback = !0), wd.hideKeyboard()),
         (this.value = ''),
         (this.showValue = '')
     },

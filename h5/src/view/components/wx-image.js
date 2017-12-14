@@ -124,16 +124,16 @@ export default window.exparser.registerElement({
           /^\s*data:image\//.test(filePath)
           ? this._srcChanged(filePath)
           : /^wdfile:\/\//.test(filePath)
-            ? ((opts.filePath = filePath), wx.getLocalImgData(opts))
-            : ((opts.path = filePath), wx.getLocalImgData(opts))
+            ? ((opts.filePath = filePath), wd.getLocalImgData(opts))
+            : ((opts.path = filePath), wd.getLocalImgData(opts))
         : false && /android/.test(ua)
           ? /^wdfile:\/\//.test(filePath) ||
             /^(http|https):\/\//.test(filePath) ||
             /^\s*data:image\//.test(filePath)
             ? this._srcChanged(filePath)
-            : wx.getCurrentRoute({
+            : wd.getCurrentRoute({
               success: function (t) {
-                var n = wx.getRealRoute(t.route, filePath)
+                var n = wd.getRealRoute(t.route, filePath)
                 self._srcChanged(n)
               }
             })

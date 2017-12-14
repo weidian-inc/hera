@@ -17,7 +17,7 @@ import './initConsole'
 
 function addGetterForWX (apiKey) {
   WX.__defineGetter__(apiKey, function () {
-    return utils.surroundByTryCatchFactory(apiObj[apiKey], 'wd.' + apiKey)
+    return utils.surroundByTryCatchFactory(apiObj[apiKey], 'wx.' + apiKey)
   })
 }
 
@@ -279,7 +279,7 @@ var apiObj = {
       arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}
     if (paramCheck('switchTab', params, { url: '' })) {
       ;/\?.*$/.test(params.url) &&
-        (console.warn('wd.switchTab: url 不支持 queryString'),
+        (console.warn('wx.switchTab: url 不支持 queryString'),
         (params.url = params.url.replace(/\?.*$/, '')))
       params.url = utils.getRealRoute(currUrl, params.url)
       params.url = utils.encodeUrlQuery(params.url)
@@ -366,7 +366,7 @@ var apiObj = {
       params.header = utils.convertObjectValueToString(params.header)
       headerType !== 'Undefined' &&
         headerType !== 'Object' &&
-        (console.warn('wd.request: header must be an object'),
+        (console.warn('wx.request: header must be an object'),
         (params.header = {}))
       params.header = Object.keys(params.header).reduce(function (res, cur) {
         cur.toLowerCase() === 'content-type'
@@ -1800,5 +1800,5 @@ WX.loadExtApi = function (conf) {
 }
 window.HeraExtApiConf && WX.loadExtApi(window.HeraExtApiConf)
 
-window.wd = WX
+window.wx = WX
 module.exports = WX

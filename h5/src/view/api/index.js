@@ -6,8 +6,8 @@ import './init'
 
 function injectAttr (attrName) {
   isInDevtools
-    ? (wx[attrName] = apiObj[attrName])
-    : wx.__defineGetter__(attrName, function () {
+    ? (wdApi[attrName] = apiObj[attrName])
+    : wdApi.__defineGetter__(attrName, function () {
       return function () {
         try {
           return apiObj[attrName].apply(this, arguments)
@@ -31,7 +31,7 @@ function errReport (obj, extend) {
 
 var localImgDataIng = !1,
   imgData = [],
-  wx = {},
+  wdApi = {},
   isInDevtools = utils.getPlatform() === 'devtools',
   defInvoke = function (name, args) {
     // publish
@@ -47,10 +47,10 @@ var localImgDataIng = !1,
     onAppEnterForeground: onAppStateChange.onAppEnterForeground,
     onAppEnterBackground: onAppStateChange.onAppEnterBackground,
     reportIDKey: function (e, t) {
-      console.warn('reportIDKey has been removed wx')
+      console.warn('reportIDKey has been removed wd')
     },
     reportKeyValue: function (e, t) {
-      console.warn('reportKeyValue has been removed from wx')
+      console.warn('reportKeyValue has been removed from wd')
     },
     initReady: function () {
       bridge.invokeMethod('initReady')
@@ -169,6 +169,6 @@ var localImgDataIng = !1,
 
 for (var key in apiObj) injectAttr(key)
 
-// export default wx
-module.exports = wx
-window.wx = wx
+// export default wdApi
+module.exports = wdApi
+window.wd = wdApi

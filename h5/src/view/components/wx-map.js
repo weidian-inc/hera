@@ -141,7 +141,7 @@ window.exparser.registerElement({
         ? (Object.keys(item).forEach(function (itemName) {
           tempObj[itemName] = item[itemName]
         }),
-          (tempObj.iconPath = wx.getRealRoute(t, tempObj.iconPath)),
+          (tempObj.iconPath = wd.getRealRoute(t, tempObj.iconPath)),
           tempObj)
         : item
     })
@@ -304,12 +304,12 @@ window.exparser.registerElement({
       isDragging = !1,
       stopedDragging = !1
     qq.maps.event.addListener(map, 'click', function () {
-      self.bindtap && wx.publishPageEvent(self.bindtap, {})
+      self.bindtap && wd.publishPageEvent(self.bindtap, {})
     })
     qq.maps.event.addListener(map, 'drag', function () {
       self.bindregionchange &&
         !isDragging &&
-        (wx.publishPageEvent(self.bindregionchange, {
+        (wd.publishPageEvent(self.bindregionchange, {
           type: 'begin'
         }),
         (isDragging = !0),
@@ -321,7 +321,7 @@ window.exparser.registerElement({
     qq.maps.event.addListener(map, 'bounds_changed', function () {
       self.bindregionchange &&
         stopedDragging &&
-        (wx.publishPageEvent(self.bindregionchange, {
+        (wd.publishPageEvent(self.bindregionchange, {
           type: 'end'
         }),
         (stopedDragging = !1))
@@ -474,7 +474,7 @@ window.exparser.registerElement({
       arg2 = arguments[1]
     return this._isReady
       ? void (this._isMobile()
-          ? wx.getCurrentRoute({
+          ? wd.getCurrentRoute({
             success: function (n) {
               self._update(
                 {
@@ -507,7 +507,7 @@ window.exparser.registerElement({
       arg2 = arguments[1]
     return this._isReady
       ? void (this._isMobile()
-          ? wx.getCurrentRoute({
+          ? wd.getCurrentRoute({
             success: function (res) {
               var markers = self._transformPath(
                   self._transformMarkers(markerArg),
@@ -566,10 +566,10 @@ window.exparser.registerElement({
                     var event = n.event
                     event instanceof TouchEvent
                       ? event.type === 'touchend' &&
-                        wx.publishPageEvent(self.bindmarkertap, {
+                        wd.publishPageEvent(self.bindmarkertap, {
                           markerId: markerItem.id
                         })
-                      : wx.publishPageEvent(self.bindmarkertap, {
+                      : wd.publishPageEvent(self.bindmarkertap, {
                         markerId: markerItem.id
                       })
                   }),
@@ -684,7 +684,7 @@ window.exparser.registerElement({
     return this._isReady
       ? void (this._isMobile()
           ? this._canInvokeNewFeature &&
-            wx.getCurrentRoute({
+            wd.getCurrentRoute({
               success: function (res) {
                 var controls = self._transformPath(
                   self._transformControls(nCtrl),
@@ -725,7 +725,7 @@ window.exparser.registerElement({
               ctr.clickable &&
                   typeof ctr.id !== 'undefined' &&
                   (img.onclick = function () {
-                    wx.publishPageEvent(self.bindcontroltap, {
+                    wd.publishPageEvent(self.bindcontroltap, {
                       controlId: ctr.id
                     })
                   })
