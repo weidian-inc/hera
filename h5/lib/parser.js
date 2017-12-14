@@ -119,7 +119,7 @@ module.exports = function (full_path) {
             )
             wxssMsgFlag = 0
           }
-          wxssTranspile(srcs).then(stdout => {
+          wxssTranspile(srcs, { keepSlash: true }).then(stdout => {
             wxssSourcemap(full_path, stdout).then(content => {
               cache[full_path] = content
               resolve(content)

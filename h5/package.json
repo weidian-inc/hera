@@ -62,7 +62,7 @@
     "update-notifier": "^1.0.2",
     "whatwg-fetch": "^2.0.3",
     "wxml-transpiler": "^1.0.4",
-    "wxss-transpiler": "^1.0.2"
+    "wxss-transpiler": "^1.0.3"
   },
   "devDependencies": {
     "actionsheet": "^0.1.2",
