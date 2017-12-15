@@ -1,3 +1,5 @@
+import './common/globalDefined'
+
 import './css/index.css'
 
 import './common/servicebridge'

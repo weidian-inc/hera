@@ -3,6 +3,7 @@ const openIdUrl = require('./config').openIdUrl
 App({
   onLaunch: function () {
     console.log('App Launch')
+    this.testPromise()
   },
   onShow: function () {
     console.log('App Show')
@@ -13,6 +14,17 @@ App({
   globalData: {
     hasLogin: false,
     openid: null
+  },
+  testPromise: function () {
+    var getItLater = function () {
+      return new Promise((resolve, reject) => {
+        console.log(55555)
+        setTimeout(() => {
+          resolve(6666)
+        }, 2000)
+      })
+    }
+    getItLater().then(res => console.log(res))
   },
   // lazy loading openid
   getUserOpenId: function (callback) {

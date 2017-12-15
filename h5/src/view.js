@@ -1,3 +1,5 @@
+import './common/globalDefined'
+
 import './common/jsbridge'
 
 import './common/reporter'
