@@ -2,7 +2,7 @@
 <import src="../../../common/foot.wxml" />
 
 <view class="container">
-  <template is="head" data="{{title: 'view'}}"/>
+  <template is="head" data="{{title: 'view'}}" />
 
   <view class="page-body">
     <view class="page-section">
@@ -27,7 +27,18 @@
         <view class="flex-item flex-item-V demo-text-3"></view>
       </view>
     </view>
+    <view class="page-section">
+      <view class="page-section-title">
+        <text>富文本</text>
+      </view>
+      <view class="flex-wrp" style="flex-direction:column;">
+        <!-- rich-text.wxml -->
+        <rich-text nodes="{{nodes}}" bindtap="tap"></rich-text>
+        <rich-text nodes="<h1 style='color:red;'>html标题</h1>" bindtap="tap"></rich-text>
+      </view>
+    </view>
   </view>
+
 
   <template is="foot" />
 </view>

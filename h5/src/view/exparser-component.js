@@ -248,7 +248,9 @@ function exeWhenWXJSbridgeReady (fn) {
           if (
             element.__wxScrolling &&
             Date.now() - element.__wxScrolling < wxScrollTimeLowestValue
-          ) { return !0 }
+          ) {
+            return !0
+          }
         }
         return !1
       },
@@ -532,4 +534,5 @@ require('./components/wx-toast')
 require('./components/wx-video')
 require('./components/wx-view')
 require('./components/wx-contact-button')
+require('./components/wx-rich-text')
 // import ContactButton from './wx-contact-button'

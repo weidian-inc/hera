@@ -324,8 +324,8 @@ exports.getIp = function () {
   }
 }
 
-exports.logMethods = `var heraLog = { log: [], error: [], info:[] }
-var logMethods = ['log', 'error', 'info']
+exports.logMethods = `var heraLog = { log: [], error: [], info:[], warn:[], group:[] }
+var logMethods = ['log','error','info','warn','group']
 logMethods.map(function (method) {
   console[method] = (function (oriLogFunc) {
     return function () {
