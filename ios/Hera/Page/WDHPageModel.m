@@ -80,6 +80,10 @@
     if (self.pageStyle) {
         self.pageStyle.navigationBarTitleText = title;
     }
+	
+	if (self.windowStyle) {
+		self.windowStyle.navigationBarTitleText = title;
+	}
 }
 
 //解析Style
