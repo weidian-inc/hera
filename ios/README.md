@@ -9,7 +9,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '9.0'
 
 target 'TargetName' do
-    pod 'Hera', '1.0.0'
+    pod 'Hera', '1.1.0'
 end
 ```
 ## 如何使用
