@@ -17,11 +17,11 @@
 
 ```gradle
 repositories {
-    maven { url 'https://weidian.bintray.com/repo'}
+    jcenter()
 }
 
 dependencies {
-    compile "com.weidian.lib:hera:1.0.0"
+    compile "com.weidian.lib:hera:1.1.0"
 }
 ```
 
