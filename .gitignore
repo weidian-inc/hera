@@ -3,3 +3,5 @@ temp
 h5
 android
 ios
+.idea
+*.log
