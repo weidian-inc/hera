@@ -79,7 +79,7 @@ exports.copyFiles = function (list, dest) {
 exports.loadJSONfiles = function (pages) {
   let p = new Parallel()
   let res = {}
-  return function (done) {
+  return new Promise((resolve, reject) => {
     for (let page of pages) {
       let file = page + '.json'
       p.add(cb => {
@@ -101,10 +101,13 @@ exports.loadJSONfiles = function (pages) {
       })
     }
     p.done(err => {
-      if (err) return done(err)
-      done(null, res)
+      if (err) return reject(err)
+      resolve(res)
     })
-  }
+  })
+  // return function (done) {
+
+  // }
 }
 
 let id = 1
