@@ -16,7 +16,7 @@ node -v
 
 安装完成后启动`Xcode`，并在`Xcode | Preferences | Locations`菜单中检查一下是否装有某个版本的`Command Line Tools`。
 
-![](assets/xcode-cmd-line-tools.png)
+![](https://weidian-inc.github.io/hera/hera-website/assets/xcode-cmd-line-tools-7a5419c2949de74514e6c15e75a29fa1.png)
 
 最后使用如下命令安装依赖管理工具 [cocoapods](https://cocoapods.org/)
 
