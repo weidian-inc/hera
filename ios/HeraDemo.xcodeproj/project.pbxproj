@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		55047ADF1FE793CB0070F9E1 /* demoapp.zip in Resources */ = {isa = PBXBuildFile; fileRef = 55047ADE1FE793CB0070F9E1 /* demoapp.zip */; };
+		55047AE51FE7D35D0070F9E1 /* demoapp.zip in Resources */ = {isa = PBXBuildFile; fileRef = 55047AE41FE7D35D0070F9E1 /* demoapp.zip */; };
 		5526E6451FBBD8CB0014ACE6 /* RetrieveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E6441FBBD8CB0014ACE6 /* RetrieveViewController.m */; };
 		5526E64E1FBC37EC0014ACE6 /* LinkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E64D1FBC37EC0014ACE6 /* LinkViewController.m */; };
 		5591AEE21FCC332C00D79F47 /* AppTransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5591AEE11FCC332C00D79F47 /* AppTransitionViewController.m */; };
@@ -26,7 +26,7 @@
 
 /* Begin PBXFileReference section */
 		46D239121F20466400751BF0 /* HeraDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HeraDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		55047ADE1FE793CB0070F9E1 /* demoapp.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = demoapp.zip; sourceTree = "<group>"; };
+		55047AE41FE7D35D0070F9E1 /* demoapp.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = demoapp.zip; sourceTree = "<group>"; };
 		5526E6431FBBD8CB0014ACE6 /* RetrieveViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RetrieveViewController.h; sourceTree = "<group>"; };
 		5526E6441FBBD8CB0014ACE6 /* RetrieveViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RetrieveViewController.m; sourceTree = "<group>"; };
 		5526E64C1FBC37EC0014ACE6 /* LinkViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinkViewController.h; sourceTree = "<group>"; };
@@ -103,7 +103,7 @@
 		E94AD68A1FB4546600AC5B39 /* HeraDemo */ = {
 			isa = PBXGroup;
 			children = (
-				55047ADE1FE793CB0070F9E1 /* demoapp.zip */,
+				55047AE41FE7D35D0070F9E1 /* demoapp.zip */,
 				E94AD68B1FB4546600AC5B39 /* AppDelegate.h */,
 				E94AD68C1FB4546600AC5B39 /* AppDelegate.m */,
 				E94AD68D1FB4546600AC5B39 /* Assets.xcassets */,
@@ -187,8 +187,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				55047ADF1FE793CB0070F9E1 /* demoapp.zip in Resources */,
 				E94AD6A11FB4546600AC5B39 /* HeraRes.bundle in Resources */,
+				55047AE51FE7D35D0070F9E1 /* demoapp.zip in Resources */,
 				E94AD69D1FB4546600AC5B39 /* Info.plist in Resources */,
 				E94AD69C1FB4546600AC5B39 /* Main.storyboard in Resources */,
 				E94AD69A1FB4546600AC5B39 /* Assets.xcassets in Resources */,
