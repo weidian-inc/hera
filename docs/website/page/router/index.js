@@ -19,6 +19,11 @@ export default {
           path: 'quickstart',
           name: 'QuickStart',
           component: QuickStart
+        },
+        {
+          path: 'others/:article',
+          name: 'BasicsOthers',
+          component: UsageSidebar
         }
       ]
     },

@@ -13,6 +13,7 @@ import QuickstartAndroidWin from '../../../../zh-cn/Quickstart/Android/windows.m
 import QuickstartIOSMac from '../../../../zh-cn/Quickstart/iOS/macOS.md';
 import QuickstartWeb from '../../../../zh-cn/Quickstart/Web/all.md';
 import QuickstartNotSupport from './NotSupport.md';
+import BuildWithSrouce from '../../../../zh-cn/Quickstart/BuildWithSourceCode.md'
 
 // android
 import AndroidImplDetail from '../../../../zh-cn/Android/impl-detail.md';
@@ -46,6 +47,7 @@ const mdList = {
   'basic-quick-macos-web': QuickstartWeb,
   'basic-quick-linux-web': QuickstartWeb,
   'basic-quick-windows-web': QuickstartWeb,
+  'basic-build-with-soruce':BuildWithSrouce,
   'andorid-impl-detail': AndroidImplDetail,
   'andorid-how-to-import': AndroidHowToImport,
   'andorid-env-setup': AndroidEnvSetup,
@@ -118,6 +120,14 @@ export default {
     margin-top: 50px;
     font-size: 16px;
     line-height: 24px;
+    color: #222;
+    font-weight: bold;
+  }
+
+   h3 {
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 14px;
     color: #222;
     font-weight: bold;
   }

@@ -5,7 +5,7 @@
         <div class="sidebar-item-group-title bold">基础</div>
         <template v-for="item in basics">
           <div class="sidebar-item" :class="{'active': active === item.en}" :key="item.en">
-            <router-link :to="`/basics/${item.en.toLowerCase()}`">{{ item.zh }}</router-link>
+            <router-link :to="`/basics/${item.type && item.type == 'child'? 'others/':''}${item.en.toLowerCase()}`">{{ item.zh }}</router-link>
           </div>
         </template>
       </div>
@@ -35,22 +35,14 @@
       </div>
     </aside>
     <content>
-      <template v-if="this.$route.matched[0].path === '/android/:article'">
-        <markdown :article="this.$route.params.article">
-        </markdown>
-      </template>
-      <template v-if="this.$route.matched[0].path === '/others/:article'">
-        <markdown :article="this.$route.params.article">
-        </markdown>
-      </template>
-      <template v-if="this.$route.matched[0].path === '/ios/:article'">
-        <markdown :article="this.$route.params.article">
-        </markdown>
-      </template>
-      <template v-else>
+      <template v-if="isNative(this.$route.name)">
         <keep-alive>
           <router-view></router-view>
         </keep-alive>
+      </template>
+      <template v-else>
+        <markdown :article="this.$route.params.article">
+        </markdown>
       </template>
     </content>
   </div>
@@ -72,6 +64,7 @@ export default {
     //   );
     // },
   },
+
   data() {
     return {
       active: '',
@@ -79,6 +72,11 @@ export default {
         {
           en: 'QuickStart',
           zh: '快速开始',
+        },
+        {
+          en: 'basic-build-with-soruce',
+          zh: '从源码构建',
+          type: 'child',
         },
       ],
       android: [
@@ -110,7 +108,7 @@ export default {
         },
       ],
       others: [
-      {
+        {
           en: 'demo',
           zh: 'Demo体验',
         },
@@ -165,6 +163,10 @@ export default {
       } else {
         this.active = this.$route.name;
       }
+    },
+    isNative(name) {
+      const nativeList = ['QuickStart','Index'];
+      return ~nativeList.indexOf(name);
     },
   },
 };
