@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-// var os = require('os')
-
 var promisify = require('promisify-node')
 var childProcess = require('child_process')
 var exec = childProcess.exec
@@ -14,6 +12,7 @@ var chalk = require('chalk')
 // var boxen = require('boxen')
 var archiver = require('archiver')
 var path = require('path')
+var semCmp = require('semver-compare')
 var copydir = promisify(require('copy-dir'))
 
 program
@@ -221,37 +220,44 @@ var zipFiles = (function () {
     step--
     if (step === 0) {
       console.log(chalk.green(`${stepName}完成, 开始压缩文件`))
+      const curVersion = process.version.slice(1)
+      if (semCmp(curVersion, '8.1.2') > 0 || semCmp(curVersion, '8.0.0') < 0) {
+        // create a file to stream archive data to.
+        var output = fs.createWriteStream(`${distPath}.zip`)
+        var archive = archiver('zip', {
+          zlib: { level: 9 } // Sets the compression level.
+        })
 
-      // create a file to stream archive data to.
-      var output = fs.createWriteStream(`${distPath}.zip`)
-      var archive = archiver('zip', {
-        zlib: { level: 9 } // Sets the compression level.
-      })
+        output.on('close', function () {
+          const size = archive.pointer()
+          console.log(chalk.green(`压缩完成：${size} bytes (${size / 1024} kb)`))
+          console.log('文件已生成到:' + distPath)
+        })
 
-      output.on('close', function () {
-        const size = archive.pointer()
-        console.log(chalk.green(`压缩完成：${size} bytes (${size / 1024} kb)`))
-        console.log('文件已生成到:' + distPath)
-      })
+        // good practice to catch warnings (ie stat failures and other non-blocking errors)
+        archive.on('warning', function (err) {
+          if (err.code === 'ENOENT') {
+            // log warning
+          } else {
+            // throw error
+            throw err
+          }
+        })
 
-      // good practice to catch warnings (ie stat failures and other non-blocking errors)
-      archive.on('warning', function (err) {
-        if (err.code === 'ENOENT') {
-          // log warning
-        } else {
-          // throw error
+        // good practice to catch this error explicitly
+        archive.on('error', function (err) {
           throw err
-        }
-      })
+        })
 
-      // good practice to catch this error explicitly
-      archive.on('error', function (err) {
-        throw err
-      })
-
-      archive.pipe(output)
-      archive.directory(`${distPath}`, false)
-      archive.finalize()
+        archive.pipe(output)
+        archive.directory(`${distPath}`, false)
+        archive.finalize()
+      } else {
+        exec(`cd ${distPath} && zip -r -q ${distPath}.zip ./*`, (err, out) => {
+          err && console.log(err)
+          console.log('文件已生成到:' + distPath)
+        })
+      }
     } else {
       console.log(chalk.green(`${stepName || ''}完成，${step} step left`))
     }
