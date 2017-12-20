@@ -28,32 +28,45 @@
 package com.weidian.lib.hera.page;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.weidian.lib.hera.R;
 import com.weidian.lib.hera.config.AppConfig;
 import com.weidian.lib.hera.interfaces.IBridgeHandler;
 import com.weidian.lib.hera.interfaces.OnEventListener;
+import com.weidian.lib.hera.model.TabItemInfo;
 import com.weidian.lib.hera.page.view.NavigationBar;
+import com.weidian.lib.hera.page.view.PageWebView;
+import com.weidian.lib.hera.page.view.TabBar;
 import com.weidian.lib.hera.trace.HeraTrace;
 import com.weidian.lib.hera.utils.ColorUtil;
 import com.weidian.lib.hera.utils.FileUtil;
+import com.weidian.lib.hera.web.HeraWebViewClient;
 import com.weidian.lib.hera.widget.ToastView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.List;
 import java.util.Set;
 
 /**
  * Page层，即小程序view展示层
  */
-public abstract class Page extends LinearLayout implements IBridgeHandler {
+public class Page extends LinearLayout implements IBridgeHandler,
+        TabBar.OnSwitchTabListener {
+
+    public static final String TAG = "Page";
 
     public static final String APP_LAUNCH = "appLaunch";
     public static final String NAVIGATE_TO = "navigateTo";
@@ -61,43 +74,140 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
     public static final String REDIRECT_TO = "redirectTo";
     public static final String SWITCH_TAB = "switchTab";
 
-    protected AppConfig appConfig;
-    protected OnEventListener eventListener;
-    protected String currentPageOpenType;
-    protected String currentPagePath;
+    private FrameLayout mWebLayout;
+    private NavigationBar mNavigationBar;
+    private PageWebView mCurrentWebView;
+    private TabBar mTabBar;
+    private ToastView mToastView;
 
-    public Page(Context context, AppConfig appConfig) {
+    private AppConfig mAppConfig;
+    private OnEventListener mEventListener;
+    private String mPageOpenType;
+    private String mPagePath;
+
+    public Page(Context context, String pagePath, AppConfig appConfig) {
         super(context);
-        this.appConfig = appConfig;
+        this.mAppConfig = appConfig;
+        init(context, pagePath);
     }
 
-    public void setEventListener(OnEventListener listener) {
-        this.eventListener = listener;
+    private void init(Context context, String url) {
+        inflate(context, R.layout.hera_page, this);
+        LinearLayout topLayout = (LinearLayout) findViewById(R.id.top_layout);
+        LinearLayout bottomLayout = (LinearLayout) findViewById(R.id.bottom_layout);
+        mWebLayout = (FrameLayout) findViewById(R.id.web_layout);
+        mToastView = (ToastView) findViewById(R.id.toast_view);
+        mNavigationBar = new NavigationBar(context);
+
+        //添加导航栏
+        topLayout.addView(mNavigationBar, new LayoutParams(LayoutParams.MATCH_PARENT,
+                mNavigationBar.getMaximumHeight()));
+
+        if (mAppConfig.isTabPage(url)) {
+            initTabPage(context, topLayout, bottomLayout);
+        } else {
+            initSinglePage(context);
+        }
+    }
+
+    private void initTabPage(Context context, LinearLayout topLayout, LinearLayout bottomLayout) {
+        //添加tab栏
+        mTabBar = new TabBar(context, mAppConfig);
+        mTabBar.setOnSwitchTabListener(this);
+        if (mAppConfig.isTopTabBar()) {
+            bottomLayout.setVisibility(GONE);
+            topLayout.addView(mTabBar, new LayoutParams(LayoutParams.MATCH_PARENT,
+                    LayoutParams.WRAP_CONTENT));
+        } else {
+            bottomLayout.setVisibility(VISIBLE);
+            bottomLayout.addView(mTabBar, new LayoutParams(LayoutParams.MATCH_PARENT,
+                    LayoutParams.WRAP_CONTENT));
+        }
+
+        //添加web页面
+        List<TabItemInfo> list = mAppConfig.getTabItemList();
+        int len = (list == null ? 0 : list.size());
+        for (int i = 0; i < len; i++) {
+            TabItemInfo info = list.get(i);
+            String url = info != null ? info.pagePath : null;
+            mWebLayout.addView(createSwipeRefreshWebView(context, url),
+                    new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                            FrameLayout.LayoutParams.MATCH_PARENT));
+        }
+    }
+
+    private void initSinglePage(Context context) {
+        mWebLayout = (FrameLayout) findViewById(R.id.web_layout);
+        mWebLayout.addView(createSwipeRefreshWebView(context, null),
+                new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.MATCH_PARENT));
+    }
+
+    /**
+     * 创建封装下拉刷新功能的WebView包装视图
+     *
+     * @param context 上下文
+     * @param url     页面路径
+     * @return 封装下拉刷新功能的WebView包装视图
+     */
+    private SwipeRefreshLayout createSwipeRefreshWebView(Context context, String url) {
+        SwipeRefreshLayout refreshLayout = new SwipeRefreshLayout(context);
+        refreshLayout.setEnabled(mAppConfig.isEnablePullDownRefresh(url));
+        refreshLayout.setColorSchemeColors(Color.GRAY);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                HeraTrace.d(TAG, "start onPullDownRefresh");
+                onPageEvent("onPullDownRefresh", "{}");
+            }
+        });
+        PageWebView webView = new PageWebView(context);
+        webView.setTag(url);
+        webView.setWebViewClient(new HeraWebViewClient(mAppConfig));
+        webView.setJsHandler(this);
+        refreshLayout.addView(webView, 0, new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        mCurrentWebView = webView;
+        return refreshLayout;
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        HeraTrace.d(pageTag(), String.format("view@%s onAttachedToWindow()", getViewId()));
+        HeraTrace.d(TAG, String.format("view@%s onAttachedToWindow()", getViewId()));
         //设置标题栏背景色（通过应用配置信息获取）
-        String textColor = appConfig.getNavigationBarTextColor();
-        String bgColor = appConfig.getNavigationBarBackgroundColor();
-        getNavigationBar().setTitleTextColor(ColorUtil.parseColor(textColor));
-        getNavigationBar().setBackgroundColor(ColorUtil.parseColor(bgColor));
+        String textColor = mAppConfig.getNavigationBarTextColor();
+        String bgColor = mAppConfig.getNavigationBarBackgroundColor();
+        mNavigationBar.setTitleTextColor(ColorUtil.parseColor(textColor));
+        mNavigationBar.setBackgroundColor(ColorUtil.parseColor(bgColor));
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        HeraTrace.d(pageTag(), String.format("view@%s onDetachedFromWindow()", getViewId()));
+        HeraTrace.d(TAG, String.format("view@%s onDetachedFromWindow()", getViewId()));
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(
                 Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+
+        mToastView.clearCallbacks();
+        int count = mWebLayout.getChildCount();
+        for (int i = 0; i < count; i++) {
+            SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) mWebLayout.getChildAt(i);
+            PageWebView webView = (PageWebView) refreshLayout.getChildAt(0);
+            refreshLayout.removeAllViews();
+            webView.setTag(null);
+            webView.destroy();
+        }
+        mWebLayout.removeAllViews();
+        removeAllViews();
     }
 
     @Override
     public void handlePublish(String event, String params, String viewIds) {
-        HeraTrace.d(pageTag(), String.format("view@%s handlePublish(), event=%s, params=%s, viewIds=%s",
+        HeraTrace.d(TAG, String.format("view@%s handlePublish(), event=%s, params=%s, viewIds=%s",
                 getViewId(), event, params, viewIds));
 
         if ("custom_event_DOMContentLoaded".equals(event)) {
@@ -111,23 +221,28 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
 
     @Override
     public void handleInvoke(String event, String params, String callbackId) {
-        HeraTrace.d(pageTag(), String.format("view@%s handleInvoke(), event=%s, params=%s, callbackIds=%s",
+        HeraTrace.d(TAG, String.format("view@%s handleInvoke(), event=%s, params=%s, callbackIds=%s",
                 getViewId(), event, params, callbackId));
+    }
+
+    @Override
+    public void switchTab(String url) {
+        switchTab(url, SWITCH_TAB);
     }
 
     /**
      * 页面dom内容加载完成
      */
-    protected void onDomContentLoaded() {
-        if (eventListener != null) {
+    private void onDomContentLoaded() {
+        if (mEventListener != null) {
             String eventName = "onAppRoute";
             String eventParams = "{}";
             try {
                 JSONObject json = new JSONObject();
                 json.put("webviewId", getViewId());
-                json.put("openType", currentPageOpenType);
-                if (!TextUtils.isEmpty(currentPagePath)) {
-                    Uri uri = Uri.parse(currentPagePath);
+                json.put("openType", mPageOpenType);
+                if (!TextUtils.isEmpty(mPagePath)) {
+                    Uri uri = Uri.parse(mPagePath);
                     json.put("path", uri.getPath());
                     Set<String> keys = uri.getQueryParameterNames();
                     if (keys != null && keys.size() > 0) {
@@ -141,10 +256,10 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
                 }
                 eventParams = json.toString();
             } catch (JSONException e) {
-                HeraTrace.e(pageTag(), "onDomContentLoaded assembly params exception!");
+                HeraTrace.e(TAG, "onDomContentLoaded assembly params exception!");
             }
             //通知Service层的订阅处理器处理
-            eventListener.notifyServiceSubscribeHandler(eventName, eventParams, getViewId());
+            mEventListener.notifyServiceSubscribeHandler(eventName, eventParams, getViewId());
         }
     }
 
@@ -154,11 +269,55 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
      * @param event  事件名称
      * @param params 参数
      */
-    protected void onPageEvent(String event, String params) {
-        if (eventListener != null) {
+    private void onPageEvent(String event, String params) {
+        if (mEventListener != null) {
             //转由Service层的订阅处理器处理
-            eventListener.notifyServiceSubscribeHandler(event, params, getViewId());
+            mEventListener.notifyServiceSubscribeHandler(event, params, getViewId());
         }
+    }
+
+    /**
+     * 切换Tab
+     *
+     * @param url      tab页路径
+     * @param openType 打开类型
+     */
+    private void switchTab(String url, String openType) {
+        Uri uri = Uri.parse(url);
+        String pagePath = uri.getPath();
+        mNavigationBar.setTitle(mAppConfig.getPageTitle(pagePath));
+        if (mTabBar != null) {
+            mTabBar.switchTab(pagePath);
+        }
+        int count = mWebLayout.getChildCount();
+        for (int i = 0; i < count; i++) {
+            SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) mWebLayout.getChildAt(i);
+            PageWebView webView = (PageWebView) refreshLayout.getChildAt(0);
+            Object tag = webView.getTag();
+            if (tag != null && TextUtils.equals(pagePath, tag.toString())) {
+                refreshLayout.setVisibility(VISIBLE);
+                mCurrentWebView = webView;
+                String webUrl = webView.getUrl();
+                if (TextUtils.isEmpty(webUrl)) {
+                    loadUrl(url, openType);
+                } else {
+                    mPagePath = url;
+                    mPageOpenType = SWITCH_TAB;
+                    onDomContentLoaded();
+                }
+            } else {
+                refreshLayout.setVisibility(GONE);
+            }
+        }
+    }
+
+    /**
+     * 设置事件监听
+     *
+     * @param listener 监听接口的实例类
+     */
+    public void setEventListener(OnEventListener listener) {
+        this.mEventListener = listener;
     }
 
     /**
@@ -169,7 +328,24 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
      * @param viewIds 视图id数组
      */
     public void subscribeHandler(String event, String params, int[] viewIds) {
-        HeraTrace.d(pageTag(), String.format("view@%s subscribeHandler('%s',%s)", getViewId(), event, params));
+        HeraTrace.d(TAG, String.format("view@%s subscribeHandler('%s',%s)", getViewId(), event, params));
+        if (viewIds == null || viewIds.length == 0) {
+            return;
+        }
+
+        int count = mWebLayout.getChildCount();
+        for (int i = 0; i < count; i++) {
+            SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) mWebLayout.getChildAt(i);
+            PageWebView webView = (PageWebView) refreshLayout.getChildAt(0);
+            for (int viewId : viewIds) {
+                if (viewId == webView.getViewId()) {
+                    String jsFun = String.format("javascript:HeraJSBridge.subscribeHandler('%s',%s)",
+                            event, params);
+                    webView.loadUrl(jsFun);
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -178,7 +354,12 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
      * @param url 页面url
      */
     public void onLaunchHome(String url) {
-        HeraTrace.d(pageTag(), String.format("view@%s onLaunchHome(%s)", getViewId(), url));
+        HeraTrace.d(TAG, String.format("view@%s onLaunchHome(%s)", getViewId(), url));
+        if (mAppConfig.isTabPage(url)) {
+            switchTab(url, APP_LAUNCH);
+        } else {
+            loadUrl(url, APP_LAUNCH);
+        }
     }
 
     /**
@@ -187,7 +368,7 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
      * @param url 页面url
      */
     public void onNavigateTo(String url) {
-        HeraTrace.d(pageTag(), String.format("onNavigateTo view@%s, url:%s", getViewId(), url));
+        HeraTrace.d(TAG, String.format("onNavigateTo view@%s, url:%s", getViewId(), url));
         loadUrl(url, NAVIGATE_TO);
     }
 
@@ -197,7 +378,11 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
      * @param url 页面url
      */
     public void onRedirectTo(String url) {
-        HeraTrace.d(pageTag(), String.format("onRedirectTo view@%s, url:%s", getViewId(), url));
+        HeraTrace.d(TAG, String.format("onRedirectTo view@%s, url:%s", getViewId(), url));
+        if (mTabBar != null) {
+            mTabBar.setVisibility(View.GONE);
+        }
+
         loadUrl(url, REDIRECT_TO);
     }
 
@@ -205,8 +390,8 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
      * 导航回到此页面
      */
     public void onNavigateBack() {
-        HeraTrace.d(pageTag(), String.format("onNavigateBack view@%s", getViewId()));
-        currentPageOpenType = NAVIGATE_BACK;
+        HeraTrace.d(TAG, String.format("onNavigateBack view@%s", getViewId()));
+        mPageOpenType = NAVIGATE_BACK;
         onDomContentLoaded();
     }
 
@@ -217,18 +402,18 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
      * @param openType 打开页面的类型
      */
     public void loadUrl(String url, String openType) {
-        HeraTrace.d(pageTag(), String.format("loadUrl(%s, %s) view@%s", url, openType, getViewId()));
-        if (TextUtils.isEmpty(url) || getCurrentWebView() == null) {
+        HeraTrace.d(TAG, String.format("loadUrl(%s, %s) view@%s", url, openType, getViewId()));
+        if (TextUtils.isEmpty(url) || mCurrentWebView == null) {
             return;
         }
 
-        currentPagePath = url;
-        currentPageOpenType = openType;
+        mPagePath = url;
+        mPageOpenType = openType;
 
         post(new Runnable() {
             @Override
             public void run() {
-                loadContent(currentPagePath, currentPageOpenType);
+                loadContent(mPagePath, mPageOpenType);
             }
         });
     }
@@ -236,26 +421,26 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
     private void loadContent(String url, String openType) {
         Uri uri = Uri.parse(url);
         String path = uri.getPath();//屏蔽参数干扰
-        HeraTrace.d(pageTag(), "Page file path :" + path);
+        HeraTrace.d(TAG, "Page file path :" + path);
 
-        int index = path.lastIndexOf(".");
-        if (index > 0) {
-            String dirPath = url.substring(0, index);
-            getNavigationBar().disableNavigationBack(appConfig.isDisableNavigationBack(dirPath));
-            getNavigationBar().setTitle(appConfig.getPageTitle(dirPath));
-            SwipeRefreshLayout refreshLayout = getSwipeRefreshLayout();
-            if (refreshLayout != null) {
-                refreshLayout.setEnabled(appConfig.isEnablePullDownRefresh(dirPath));
-            }
+        //更新导航栏返回按钮和标题
+        mNavigationBar.disableNavigationBack(mAppConfig.isDisableNavigationBack(url));
+        mNavigationBar.setTitle(mAppConfig.getPageTitle(url));
+
+        //设置下拉刷新启用状态
+        SwipeRefreshLayout refreshLayout = getSwipeRefreshLayout();
+        if (refreshLayout != null) {
+            refreshLayout.setEnabled(mAppConfig.isEnablePullDownRefresh(url));
         }
 
-        String sourceDir = appConfig.getMiniAppSourcePath(getContext());
+        //加载内容
+        String sourceDir = mAppConfig.getMiniAppSourcePath(getContext());
         String baseUrl = FileUtil.toUriString(sourceDir) + File.separator;
-        HeraTrace.d(pageTag(), "BaseURL: " + baseUrl);
+        HeraTrace.d(TAG, "BaseURL: " + baseUrl);
         String content = FileUtil.readContent(new File(sourceDir, path));
-        getCurrentWebView().loadDataWithBaseURL(baseUrl, content, "text/html", "UTF-8", null);
+        mCurrentWebView.loadDataWithBaseURL(baseUrl, content, "text/html", "UTF-8", null);
         if (REDIRECT_TO.equals(openType)) {
-            getCurrentWebView().clearHistory();
+            mCurrentWebView.clearHistory();
         }
     }
 
@@ -265,7 +450,7 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
      * @return
      */
     private SwipeRefreshLayout getSwipeRefreshLayout() {
-        WebView webView = getCurrentWebView();
+        WebView webView = mCurrentWebView;
         if (webView != null) {
             return (SwipeRefreshLayout) webView.getParent();
         }
@@ -278,8 +463,8 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
      * @param title 标题名
      */
     public void setNavigationBarTitle(String title) {
-        HeraTrace.d(pageTag(), String.format("setNavigationBarTitle view@%s", getViewId()));
-        getNavigationBar().setTitle(title);
+        HeraTrace.d(TAG, String.format("setNavigationBarTitle view@%s", getViewId()));
+        mNavigationBar.setTitle(title);
     }
 
     /**
@@ -289,22 +474,22 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
      * @param backgroundColor 背景颜色值
      */
     public void setNavigationBarColor(int frontColor, int backgroundColor) {
-        getNavigationBar().setTitleTextColor(frontColor);
-        getNavigationBar().setBackgroundColor(backgroundColor);
+        mNavigationBar.setTitleTextColor(frontColor);
+        mNavigationBar.setBackgroundColor(backgroundColor);
     }
 
     /**
      * 显示导航条加载动画
      */
     public void showNavigationBarLoading() {
-        getNavigationBar().showLoading();
+        mNavigationBar.showLoading();
     }
 
     /**
      * 隐藏导航条加载动画
      */
     public void hideNavigationBarLoading() {
-        getNavigationBar().hideLoading();
+        mNavigationBar.hideLoading();
     }
 
     /**
@@ -314,14 +499,14 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
      * @param params    参数
      */
     public void showToast(boolean isLoading, String params) {
-        getToastView().show(isLoading, params);
+        mToastView.show(isLoading, params);
     }
 
     /**
      * 隐藏弹窗
      */
     public void hideToast() {
-        getToastView().hide();
+        mToastView.hide();
     }
 
     /**
@@ -344,39 +529,8 @@ public abstract class Page extends LinearLayout implements IBridgeHandler {
         }
     }
 
-    /**
-     * 获取视图id
-     *
-     * @return 当前显示视图的id
-     */
-    public abstract int getViewId();
-
-    /**
-     * 获取导航栏
-     *
-     * @return NavigationBar
-     */
-    protected abstract NavigationBar getNavigationBar();
-
-    /**
-     * 获取当前的WebView
-     *
-     * @return 当前的WebView
-     */
-    protected abstract WebView getCurrentWebView();
-
-    /**
-     * 获取弹窗视图
-     *
-     * @return ToastView
-     */
-    protected abstract ToastView getToastView();
-
-    /**
-     * 页面TAG，记录日志用
-     *
-     * @return 页面TAG
-     */
-    protected abstract String pageTag();
+    public int getViewId() {
+        return mCurrentWebView != null ? mCurrentWebView.getViewId() : 0;
+    }
 
 }

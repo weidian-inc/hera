@@ -179,7 +179,7 @@ public class HeraActivity extends AppCompatActivity implements OnEventListener {
     public void onServiceReady() {
         HeraTrace.d(TAG, "onServiceReady()");
         mLoadingIndicator.hide();
-        mPageManager.launchHomePage(mAppConfig.getLaunchPath(), this);
+        mPageManager.launchHomePage(mAppConfig.getRootPath(), this);
     }
 
     @Override

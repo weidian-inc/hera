@@ -30,7 +30,7 @@ package com.weidian.lib.hera.config;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.Build;
+import android.net.Uri;
 import android.text.TextUtils;
 
 import com.weidian.lib.hera.model.TabItemInfo;
@@ -51,7 +51,6 @@ import java.util.List;
 public class AppConfig {
 
     private static final String TAG = "AppConfig";
-    private static String sHostVersion;
     private JSONObject mConfig;
     private WindowConfig mWindowConfig;
     private TabBarConfig mTabBarConfig;
@@ -66,19 +65,17 @@ public class AppConfig {
      * @return 宿主程序版本号
      */
     public static String getHostVersion(Context context) {
-        if (TextUtils.isEmpty(sHostVersion)) {
-            PackageManager packageManager = context.getPackageManager();
-
-            try {
-                PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
-                sHostVersion = packageInfo.versionName;
-            } catch (PackageManager.NameNotFoundException e) {
-                HeraTrace.d(TAG, e.getMessage());
-                sHostVersion = "1.0.1";
-            }
+        String version;
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            version = packageInfo.versionName;
+        } catch (Exception e) {
+            HeraTrace.d(TAG, e.getMessage());
+            version = "1.0.0";
         }
 
-        return sHostVersion;
+        return version;
     }
 
     public AppConfig(String appId, String userId) {
@@ -172,12 +169,12 @@ public class AppConfig {
      *
      * @return 根路径
      */
-    public String getLaunchPath() {
+    public String getRootPath() {
         if (mConfig == null) {
             return "";
         }
         String root = mConfig.optString("root");
-        return root == null ? "" : root;
+        return TextUtils.isEmpty(root) ? "" : root + ".html";
     }
 
     /**
@@ -208,11 +205,11 @@ public class AppConfig {
     /**
      * 获取页面的标题
      *
-     * @param pagePath 页面路径
+     * @param url 页面路径
      * @return 页面标题
      */
-    public String getPageTitle(String pagePath) {
-        if (TextUtils.isEmpty(pagePath) || mWindowConfig == null) {
+    public String getPageTitle(String url) {
+        if (TextUtils.isEmpty(url) || mWindowConfig == null) {
             return "";
         }
 
@@ -220,7 +217,7 @@ public class AppConfig {
             return mWindowConfig.navigationBarTitleText;
         }
 
-        JSONObject pageConfig = mWindowConfig.pages.optJSONObject(pagePath);
+        JSONObject pageConfig = mWindowConfig.pages.optJSONObject(getPath(url));
         if (pageConfig == null) {
             return mWindowConfig.navigationBarTitleText;
         }
@@ -231,30 +228,30 @@ public class AppConfig {
     /**
      * 判断页面是否启用了下拉刷新
      *
-     * @param pagePath 页面路径
+     * @param url 页面路径
      * @return true：启用了下拉刷新，否则亦然
      */
-    public boolean isEnablePullDownRefresh(String pagePath) {
-        if (TextUtils.isEmpty(pagePath) || mWindowConfig == null || mWindowConfig.pages == null) {
+    public boolean isEnablePullDownRefresh(String url) {
+        if (TextUtils.isEmpty(url) || mWindowConfig == null || mWindowConfig.pages == null) {
             return false;
         }
 
-        JSONObject pageConfig = mWindowConfig.pages.optJSONObject(pagePath);
+        JSONObject pageConfig = mWindowConfig.pages.optJSONObject(getPath(url));
         return pageConfig != null && pageConfig.optBoolean("enablePullDownRefresh");
     }
 
     /**
      * 判断页面是否禁用了导航栏返回按钮
      *
-     * @param pagePath 页面路径
+     * @param url 页面路径
      * @return true：禁用了导航栏返回按钮，否则亦然
      */
-    public boolean isDisableNavigationBack(String pagePath) {
-        if (TextUtils.isEmpty(pagePath) || mWindowConfig == null || mWindowConfig.pages == null) {
+    public boolean isDisableNavigationBack(String url) {
+        if (TextUtils.isEmpty(url) || mWindowConfig == null || mWindowConfig.pages == null) {
             return false;
         }
 
-        JSONObject pageConfig = mWindowConfig.pages.optJSONObject(pagePath);
+        JSONObject pageConfig = mWindowConfig.pages.optJSONObject(getPath(url));
         return pageConfig != null && pageConfig.optBoolean("disableNavigationBack");
     }
 
@@ -319,32 +316,52 @@ public class AppConfig {
             info.selectedIconPath = itemJson.optString("selectedIconPath");
             info.text = itemJson.optString("text");
             info.pagePath = itemJson.optString("pagePath");
+            if (!TextUtils.isEmpty(info.pagePath)) {
+                info.pagePath += ".html";
+            }
             list.add(info);
         }
         return list;
     }
 
     /**
-     * 检查被给的url是否属于Tab Bar页面
+     * 检查被给的url是否属于Tab页面
      *
      * @param url 页面路径
-     * @return true：是Tab Bar页，否则亦然
+     * @return true：是Tab页，否则亦然
      */
-    public boolean isTabBarPage(String url) {
+    public boolean isTabPage(String url) {
         if (TextUtils.isEmpty(url)) {
             return false;
         }
         if (mTabBarConfig == null || mTabBarConfig.list == null) {
             return false;
         }
+        String pagePath = getPath(url);
         int len = mTabBarConfig.list.length();
         for (int i = 0; i < len; i++) {
             JSONObject itemJson = mTabBarConfig.list.optJSONObject(i);
-            if (itemJson != null && url.equals(itemJson.optString("pagePath"))) {
+            if (itemJson != null && pagePath.equals(itemJson.optString("pagePath"))) {
                 return true;
             }
         }
         return false;
+    }
+
+    private String getPath(String url) {
+        if (TextUtils.isEmpty(url)) {
+            return "";
+        }
+        Uri uri = Uri.parse(url);
+        String pagePath = uri.getPath();
+        if (TextUtils.isEmpty(pagePath)) {
+            return "";
+        }
+        int index = pagePath.lastIndexOf(".");
+        if (index > 0) {
+            pagePath = pagePath.substring(0, index);
+        }
+        return pagePath;
     }
 
     /**

@@ -88,9 +88,9 @@ public class TabBar extends LinearLayout {
                 @Override
                 public void onClick(View v) {
                     TabItemView view = (TabItemView) v;
-                    String pagePath = view.getPagePath();
+                    String url = view.getPagePath();
                     if (mListener != null) {
-                        mListener.switchTab(pagePath);
+                        mListener.switchTab(url);
                     }
                 }
             });
@@ -108,13 +108,13 @@ public class TabBar extends LinearLayout {
     /**
      * 切换Tab item
      *
-     * @param pagePath Tab item对应的页面路径
+     * @param url Tab item对应的页面路径
      */
-    public void switchTab(String pagePath) {
+    public void switchTab(String url) {
         int count = mTabItemLayout.getChildCount();
         for (int i = 0; i < count; i++) {
             TabItemView itemView = (TabItemView) mTabItemLayout.getChildAt(i);
-            if (TextUtils.equals(pagePath, itemView.getPagePath())) {
+            if (TextUtils.equals(url, itemView.getPagePath())) {
                 itemView.setSelected(true);
             } else {
                 itemView.setSelected(false);
@@ -134,9 +134,9 @@ public class TabBar extends LinearLayout {
         /**
          * 切换tab
          *
-         * @param pagePath tab item的页面路径
+         * @param url tab item的页面路径
          */
-        void switchTab(String pagePath);
+        void switchTab(String url);
 
     }
 

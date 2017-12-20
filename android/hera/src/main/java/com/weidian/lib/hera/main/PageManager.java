@@ -39,8 +39,6 @@ import android.widget.FrameLayout;
 import com.weidian.lib.hera.config.AppConfig;
 import com.weidian.lib.hera.interfaces.OnEventListener;
 import com.weidian.lib.hera.page.Page;
-import com.weidian.lib.hera.page.SinglePage;
-import com.weidian.lib.hera.page.TabPage;
 import com.weidian.lib.hera.trace.HeraTrace;
 import com.weidian.lib.hera.utils.ColorUtil;
 import com.weidian.lib.hera.utils.JsonUtil;
@@ -135,23 +133,18 @@ public class PageManager {
     /**
      * 启动主页面（第一个页面）
      *
-     * @param pagePath 页面路径
+     * @param url      页面路径
      * @param listener 页面触发的事件监听
      */
-    public boolean launchHomePage(String pagePath, OnEventListener listener) {
-        if (TextUtils.isEmpty(pagePath)) {
+    public boolean launchHomePage(String url, OnEventListener listener) {
+        if (TextUtils.isEmpty(url)) {
             HeraTrace.d(TAG, "launchHomePage failed, url is null");
             return false;
         }
         mContainer.removeAllViews();
-        Page page;
-        if (mAppConfig.isTabBarPage(pagePath)) {
-            page = createAndAddTabPage(listener);
-        } else {
-            page = createAndAddSinglePage(listener);
-        }
+        Page page = createAndAddPage(url, listener);
         if (page != null) {
-            page.onLaunchHome(pagePath);
+            page.onLaunchHome(url);
             return true;
         }
         return false;
@@ -283,44 +276,33 @@ public class PageManager {
         return true;
     }
 
-
     /**
-     * 创建并添加一个单页面
+     * 创建并添加一个页面
      *
+     * @param url      页面路径
      * @param listener 页面触发的事件监听
      * @return 新创建的页面
      */
-    private SinglePage createAndAddSinglePage(OnEventListener listener) {
-        int pageCount = getPageCount();
-        if (pageCount >= MAX_COUNT) {
-            HeraTrace.d(TAG, String.format("create page failed, current page count:%s, most count:%s",
-                    pageCount, MAX_COUNT));
-            return null;
-        }
-
-        if (pageCount == 0) {
+    private Page createAndAddPage(String url, OnEventListener listener) {
+        if (mAppConfig.isTabPage(url)) {
             disableAnimation();
+            mContainer.removeAllViews();
         } else {
-            enableAnimation();
+            int pageCount = getPageCount();
+            if (pageCount >= MAX_COUNT) {
+                HeraTrace.d(TAG, String.format("create page failed, current page count:%s, most count:%s",
+                        pageCount, MAX_COUNT));
+                return null;
+            }
+
+            if (pageCount == 0) {
+                disableAnimation();
+            } else {
+                enableAnimation();
+            }
         }
 
-        SinglePage page = new SinglePage(mContext, mAppConfig);
-        page.setEventListener(listener);
-        mContainer.addView(page, new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
-        return page;
-    }
-
-    /**
-     * 创建并添加Tab页面，会清除其他非Tab的页面
-     *
-     * @param listener 页面触发的事件监听
-     * @return 新创建的页面
-     */
-    private TabPage createAndAddTabPage(OnEventListener listener) {
-        disableAnimation();
-        mContainer.removeAllViews();
-        TabPage page = new TabPage(mContext, mAppConfig);
+        Page page = new Page(mContext, url, mAppConfig);
         page.setEventListener(listener);
         mContainer.addView(page, new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
@@ -339,8 +321,12 @@ public class PageManager {
             HeraTrace.d(TAG, "navigateToPage failed, url is null");
             return false;
         }
+        if (mAppConfig.isTabPage(url)) {
+            HeraTrace.d(TAG, "navigateToPage failed, can not navigateTo Tab Page!");
+            return false;
+        }
 
-        SinglePage page = createAndAddSinglePage(listener);
+        Page page = createAndAddPage(url, listener);
         if (page == null) {
             HeraTrace.d(TAG, String.format("navigateToPage failed, no more than %s pages", MAX_COUNT));
             return false;
@@ -359,6 +345,10 @@ public class PageManager {
     private boolean redirectToPage(String url) {
         if (TextUtils.isEmpty(url)) {
             HeraTrace.d(TAG, "redirectToPage failed, url is null");
+            return false;
+        }
+        if (mAppConfig.isTabPage(url)) {
+            HeraTrace.d(TAG, "redirectToPage failed, can not redirectTo Tab Page!");
             return false;
         }
 
@@ -383,7 +373,15 @@ public class PageManager {
             HeraTrace.d(TAG, "switchTabPage failed, url is null");
             return false;
         }
-        TabPage page = createAndAddTabPage(listener);
+        if (!mAppConfig.isTabPage(url)) {
+            HeraTrace.d(TAG, "switchTabPage failed, can not switchTab to Single Page!");
+            return false;
+        }
+
+        Page page = createAndAddPage(url, listener);
+        if (page == null) {
+            return false;
+        }
         page.switchTab(url);
         return true;
     }

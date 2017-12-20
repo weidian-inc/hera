@@ -34,6 +34,7 @@ import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -66,7 +67,11 @@ public class NavigationBar extends Toolbar {
     }
 
     private void init(Context context) {
-        setNavigationIcon(R.drawable.hera_ic_arrow_back);
+        Drawable drawable = AppCompatResources.getDrawable(context, R.drawable.hera_ic_arrow_back);
+        if (drawable != null) {
+            drawable = drawable.mutate();
+        }
+        setNavigationIcon(drawable);
         setNavigationOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
