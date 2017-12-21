@@ -35,43 +35,32 @@ typedef NS_ENUM(NSInteger,WDHExtensionCode) {
     WDHExtensionCodeFailure = 1,   //失败
 };
 
-extern NSString *const WDHExtensionKeyCode;
-extern NSString *const WDHExtensionKeyData;
-
-typedef void(^WDHApiCompletion)(NSDictionary<NSString *, NSObject *> *result);
-
-
-@protocol WDHRetrieveApiProtocol <NSObject>
-
-/**
- 宿主实现有返回结果的api协议
-
- @param api api名字
- @param params 参数
- @param completion 执行回调 note:需在主线程执行
- */
-- (void)didReceiveApi:(NSString *)api withParam:(id)params completion:(WDHApiCompletion)completion;
-
-@end
-
-
 @interface WHHybridExtension : NSObject <WDHApiProtocol>
 
 /**
- 注册扩展的api，对业务宿主有用
-
- @param api api字符串
- @param handler 回调
+ 扩展API处理后的回调
+ 
+ @param code 处理结果码
+ @param result 处理结果数据
  */
-+ (void)registerExtensionApi:(NSString *)api handler:(id(^)(id param))handler;
+typedef void (^WDHExtensionApiCallback)(WDHExtensionCode code, NSDictionary<NSString *, NSObject *> *result);
+
 
 /**
- 注册扩展且要返回处理结果的api，对业务宿主有用
-
- @param api api字符串
- @param handler 回调
+ 扩展API处理
+ 
+ @param param 业务参数
+ @param callback 扩展API处理完毕的回调
  */
-+ (void)registerRetrieveApi:(NSString *)api handler:(id(^)(id param, WDHApiCompletion completion))handler;
+typedef void (^WDHExtensionApiHandler)(id param, WDHExtensionApiCallback callback);
+
+
+/**
+ 注册扩展API
+ 宿主注册需要自定义实现的API
+ @param api API名
+ */
++ (void)registerExtensionApi:(NSString *)api handler:(WDHExtensionApiHandler)handler;
 
 @end
 
