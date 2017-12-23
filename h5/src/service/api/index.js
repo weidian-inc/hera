@@ -382,18 +382,23 @@ var apiObj = {
       var data
       params.dataType = params.dataType || 'json'
       headers['content-type'] = headers['content-type'] || 'application/json'
+      // data = !params.data
+      //   ? ''
+      //   : typeof params.data !== 'string'
+      //     ? headers['content-type'].indexOf(
+      //         'application/x-www-form-urlencoded'
+      //       ) > -1
+      //       ? utils.urlEncodeFormData(params.data, !0)
+      //       : headers['content-type'].indexOf('application/json') > -1
+      //         ? JSON.stringify(params.data)
+      //         : typeof params.data === 'object'
+      //           ? JSON.stringify(params.data)
+      //           : data.toString()
+      //     : params.data
       data = !params.data
         ? ''
         : typeof params.data !== 'string'
-          ? headers['content-type'].indexOf(
-              'application/x-www-form-urlencoded'
-            ) > -1
-            ? utils.urlEncodeFormData(params.data, !0)
-            : headers['content-type'].indexOf('application/json') > -1
-              ? JSON.stringify(params.data)
-              : typeof params.data === 'object'
-                ? JSON.stringify(params.data)
-                : data.toString()
+          ? JSON.stringify(params.data)
           : params.data
       requestMethod == 'GET' &&
         (params.url = utils.addQueryStringToUrl(params.url, params.data))
@@ -687,7 +692,9 @@ var apiObj = {
   },
   onAccelerometerChange: function (callback) {
     hasInvokeEnableAccelerometer ||
-      (bridge.invokeMethod('enableAccelerometer', { enable: !0 }),
+      (bridge.invokeMethod('enableAccelerometer', {
+        enable: !0
+      }),
       (hasInvokeEnableAccelerometer = !0))
     accelerometerChangeFns.push(
       Reporter.surroundThirdByTryCatch(
@@ -698,7 +705,9 @@ var apiObj = {
   },
   onCompassChange: function (callback) {
     hasInvokeEnableCompass ||
-      (bridge.invokeMethod('enableCompass', { enable: !0 }),
+      (bridge.invokeMethod('enableCompass', {
+        enable: !0
+      }),
       (hasInvokeEnableCompass = !0))
     compassChangeFns.push(
       Reporter.surroundThirdByTryCatch(
@@ -1518,7 +1527,9 @@ var getTouchInfo = function (touchInfo, eventKey, eventInfo) {
     var touches = [],
       changedTouches = []
     if (eventKey === 'onTouchStart') {
-      for (var i in touchInfo) touches.push(touchInfo[i])
+      for (var i in touchInfo) {
+        touches.push(touchInfo[i])
+      }
       var touchObj = {
         x: eventInfo.touch.x,
         y: eventInfo.touch.y,
@@ -1768,7 +1779,9 @@ var getTouchInfo = function (touchInfo, eventKey, eventInfo) {
         webviewId: webviewId
       })
   })
-for (var key in apiObj) addGetterForWX(key)
+for (var key in apiObj) {
+  addGetterForWX(key)
+}
 
 function bindApi (item) {
   if (!item.name) {
