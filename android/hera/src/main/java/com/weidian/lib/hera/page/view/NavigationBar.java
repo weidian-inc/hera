@@ -90,7 +90,7 @@ public class NavigationBar extends Toolbar {
         hideLoading();
     }
 
-    private void onBack(Context context) {
+    public void onBack(Context context) {
         if (context instanceof Activity) {
             ((Activity) context).onBackPressed();
         } else if (context instanceof ContextWrapper) {

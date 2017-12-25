@@ -158,7 +158,7 @@ public class HeraActivity extends AppCompatActivity implements OnEventListener {
             return;
         }
         super.onBackPressed();
-        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        //overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 
     @Override

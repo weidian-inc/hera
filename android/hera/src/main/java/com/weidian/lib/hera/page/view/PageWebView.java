@@ -28,22 +28,36 @@
 package com.weidian.lib.hera.page.view;
 
 import android.content.Context;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.ViewConfiguration;
+import android.view.ViewParent;
 
+import com.weidian.lib.hera.trace.HeraTrace;
 import com.weidian.lib.hera.web.HeraWebView;
 
 public class PageWebView extends HeraWebView {
+    private boolean isSwiped=false;
+    private float mLastTouchX;
+    private final float mTouchSlop;
+
+    private OnHorizontalSwipeListener mSwipeListener;
 
     public PageWebView(Context context) {
-        super(context);
+        this(context,null);
     }
 
     public PageWebView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs,0);
+
     }
 
     public PageWebView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        final ViewConfiguration configuration = ViewConfiguration
+                .get(getContext());
+        mTouchSlop = configuration.getScaledTouchSlop();
     }
 
     public int getViewId() {
@@ -53,5 +67,62 @@ public class PageWebView extends HeraWebView {
     @Override
     public String tag() {
         return "PageWebView";
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                isSwiped=false;
+                if (event.getRawX()>50||mSwipeListener==null){
+                    isSwiped=false;
+                }else {
+                    ViewParent parent = getParent();
+                    if (parent != null&& parent instanceof SwipeRefreshLayout) {
+                        parent.requestDisallowInterceptTouchEvent(true);
+                        ((SwipeRefreshLayout)parent).setEnabled(false);
+                    }
+                    isSwiped=true;
+                    mLastTouchX = event.getRawX();
+                    return true;
+                }
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                if (isSwiped) {
+                    float dx = event.getRawX() - mLastTouchX;
+                    if (Math.abs(dx)>mTouchSlop){
+                        mSwipeListener.onHorizontalSwipeMove(dx);
+                        mLastTouchX = event.getRawX();
+                        return true;
+                    }
+                }
+                break;
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP:
+                if (isSwiped){
+                    mSwipeListener.onSwipeTapUp(event.getRawX());
+                    return true;
+                }
+
+                ViewParent parent = getParent();
+                if (parent != null&& parent instanceof SwipeRefreshLayout) {
+                    parent.requestDisallowInterceptTouchEvent(false);
+                    ((SwipeRefreshLayout)parent).setEnabled(true);
+                }
+                break;
+
+        }
+
+        return super.onTouchEvent(event);
+    }
+
+    public void setSwipeListener(OnHorizontalSwipeListener swipeListener) {
+        this.mSwipeListener = swipeListener;
+    }
+
+    public interface OnHorizontalSwipeListener{
+        void onHorizontalSwipeMove(float dx);
+        void onSwipeTapUp(float x);
     }
 }
