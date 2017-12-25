@@ -29,8 +29,10 @@ hera run web
 
 运行于客户端上请参考：[快速上手](https://weidian-inc.github.io/hera/#/basics/quickstart)
 
-## 项目目录
-
+## 开发相关
+### 正在做的优化
+[Todo List](https://github.com/weidian-inc/hera/projects/1)
+### 目录
 目前该项目源码由以下部分构成：
 
 ```tree
