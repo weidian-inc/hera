@@ -35,30 +35,11 @@ appInfo.appPath = @"appPath";
 ### 注册自定义API实现
 Hera框架本身已经提供了丰富的原生API实现，为了更好地满足在开发者需求，Hera也提供了自定义原生API的能力。
 
-###### 1.注册需要同步返回结果的API
-通过**WHHybridExtension**注册自定义API,处理完毕返回结果
 ```objc
-[WHHybridExtension registerExtensionApi:@"openLink" handler:^id(id param) {
-    // do something	
-    return @{WDHExtensionKeyCode:@(WDHExtensionCodeSuccess), WDHExtensionKeyData: @{@"key": @"value"}};
-}];
-```
-
-###### 2.注册需要异步返回结果的API
-通过**WHHybridExtension**注册自定义API,处理事件对象需要实现**WDHRetrieveApiProtocol**接口,当事件处理完毕后在主线程执行**WDHApiCompletion**返回相应结果
-```objc
-[WHHybridExtension registerRetrieveApi:@"getResult" handler:^id(id param, WDHApiCompletion completion) {
-    ViewController *vc = [[ViewController alloc] init];
-    if([vc respondsToSelector:@selector(didReceiveApi:withParam:completion:)]){
-    
-        [vc didReceiveApi:@"getResult" withParam:param completion:completion];
-        
-        UINavigationController *navi = (UINavigationController *)self.window.rootViewController;
-        [navi pushViewController:vc animated:YES];
-            
-        return @{WDHExtensionKeyCode:@(WDHExtensionCodeSuccess)};
-    }
-    
-    return @{WDHExtensionKeyCode:@(WDHExtensionCodeFailure)};
+[WHHybridExtension registerExtensionApi:@"getSum" handler:^(id param, WDHExtensionApiCallback callback) {
+    NSInteger numA = [param[@"numA"] integerValue];
+    NSInteger numB = [param[@"numB"] integerValue];
+    NSInteger sum = numA + numB;
+    callback(WDHExtensionCodeSuccess, @{@"result": @(sum)});
 }];
 ```
