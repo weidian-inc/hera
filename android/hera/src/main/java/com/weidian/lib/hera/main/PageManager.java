@@ -31,7 +31,10 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.widget.FrameLayout;
@@ -305,7 +308,7 @@ public class PageManager {
             }
         }
 
-        Page page = new Page(mContext, url, mAppConfig);
+        Page page = new Page(mContext, url, mAppConfig,getPageCount()==0);
         page.setEventListener(listener);
         mContainer.addView(page, new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));

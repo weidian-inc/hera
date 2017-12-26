@@ -91,9 +91,12 @@ public class Page extends LinearLayout implements IBridgeHandler,
     private String mPageOpenType;
     private String mPagePath;
 
-    public Page(Context context, String pagePath, AppConfig appConfig) {
+    private boolean isHomePage;
+
+    public Page(Context context, String pagePath, AppConfig appConfig,boolean isHomePage) {
         super(context);
         this.mAppConfig = appConfig;
+        this.isHomePage=isHomePage;
         init(context, pagePath);
     }
 
@@ -171,7 +174,10 @@ public class Page extends LinearLayout implements IBridgeHandler,
         webView.setTag(url);
         webView.setWebViewClient(new HeraWebViewClient(mAppConfig));
         webView.setJsHandler(this);
-        webView.setSwipeListener(this);
+
+        if (!isHomePage){
+            webView.setSwipeListener(this);
+        }
         refreshLayout.addView(webView, 0, new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mCurrentWebView = webView;
@@ -551,17 +557,14 @@ public class Page extends LinearLayout implements IBridgeHandler,
 
     @Override
     public void onHorizontalSwipeMove(float dx) {
-
         this.scrollBy(-(int) dx,0);
     }
 
     @Override
     public void onSwipeTapUp(float x) {
         if (x<getWidth()/2){// 回到原位
-            HeraTrace.d("onTouchEvent",this+" recover origin..");
             this.scrollTo(0,0);
         }else {// 返回上一层级
-            HeraTrace.d("onTouchEvent",this+" go back ..");
             disableParentAnim();
             mNavigationBar.onBack(getContext());
         }
