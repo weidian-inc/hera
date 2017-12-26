@@ -1,6 +1,6 @@
 {
   "name": "hera-weweb",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "wx 2 app",
   "main": "bin/weweb",
   "bin": {
@@ -46,6 +46,7 @@
     "promisify-node": "^0.4.0",
     "semver-compare": "^1.0.0",
     "source-map": "^0.5.6",
+    "uglify-js": "^3.3.2",
     "whatwg-fetch": "^2.0.3",
     "wxml-transpiler": "^1.0.4",
     "wxss-transpiler": "^1.0.4"
