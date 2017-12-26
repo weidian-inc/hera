@@ -1,14 +1,14 @@
 const Concat = require('concat-with-sourcemaps')
-const chokidar = require('chokidar')
+// const chokidar = require('chokidar')
 const chalk = require('chalk')
 const cache = require('./cache')
 const util = require('./util')
 const loadConfig = require('./config')
 const fs = require('fs')
 // const convert = require('convert-source-map')
-const jsondiffpatch = require('jsondiffpatch').create({
-  cloneDiffValues: false
-})
+// const jsondiffpatch = require('jsondiffpatch').create({
+//   cloneDiffValues: false
+// })
 
 let buildPromise = null
 let currConfig = JSON.parse(fs.readFileSync('./app.json', 'utf8'))
@@ -134,10 +134,8 @@ function concatFiles (obj, pages) {
     }
   }
 
-  return concat.content
-    .toString()
-    .replace(/WeixinJSBridge/g, 'ServiceJSBridge')
-    //.replace(/([^\w\/\\@#%])wx\./g, '$1wd.')
-    //.replace(/Reporter/g, 'SReporter')
-    //.replace(/Object\.defineProperty\(\s*wx\s*,/g, 'Object.defineProperty(wd,')
+  return concat.content.toString().replace(/WeixinJSBridge/g, 'ServiceJSBridge')
+  // .replace(/([^\w\/\\@#%])wx\./g, '$1wd.')
+  // .replace(/Reporter/g, 'SReporter')
+  // .replace(/Object\.defineProperty\(\s*wx\s*,/g, 'Object.defineProperty(wd,')
 }

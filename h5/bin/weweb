@@ -4,16 +4,11 @@ var childProcess = require('child_process')
 var exec = childProcess.exec
 var program = require('commander')
 var json = require('../package.json')
-// var UpdateNotifier = require('update-notifier').UpdateNotifier
-var fs = require('fs')
-var open = require('open')
+var fs = require('fs-extra')
 var chalk = require('chalk')
-// var net = require('net')
-// var boxen = require('boxen')
 var archiver = require('archiver')
 var path = require('path')
 var semCmp = require('semver-compare')
-var copydir = promisify(require('copy-dir'))
 
 program
   .version(json.version)
@@ -26,27 +21,6 @@ program
   .option('-d, --dist <p>', '指定生成的路径')
 
 program.parse(process.argv)
-
-// var notifier = new UpdateNotifier({
-//   pkg: json,
-//   callback: function (err, result) {
-//     if (err) return
-//     if (result.current !== result.latest) {
-//       var message = 'Update available ' + chalk.dim(result.current) + chalk.reset(' → ') +
-//           chalk.green(result.latest) + ' \nRun ' + chalk.cyan('npm i -g ' + json.name) + ' to update'
-//       var msg = '\n' + boxen(message, {
-//             padding: 1,
-//             margin: 1,
-//             align: 'center',
-//             borderColor: 'yellow',
-//             borderStyle: 'round'
-//           })
-//       console.log(msg)
-//     }
-//   }
-// })
-
-// notifier.check()
 
 if (program.list) {
   open('https://github.com/Weidian-developer/hera')
@@ -112,7 +86,8 @@ function doTransformFile () {
   let commonDir = distPath + '/framework'
 
   if (program.build) {
-    copydir(rootPath + '/public', commonDir)
+    fs
+      .copy(rootPath + '/public', commonDir)
       .then(() => exec(`cd ${commonDir} && zip -r -q ${commonDir}.zip ./*`))
       .then(() => {
         console.log('文件已生成到: ' + distPath)
@@ -263,48 +238,6 @@ var zipFiles = (function () {
     }
   }
 })()
-
-// function bootWebServer() {
-//   var server = require('../lib/server')(distPath)
-//   var startPort = 2000
-
-//   getPort(function (port) {
-//     if (os.platform() == 'darwin' && program.open) {
-//       exec('osascript chrome.scpt ' + port, {cwd: __dirname}, function () { })
-//     }
-//     server.listen(port, function () {
-//       // console.log('listening on port ' + port)
-//       var openMsg = `Opening it on: http://localhost:${port}`
-//       var msg = '\n' + boxen(openMsg, {
-//             padding: 1,
-//             margin: 1,
-//             align: 'center',
-//             borderColor: 'yellow',
-//             borderStyle: 'round'
-//           })
-//       console.log(msg)
-//       open('http://localhost:' + port)
-//     })
-//   })
-
-//   function getPort(cb) {
-//     if (program.port) return cb(program.port)
-//     var port = startPort
-
-//     var server = net.createServer()
-//     server.listen(port, function () {
-//       server.once('close', function () {
-//         cb(port)
-//       })
-//       server.close()
-//     })
-//     server.on('error', function () {
-//       startPort += 1
-//       getPort(cb)
-//     })
-//   }
-
-// }
 
 util.exists(distPath).then(function (exist) {
   exec('rm -rf ' + distPath + '/*', function (err, out) {

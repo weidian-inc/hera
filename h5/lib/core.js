@@ -1,5 +1,5 @@
 'use strict'
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 const loadConfig = require('./config')
 const util = require('./util')
@@ -84,8 +84,14 @@ exports.getService = async function (opts) {
 }
 
 exports.getOtherFiles = async function (src, dest) {
-  let fileList = await util.getOtherFileList(src)
-  return util.copyFiles(fileList, dest)
+  // let fileList = await util.getOtherFileList(src)
+  // return util.copyFiles(fileList, dest)
+  return util.copy('./', dest, {
+    exclude: {
+      basename: ['.git', 'node_modules', 'heraTmp', 'heraPlatforms'],
+      extname: ['.js', '.json', '.wxss', '.css', '.git', '.md', '.wxml', '']
+    }
+  })
 }
 
 exports.getServiceConfig = async function () {

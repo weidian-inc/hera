@@ -1,8 +1,7 @@
-const growl = require('growl')
 const path = require('path')
 const chalk = require('chalk')
 const et = require('et-improve')
-const fs = require('fs')
+const fs = require('fs-extra')
 const glob = require('glob')
 const Parallel = require('node-parallel')
 const babel = require('babel-core')
@@ -10,7 +9,7 @@ const isWin = /^win/.test(process.platform)
 const Concat = require('concat-with-sourcemaps')
 const UglifyJS = require('uglify-js')
 const ni = require('os').networkInterfaces()
-const copyfiles = require('copyfiles')
+// const copyfiles = require('copyfiles')
 const BASE_DEVICE_WIDTH = 750
 const EPS = 0.0001
 const RPXRE = /%%\?[+-]?\d+(\.\d+)?rpx\?%%/g
@@ -35,42 +34,6 @@ exports.globJSfiles = function () {
       function (err, files) {
         if (err) return reject(err)
         resolve(files)
-      }
-    )
-  })
-}
-
-exports.getOtherFileList = function (src) {
-  return new Promise(function (resolve, reject) {
-    glob(
-      '**',
-      {
-        ignore: [
-          'modules/**',
-          '**/*.{js,wxml,json,wxss,md}',
-          'heraTmp/**',
-          'heraPlatforms/**'
-        ],
-        nodir: true
-      },
-      function (err, files) {
-        if (err) return reject(err)
-        resolve(files)
-      }
-    )
-  })
-}
-
-exports.copyFiles = function (list, dest) {
-  return new Promise(function (resolve, reject) {
-    copyfiles(
-      list.concat(dest),
-      {
-        // exclude: '**/*.js.txt'
-      },
-      function (err) {
-        if (err) return reject(err)
-        resolve('done')
       }
     )
   })
@@ -305,10 +268,6 @@ function loadJavascript (full_path, useBabel, cb) {
 
 exports.notifyError = function (err) {
   console.error(err.stack)
-  let img = path.resolve(__dirname, '../public/images/error.png')
-  growl(err.message, {
-    image: img
-  })
 }
 
 exports.getIp = function () {
@@ -350,56 +309,6 @@ exports.parseCss = function (content, width, ratio) {
     })
   }
   return content
-}
-
-// 在复制目录前需要判断该目录是否存在，不存在需要先创建目录
-exports.copy = function (src, dst, callback) {
-  let self = this
-  let copyDir = this.copyDir.bind(this)
-  this.exists(dst).then(function (exists) {
-    // 已存在
-    if (exists) {
-      copyDir(src, dst)
-      callback()
-    } else {
-      // 不存在
-      fs.mkdir(dst, function () {
-        copyDir(src, dst, callback)
-      })
-    }
-  })
-}
-/**
- * [copy 复制文件到目标文件，递归调用]
- * @param  {[string]} src [原文件]
- * @param  {[string]} dst [目标文件]
- * @return {[type]}     [description]
- */
-exports.copyDir = function (src, dst, callback) {
-  let self = this
-  // 读取目录中的所有文件/目录
-  fs.readdir(src, function (err, paths) {
-    if (err) {
-      throw err
-    }
-    paths.forEach(function (path) {
-      var _src = src + '/' + path,
-        _dst = dst + '/' + path
-      fs.stat(_src, function (err, st) {
-        if (err) {
-          throw err
-        }
-        // 判断是否为文件
-        if (st.isFile()) {
-          // 通过管道来传输流
-          fs.createReadStream(_src).pipe(fs.createWriteStream(_dst))
-        } else if (st.isDirectory()) {
-          // 如果是目录则递归调用自身
-          self.copy(_src, _dst, callback || '')
-        }
-      })
-    })
-  })
 }
 
 exports.createFile = function (distPath, fileName, text, cb) {
@@ -468,4 +377,25 @@ function getNumber (e, width, ratio) {
     g = -g
   }
   return transformByDPR(g, width, ratio)
+}
+exports.copy = function (src, dest, opts) {
+  opts = Object.assign(
+    {},
+    {
+      exclude: {
+        basename: [],
+        extname: []
+      }
+    },
+    opts
+  )
+  return fs.copy(src, dest, {
+    filter: (src, dest) => {
+      if (fs.lstatSync(src).isDirectory()) {
+        return !~opts.exclude.basename.indexOf(path.basename(src))
+      }
+
+      return !~opts.exclude.extname.indexOf(path.extname(src))
+    }
+  })
 }

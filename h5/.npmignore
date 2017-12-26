@@ -5,6 +5,8 @@ node_modules
 .vscode
 dist
 tmp/bundle
+bin/wcc*
+bin/wcsc*
 tmp/dist
 demo
 docs
