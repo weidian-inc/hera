@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		55047AE51FE7D35D0070F9E1 /* demoapp.zip in Resources */ = {isa = PBXBuildFile; fileRef = 55047AE41FE7D35D0070F9E1 /* demoapp.zip */; };
-		5526E6451FBBD8CB0014ACE6 /* RetrieveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E6441FBBD8CB0014ACE6 /* RetrieveViewController.m */; };
 		5526E64E1FBC37EC0014ACE6 /* LinkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E64D1FBC37EC0014ACE6 /* LinkViewController.m */; };
 		5591AEE21FCC332C00D79F47 /* AppTransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5591AEE11FCC332C00D79F47 /* AppTransitionViewController.m */; };
 		639123BB2E30375E1AE1F3E4 /* libPods-HeraDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 70A368766FF0A5275194A974 /* libPods-HeraDemo.a */; };
@@ -27,8 +26,6 @@
 /* Begin PBXFileReference section */
 		46D239121F20466400751BF0 /* HeraDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HeraDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55047AE41FE7D35D0070F9E1 /* demoapp.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = demoapp.zip; sourceTree = "<group>"; };
-		5526E6431FBBD8CB0014ACE6 /* RetrieveViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RetrieveViewController.h; sourceTree = "<group>"; };
-		5526E6441FBBD8CB0014ACE6 /* RetrieveViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RetrieveViewController.m; sourceTree = "<group>"; };
 		5526E64C1FBC37EC0014ACE6 /* LinkViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinkViewController.h; sourceTree = "<group>"; };
 		5526E64D1FBC37EC0014ACE6 /* LinkViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LinkViewController.m; sourceTree = "<group>"; };
 		5591AEE01FCC332C00D79F47 /* AppTransitionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppTransitionViewController.h; sourceTree = "<group>"; };
@@ -115,8 +112,6 @@
 				E94AD6951FB4546600AC5B39 /* resources.xcassets */,
 				E94AD6961FB4546600AC5B39 /* ViewController.h */,
 				E94AD6971FB4546600AC5B39 /* ViewController.m */,
-				5526E6431FBBD8CB0014ACE6 /* RetrieveViewController.h */,
-				5526E6441FBBD8CB0014ACE6 /* RetrieveViewController.m */,
 				5591AEE01FCC332C00D79F47 /* AppTransitionViewController.h */,
 				5591AEE11FCC332C00D79F47 /* AppTransitionViewController.m */,
 				5526E64C1FBC37EC0014ACE6 /* LinkViewController.h */,
@@ -254,7 +249,6 @@
 			files = (
 				5526E64E1FBC37EC0014ACE6 /* LinkViewController.m in Sources */,
 				5591AEE21FCC332C00D79F47 /* AppTransitionViewController.m in Sources */,
-				5526E6451FBBD8CB0014ACE6 /* RetrieveViewController.m in Sources */,
 				E94AD6A01FB4546600AC5B39 /* ViewController.m in Sources */,
 				E94AD69E1FB4546600AC5B39 /* main.m in Sources */,
 				E94AD6991FB4546600AC5B39 /* AppDelegate.m in Sources */,
