@@ -27,13 +27,17 @@
 
 package com.weidian.lib.hera.page;
 
+import android.animation.LayoutTransition;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
@@ -50,6 +54,7 @@ import com.weidian.lib.hera.page.view.TabBar;
 import com.weidian.lib.hera.trace.HeraTrace;
 import com.weidian.lib.hera.utils.ColorUtil;
 import com.weidian.lib.hera.utils.FileUtil;
+import com.weidian.lib.hera.utils.UIUtil;
 import com.weidian.lib.hera.web.HeraWebViewClient;
 import com.weidian.lib.hera.widget.ToastView;
 
@@ -64,7 +69,7 @@ import java.util.Set;
  * Page层，即小程序view展示层
  */
 public class Page extends LinearLayout implements IBridgeHandler,
-        TabBar.OnSwitchTabListener {
+        TabBar.OnSwitchTabListener, PageWebView.OnHorizontalSwipeListener {
 
     public static final String TAG = "Page";
 
@@ -80,14 +85,18 @@ public class Page extends LinearLayout implements IBridgeHandler,
     private TabBar mTabBar;
     private ToastView mToastView;
 
+
     private AppConfig mAppConfig;
     private OnEventListener mEventListener;
     private String mPageOpenType;
     private String mPagePath;
 
-    public Page(Context context, String pagePath, AppConfig appConfig) {
+    private boolean isHomePage;
+
+    public Page(Context context, String pagePath, AppConfig appConfig,boolean isHomePage) {
         super(context);
         this.mAppConfig = appConfig;
+        this.isHomePage=isHomePage;
         init(context, pagePath);
     }
 
@@ -165,6 +174,10 @@ public class Page extends LinearLayout implements IBridgeHandler,
         webView.setTag(url);
         webView.setWebViewClient(new HeraWebViewClient(mAppConfig));
         webView.setJsHandler(this);
+
+        if (!isHomePage){
+            webView.setSwipeListener(this);
+        }
         refreshLayout.addView(webView, 0, new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mCurrentWebView = webView;
@@ -179,7 +192,14 @@ public class Page extends LinearLayout implements IBridgeHandler,
         String textColor = mAppConfig.getNavigationBarTextColor();
         String bgColor = mAppConfig.getNavigationBarBackgroundColor();
         mNavigationBar.setTitleTextColor(ColorUtil.parseColor(textColor));
-        mNavigationBar.setBackgroundColor(ColorUtil.parseColor(bgColor));
+        int naviBgColor=ColorUtil.parseColor(bgColor);
+        mNavigationBar.setBackgroundColor(naviBgColor);
+
+        Context context=getContext();
+        if (context!=null&& context instanceof Activity){
+            UIUtil.setColor((Activity)context, naviBgColor);
+        }
+
     }
 
     @Override
@@ -533,4 +553,34 @@ public class Page extends LinearLayout implements IBridgeHandler,
         return mCurrentWebView != null ? mCurrentWebView.getViewId() : 0;
     }
 
+    // --------------------------  OnHorizontalSwipeListener  ---------------------------------
+
+    @Override
+    public void onHorizontalSwipeMove(float dx) {
+        this.scrollBy(-(int) dx,0);
+    }
+
+    @Override
+    public void onSwipeTapUp(float x) {
+        if (x<getWidth()/2){// 回到原位
+            this.scrollTo(0,0);
+        }else {// 返回上一层级
+            disableParentAnim();
+            mNavigationBar.onBack(getContext());
+        }
+    }
+
+    private void disableParentAnim(){
+        ViewParent parent=this.getParent();
+        if (parent!=null&&parent instanceof FrameLayout){
+            LayoutTransition transition = ((FrameLayout)parent).getLayoutTransition();
+            if (transition!=null){
+                transition.disableTransitionType(LayoutTransition.APPEARING);
+                transition.disableTransitionType(LayoutTransition.DISAPPEARING);
+                transition.disableTransitionType(LayoutTransition.CHANGE_APPEARING);
+                transition.disableTransitionType(LayoutTransition.CHANGE_DISAPPEARING);
+                transition.disableTransitionType(LayoutTransition.CHANGING);
+            }
+        }
+    }
 }

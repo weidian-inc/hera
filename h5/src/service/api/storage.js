@@ -166,8 +166,8 @@ export function clearStorage (data) {
   storage.clear()
 }
 
-export function remove (data) {
-  storage.remove()
+export function remove (key) {
+  storage.remove(key)
 }
 
 export function removeStorage (args) {

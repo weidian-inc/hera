@@ -31,7 +31,10 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.widget.FrameLayout;
@@ -62,12 +65,15 @@ public class PageManager {
 
         DisplayMetrics dm = mContext.getResources().getDisplayMetrics();
         LayoutTransition transition = new LayoutTransition();
+        // View 页面转场动画
         transition.setAnimator(LayoutTransition.APPEARING, getAppearingAnimation(dm.widthPixels));
         transition.setAnimator(LayoutTransition.DISAPPEARING, getDisappearingAnimation(dm.widthPixels));
+        // 动画开始延迟
         transition.setStartDelay(LayoutTransition.APPEARING, 0);
         transition.setStartDelay(LayoutTransition.DISAPPEARING, 0);
         transition.setStartDelay(LayoutTransition.CHANGE_APPEARING, 0);
         transition.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
+        // 动画执行时间
         transition.setDuration(LayoutTransition.APPEARING, 300);
         transition.setDuration(LayoutTransition.DISAPPEARING, 300);
         transition.setDuration(LayoutTransition.CHANGE_APPEARING, 300);
@@ -266,9 +272,9 @@ public class PageManager {
 
         if (pageCount <= 1) {
             disableAnimation();
-        } else {
+        } /*else {
             enableAnimation();
-        }
+        }*/
 
         for (int i = pageCount - delta; i < pageCount; i++) {
             mContainer.removeViewAt(i);
@@ -302,7 +308,7 @@ public class PageManager {
             }
         }
 
-        Page page = new Page(mContext, url, mAppConfig);
+        Page page = new Page(mContext, url, mAppConfig,getPageCount()==0);
         page.setEventListener(listener);
         mContainer.addView(page, new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));

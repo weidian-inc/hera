@@ -95,7 +95,7 @@ public class RequestModule extends AbsModule {
             Headers headers = Headers.of(OkHttpUtil.parseJsonToMap(header));
             Request.Builder requestBuilder = new Request.Builder().headers(headers);
             if (METHOD_GET.equals(method)) {
-                url = OkHttpUtil.appendUrlParams(url, reqParam);
+                //url = OkHttpUtil.appendUrlParams(url, reqParam);
                 requestBuilder.url(url).get();
             } else {
                 FormBody.Builder formBuilder = new FormBody.Builder();

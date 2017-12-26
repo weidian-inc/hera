@@ -18,7 +18,18 @@ Page({
     ]
   },
   tap () {
-    console.log('tap')
+    this.testPromise()
+  },
+  testPromise: function () {
+    var getItLater = function () {
+      return new Promise((resolve, reject) => {
+        console.log(55555)
+        setTimeout(() => {
+          resolve(6666)
+        }, 2000)
+      })
+    }
+    getItLater().then(res => console.log(res))
   },
   onLoad: function (options) {
     // Do some initialize when page load.

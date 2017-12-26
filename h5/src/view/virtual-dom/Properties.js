@@ -119,7 +119,7 @@ function applyProperties (ele, props) {
                 }
               } else {
                 const isAnimationProp = propName === 'animation' && typeof(propValue) === 'object'
-                const isPropHasActions = propValue.actions && propValue.actions.length > 0
+                const isPropHasActions = propValue && propValue.actions && propValue.actions.length > 0
                 if (isAnimationProp && isPropHasActions) {
                   !(function () {
                     const execAnimationAction = function () {
