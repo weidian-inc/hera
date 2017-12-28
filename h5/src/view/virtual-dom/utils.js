@@ -111,26 +111,5 @@ export default {
   },
   getDataType: function (obj) {
     return Object.prototype.toString.call(obj).split(' ')[1].split(']')[0]
-  },
-  getPageConfig: function () {
-    let configs = {}
-    if (window.__wxConfig && window.__wxConfig.window) {
-      configs = window.__wxConfig.window
-    } else {
-      let globConfig = {}
-      window.__wxConfig &&
-        window.__wxConfig.global &&
-        window.__wxConfig.global.window &&
-        (globConfig = window.__wxConfig.global.window)
-
-      let pageConfig = {}
-      window.__wxConfig &&
-        window.__wxConfig.page &&
-        window.__wxConfig.page[window.__route__] &&
-        window.__wxConfig.page[window.__route__].window &&
-        (pageConfig = window.__wxConfig.page[window.__route__].window)
-      configs = objAssign({}, globConfig, pageConfig)
-    }
-    return configs
   }
 }
