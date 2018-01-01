@@ -37,6 +37,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.webkit.WebView;
 
+import com.facebook.stetho.Stetho;
 import com.weidian.lib.hera.config.AppConfig;
 import com.weidian.lib.hera.config.HeraConfig;
 import com.weidian.lib.hera.trace.HeraTrace;
@@ -119,6 +120,7 @@ public class HeraService extends Service {
     public void onCreate() {
         super.onCreate();
         HeraTrace.d(TAG, "HeraProcessService onCreate");
+        Stetho.initializeWithDefaults(getApplicationContext());
     }
 
     @Override
