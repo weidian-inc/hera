@@ -45,12 +45,17 @@ public class PageWebView extends HeraWebView {
     private OnHorizontalSwipeListener mSwipeListener;
 
     public PageWebView(Context context) {
-        this(context,null);
+        super(context);
+        final ViewConfiguration configuration = ViewConfiguration
+                .get(getContext());
+        mTouchSlop = configuration.getScaledTouchSlop();
     }
 
     public PageWebView(Context context, AttributeSet attrs) {
-        this(context, attrs,0);
-
+        super(context, attrs);
+        final ViewConfiguration configuration = ViewConfiguration
+                .get(getContext());
+        mTouchSlop = configuration.getScaledTouchSlop();
     }
 
     public PageWebView(Context context, AttributeSet attrs, int defStyleAttr) {
