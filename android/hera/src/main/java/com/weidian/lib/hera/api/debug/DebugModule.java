@@ -29,7 +29,7 @@ package com.weidian.lib.hera.api.debug;
 
 import android.content.Context;
 import android.os.Build;
-import android.webkit.WebView;
+import com.tencent.smtt.sdk.WebView;
 
 import com.weidian.lib.hera.api.AbsModule;
 import com.weidian.lib.hera.api.HeraApi;

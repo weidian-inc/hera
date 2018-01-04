@@ -35,9 +35,11 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.webkit.WebView;
 
 import com.facebook.stetho.Stetho;
+import com.tencent.smtt.sdk.QbSdk;
+import com.tencent.smtt.sdk.TbsListener;
+import com.tencent.smtt.sdk.WebView;
 import com.weidian.lib.hera.config.AppConfig;
 import com.weidian.lib.hera.config.HeraConfig;
 import com.weidian.lib.hera.trace.HeraTrace;
@@ -45,7 +47,6 @@ import com.weidian.lib.hera.utils.IOUtil;
 import com.weidian.lib.hera.utils.SharePreferencesUtil;
 import com.weidian.lib.hera.utils.StorageUtil;
 import com.weidian.lib.hera.utils.ZipUtil;
-
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -74,6 +75,8 @@ public class HeraService extends Service {
         HeraTrace.d(TAG, "start HeraProcessService");
         sConfig = config;//宿主进程记录的HeraConfig
         initFramework(context);
+
+        initX5(context);
 
         Intent intent = new Intent(context, HeraService.class);
         if (config != null) {
@@ -146,6 +149,40 @@ public class HeraService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    private static void initX5(Context context) {
+        QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
+
+            @Override
+            public void onViewInitFinished(boolean arg0) {
+                HeraTrace.d(TAG, "onViewInitFinished isX5Core: " + arg0);
+            }
+
+            @Override
+            public void onCoreInitFinished() {
+                HeraTrace.d(TAG, "onCoreInitFinished");
+            }
+        };
+        //x5内核初始化接口
+        QbSdk.initX5Environment(context.getApplicationContext(), cb);
+        QbSdk.setDownloadWithoutWifi(true);
+        QbSdk.setTbsListener(new TbsListener() {
+            @Override
+            public void onDownloadFinish(int i) {
+                HeraTrace.d(TAG, "Tbs onDownloadFinish:" + i);
+            }
+
+            @Override
+            public void onInstallFinish(int i) {
+                HeraTrace.d(TAG, "Tbs onInstallFinish:" + i);
+            }
+
+            @Override
+            public void onDownloadProgress(int i) {
+                HeraTrace.d(TAG, "Tbs onDownloadProgress:" + i);
+            }
+        });
     }
 
     /**
