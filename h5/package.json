@@ -48,7 +48,7 @@
     "source-map": "^0.5.6",
     "uglify-js": "^3.3.2",
     "whatwg-fetch": "^2.0.3",
-    "wxml-transpiler": "^1.0.4",
+    "wxml-transpiler": "^1.0.5",
     "wxss-transpiler": "^1.0.4"
   },
   "devDependencies": {
