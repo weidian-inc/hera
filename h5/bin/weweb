@@ -95,7 +95,7 @@ function doTransformFile () {
       .catch(e => console.log(e))
   } else {
     var core = require('../lib/core')
-    distPath = distPath + '/app'
+    if(!program.dist)distPath = distPath + '/app'
 
     core
       .getOtherFiles(folder, distPath)
@@ -193,7 +193,7 @@ var zipFiles = (function () {
   let step = 6
   return function (stepName) {
     step--
-    if (step === 0) {
+    if (step === 0 && !program.dist) {
       console.log(chalk.green(`${stepName}完成, 开始压缩文件`))
       const curVersion = process.version.slice(1)
       if (semCmp(curVersion, '8.1.2') > 0 || semCmp(curVersion, '8.0.0') < 0) {
