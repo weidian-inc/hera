@@ -60,7 +60,7 @@ public class PhoneCallModule extends AbsModule {
         }
         if (!TextUtils.isEmpty(phoneNumber)) {
             Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_CALL);
+            intent.setAction(Intent.ACTION_DIAL);
             intent.setData(Uri.parse("tel:" + phoneNumber));
             getContext().startActivity(intent);
             callback.onResult(packageResultData(event, RESULT_OK, null));
