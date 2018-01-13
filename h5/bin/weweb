@@ -239,19 +239,19 @@ var zipFiles = (function () {
   }
 })()
 
-util.exists(distPath).then(function (exist) {
-  exec('rm -rf ' + distPath + '/*', function (err, out) {
-    err && console.log(chalk.red(err))
-    console.log('文件将生成到: ' + distPath)
-    if (exist) {
-      doTransformFile()
-    } else {
-      fs.mkdir(distPath, function () {
-        doTransformFile()
-      })
-    }
+// util.exists(distPath).then(function (exist) {
+fs.remove(distPath, function (err, out) {
+  err && console.log(chalk.red(err))
+  console.log('文件将生成到: ' + distPath)
+  // if (exist) {
+  //   doTransformFile()
+  // } else {
+  fs.mkdir(distPath, function () {
+    doTransformFile()
   })
+  // }
 })
+// })
 
 process.on('uncaughtException', function (e) {
   console.log(chalk.red('发生了未知错误'))
