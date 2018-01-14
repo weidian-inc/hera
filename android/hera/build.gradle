@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 
 dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:design:25.3.1'
 
     compile "com.github.bumptech.glide:glide:3.7.0"
@@ -25,6 +26,12 @@ android {
         targetSdkVersion project.targetSdkVersion
         versionCode 1
         versionName "1.0"
+
+        // Specifies the ABI configurations of your native
+        // libraries Gradle should build and package with your APK.
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+        }
     }
 
     buildTypes {

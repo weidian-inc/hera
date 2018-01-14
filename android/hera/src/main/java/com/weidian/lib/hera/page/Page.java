@@ -34,12 +34,11 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebView;
+import com.tencent.smtt.sdk.WebView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 

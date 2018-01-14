@@ -33,8 +33,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Pair;
 import android.view.accessibility.AccessibilityManager;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
 import android.widget.Toast;
 
 import com.weidian.lib.hera.config.HeraConfig;
