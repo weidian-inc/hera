@@ -14,6 +14,7 @@ program
   .version(json.version)
   .usage('[app root]')
   .option('-b, --build', '打包出Framework')
+  .option('-u, --unzip', '不打包')
   .option('-o, --open', '使用 Chrome 打开小程序，仅对 Mac 有效')
   .option('-l, --list', '使用默认浏览器打开更新历史')
   .option('--log', '收集 log（供 iOS 调试用）')
@@ -95,7 +96,7 @@ function doTransformFile () {
       .catch(e => console.log(e))
   } else {
     var core = require('../lib/core')
-    distPath = distPath + '/app'
+    if(!program.unzip)distPath = distPath + '/app'
 
     core
       .getOtherFiles(folder, distPath)
@@ -193,7 +194,7 @@ var zipFiles = (function () {
   let step = 6
   return function (stepName) {
     step--
-    if (step === 0) {
+    if (step === 0 && !program.unzip) {
       console.log(chalk.green(`${stepName}完成, 开始压缩文件`))
       const curVersion = process.version.slice(1)
       if (semCmp(curVersion, '8.1.2') > 0 || semCmp(curVersion, '8.0.0') < 0) {
@@ -239,19 +240,19 @@ var zipFiles = (function () {
   }
 })()
 
-util.exists(distPath).then(function (exist) {
-  exec('rm -rf ' + distPath + '/*', function (err, out) {
-    err && console.log(chalk.red(err))
-    console.log('文件将生成到: ' + distPath)
-    if (exist) {
-      doTransformFile()
-    } else {
-      fs.mkdir(distPath, function () {
-        doTransformFile()
-      })
-    }
+// util.exists(distPath).then(function (exist) {
+fs.remove(distPath, function (err, out) {
+  err && console.log(chalk.red(err))
+  console.log('文件将生成到: ' + distPath)
+  // if (exist) {
+  //   doTransformFile()
+  // } else {
+  fs.mkdir(distPath, function () {
+    doTransformFile()
   })
+  // }
 })
+// })
 
 process.on('uncaughtException', function (e) {
   console.log(chalk.red('发生了未知错误'))

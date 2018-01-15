@@ -16,6 +16,10 @@ class WxVirtualNode {
       ? (this.wxKey = void 0)
       : (this.wxKey = String(wxKey))
     this.descendants = 0//子节点数
+    if(this.tagName=='wx-map'){//mapSDK按需加载
+      let map = require('../components/wx-map')
+      map.loadSDK()
+    }
     for (let c = 0; c < this.children.length; ++c) {
       let child = this.children[c]
       if (Utils.isVirtualNode(child)) {
