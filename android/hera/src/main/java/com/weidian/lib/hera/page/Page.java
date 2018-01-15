@@ -56,6 +56,7 @@ import com.weidian.lib.hera.utils.FileUtil;
 import com.weidian.lib.hera.utils.UIUtil;
 import com.weidian.lib.hera.web.HeraWebViewClient;
 import com.weidian.lib.hera.widget.ToastView;
+import com.weidian.lib.hera.widget.X5SwipeRefreshLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -159,7 +160,7 @@ public class Page extends LinearLayout implements IBridgeHandler,
      * @return 封装下拉刷新功能的WebView包装视图
      */
     private SwipeRefreshLayout createSwipeRefreshWebView(Context context, String url) {
-        SwipeRefreshLayout refreshLayout = new SwipeRefreshLayout(context);
+        SwipeRefreshLayout refreshLayout = new X5SwipeRefreshLayout(context);
         refreshLayout.setEnabled(mAppConfig.isEnablePullDownRefresh(url));
         refreshLayout.setColorSchemeColors(Color.GRAY);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
