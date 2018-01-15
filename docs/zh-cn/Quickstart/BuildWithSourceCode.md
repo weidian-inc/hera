@@ -1,12 +1,18 @@
 # 从源码构建
 
-如果您运行时发现一些错误，它们可能已经被修复了，您可以先尝试使用源码来运行您的程序，如果错误仍然存在，请提 issue 或是在群里向管理员反映。
+如果您运行时发现一些错误，它们可能已经被修复了，您可以先尝试使用源码来运行您的程序，如果错误仍然存在，请提 issue 或是在群里向管理员反映。
 
 ## Clone 源码
 
 ```sh
+## clone 源码
 git clone https://github.com/weidian-inc/hera.git
+
+## 切换到 dev 分支
+git checkout master-dev
 ```
+
+
 
 ## 进入 h5 目录
 
