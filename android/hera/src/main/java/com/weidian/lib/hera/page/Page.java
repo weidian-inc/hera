@@ -174,6 +174,7 @@ public class Page extends LinearLayout implements IBridgeHandler,
         webView.setTag(url);
         webView.setWebViewClient(new HeraWebViewClient(mAppConfig));
         webView.setJsHandler(this);
+        webView.setRefreshEnable(mAppConfig.isEnablePullDownRefresh(url));
 
         if (!isHomePage){
             webView.setSwipeListener(this);

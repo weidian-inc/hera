@@ -40,30 +40,18 @@ import com.weidian.lib.hera.web.HeraWebView;
 public class PageWebView extends HeraWebView {
     private boolean isSwiped=false;
     private float mLastTouchX;
-    private final float mTouchSlop;
+    private boolean refreshEnable;
 
     private OnHorizontalSwipeListener mSwipeListener;
 
     public PageWebView(Context context) {
         super(context);
-        final ViewConfiguration configuration = ViewConfiguration
-                .get(getContext());
-        mTouchSlop = configuration.getScaledTouchSlop();
     }
 
     public PageWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        final ViewConfiguration configuration = ViewConfiguration
-                .get(getContext());
-        mTouchSlop = configuration.getScaledTouchSlop();
     }
 
-    public PageWebView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        final ViewConfiguration configuration = ViewConfiguration
-                .get(getContext());
-        mTouchSlop = configuration.getScaledTouchSlop();
-    }
 
     public int getViewId() {
         return hashCode();
@@ -75,7 +63,7 @@ public class PageWebView extends HeraWebView {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean dispatchTouchEvent(MotionEvent event) {
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
                 isSwiped=false;
@@ -96,11 +84,11 @@ public class PageWebView extends HeraWebView {
             case MotionEvent.ACTION_MOVE:
                 if (isSwiped) {
                     float dx = event.getRawX() - mLastTouchX;
-                    if (Math.abs(dx)>mTouchSlop){
+
                         mSwipeListener.onHorizontalSwipeMove(dx);
                         mLastTouchX = event.getRawX();
                         return true;
-                    }
+
                 }
                 break;
             case MotionEvent.ACTION_CANCEL:
@@ -109,21 +97,24 @@ public class PageWebView extends HeraWebView {
                     mSwipeListener.onSwipeTapUp(event.getRawX());
                     return true;
                 }
-
                 ViewParent parent = getParent();
                 if (parent != null&& parent instanceof SwipeRefreshLayout) {
                     parent.requestDisallowInterceptTouchEvent(false);
-                    ((SwipeRefreshLayout)parent).setEnabled(true);
+                    ((SwipeRefreshLayout)parent).setEnabled(this.refreshEnable);
                 }
                 break;
 
         }
-
-        return super.onTouchEvent(event);
+        return super.dispatchTouchEvent(event);
     }
+
 
     public void setSwipeListener(OnHorizontalSwipeListener swipeListener) {
         this.mSwipeListener = swipeListener;
+    }
+
+    public void setRefreshEnable(boolean refreshEnable) {
+        this.refreshEnable = refreshEnable;
     }
 
     public interface OnHorizontalSwipeListener{
