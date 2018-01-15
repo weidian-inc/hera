@@ -38,7 +38,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.inputmethod.InputMethodManager;
+
 import com.tencent.smtt.sdk.WebView;
+
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -93,10 +95,10 @@ public class Page extends LinearLayout implements IBridgeHandler,
 
     private boolean isHomePage;
 
-    public Page(Context context, String pagePath, AppConfig appConfig,boolean isHomePage) {
+    public Page(Context context, String pagePath, AppConfig appConfig, boolean isHomePage) {
         super(context);
         this.mAppConfig = appConfig;
-        this.isHomePage=isHomePage;
+        this.isHomePage = isHomePage;
         init(context, pagePath);
     }
 
@@ -160,8 +162,9 @@ public class Page extends LinearLayout implements IBridgeHandler,
      * @return 封装下拉刷新功能的WebView包装视图
      */
     private SwipeRefreshLayout createSwipeRefreshWebView(Context context, String url) {
+        boolean enablePullRefresh = mAppConfig.isEnablePullDownRefresh(url);
         SwipeRefreshLayout refreshLayout = new X5SwipeRefreshLayout(context);
-        refreshLayout.setEnabled(mAppConfig.isEnablePullDownRefresh(url));
+        refreshLayout.setEnabled(enablePullRefresh);
         refreshLayout.setColorSchemeColors(Color.GRAY);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -174,9 +177,9 @@ public class Page extends LinearLayout implements IBridgeHandler,
         webView.setTag(url);
         webView.setWebViewClient(new HeraWebViewClient(mAppConfig));
         webView.setJsHandler(this);
-        webView.setRefreshEnable(mAppConfig.isEnablePullDownRefresh(url));
+        webView.setRefreshEnable(enablePullRefresh);
 
-        if (!isHomePage){
+        if (!isHomePage) {
             webView.setSwipeListener(this);
         }
         refreshLayout.addView(webView, 0, new ViewGroup.LayoutParams(
@@ -193,12 +196,12 @@ public class Page extends LinearLayout implements IBridgeHandler,
         String textColor = mAppConfig.getNavigationBarTextColor();
         String bgColor = mAppConfig.getNavigationBarBackgroundColor();
         mNavigationBar.setTitleTextColor(ColorUtil.parseColor(textColor));
-        int naviBgColor=ColorUtil.parseColor(bgColor);
+        int naviBgColor = ColorUtil.parseColor(bgColor);
         mNavigationBar.setBackgroundColor(naviBgColor);
 
-        Context context=getContext();
-        if (context!=null&& context instanceof Activity){
-            UIUtil.setColor((Activity)context, naviBgColor);
+        Context context = getContext();
+        if (context != null && context instanceof Activity) {
+            UIUtil.setColor((Activity) context, naviBgColor);
         }
 
     }
@@ -449,9 +452,13 @@ public class Page extends LinearLayout implements IBridgeHandler,
         mNavigationBar.setTitle(mAppConfig.getPageTitle(url));
 
         //设置下拉刷新启用状态
+        boolean enablePullRefresh = mAppConfig.isEnablePullDownRefresh(url);
+        if (mCurrentWebView != null) {
+            mCurrentWebView.setRefreshEnable(enablePullRefresh);
+        }
         SwipeRefreshLayout refreshLayout = getSwipeRefreshLayout();
         if (refreshLayout != null) {
-            refreshLayout.setEnabled(mAppConfig.isEnablePullDownRefresh(url));
+            refreshLayout.setEnabled(enablePullRefresh);
         }
 
         //加载内容
@@ -558,24 +565,24 @@ public class Page extends LinearLayout implements IBridgeHandler,
 
     @Override
     public void onHorizontalSwipeMove(float dx) {
-        this.scrollBy(-(int) dx,0);
+        this.scrollBy(-(int) dx, 0);
     }
 
     @Override
     public void onSwipeTapUp(float x) {
-        if (x<getWidth()/2){// 回到原位
-            this.scrollTo(0,0);
-        }else {// 返回上一层级
+        if (x < getWidth() / 2) {// 回到原位
+            this.scrollTo(0, 0);
+        } else {// 返回上一层级
             disableParentAnim();
             mNavigationBar.onBack(getContext());
         }
     }
 
-    private void disableParentAnim(){
-        ViewParent parent=this.getParent();
-        if (parent!=null&&parent instanceof FrameLayout){
-            LayoutTransition transition = ((FrameLayout)parent).getLayoutTransition();
-            if (transition!=null){
+    private void disableParentAnim() {
+        ViewParent parent = this.getParent();
+        if (parent != null && parent instanceof FrameLayout) {
+            LayoutTransition transition = ((FrameLayout) parent).getLayoutTransition();
+            if (transition != null) {
                 transition.disableTransitionType(LayoutTransition.APPEARING);
                 transition.disableTransitionType(LayoutTransition.DISAPPEARING);
                 transition.disableTransitionType(LayoutTransition.CHANGE_APPEARING);
