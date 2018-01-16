@@ -19,11 +19,8 @@ void HRLog(NSString *format, ...) {
 	
 	va_list args;
 	va_start(args, format);
-	
-	NSString *message = [[NSString alloc] initWithFormat:format arguments:args];
-	NSString *hodoerMessage = [NSString stringWithFormat:@"~~~~~Hera:------->(%@)", message];
-	NSLogv(hodoerMessage, args);
-	
+	NSString *log = [@"----Hera:------>: " stringByAppendingString:format];
+	NSLogv(log, args);
 	va_end(args);
 }
 
