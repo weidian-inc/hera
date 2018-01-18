@@ -38,6 +38,7 @@ import com.weidian.lib.hera.api.device.PhoneCallModule;
 import com.weidian.lib.hera.api.device.ScanCodeModule;
 import com.weidian.lib.hera.api.device.SystemInfoModule;
 import com.weidian.lib.hera.api.file.FileModule;
+import com.weidian.lib.hera.api.location.RequestLocationModule;
 import com.weidian.lib.hera.api.media.ImageInfoModule;
 import com.weidian.lib.hera.api.media.ImageModule;
 import com.weidian.lib.hera.api.network.DownloadModule;
@@ -92,6 +93,9 @@ public class SdkApiManager {
 
         //文件
         add(new FileModule(activity, appConfig));
+
+        //位置
+        add(new RequestLocationModule(activity));
     }
 
     /**
