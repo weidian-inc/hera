@@ -179,6 +179,8 @@
 		5540E9871F7A4BAB002C944B /* WDHBundleUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 5540E9851F7A4BAB002C944B /* WDHBundleUtil.m */; };
 		554AF8A21FB96D9F00FBCBB4 /* WDHInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 554AF8A01FB96D9F00FBCBB4 /* WDHInterface.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		554AF8A31FB96D9F00FBCBB4 /* WDHInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 554AF8A11FB96D9F00FBCBB4 /* WDHInterface.m */; };
+		554E3483201482D7002FC2AE /* WHE_getLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 554E3481201482D7002FC2AE /* WHE_getLocation.h */; };
+		554E3484201482D7002FC2AE /* WHE_getLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 554E3482201482D7002FC2AE /* WHE_getLocation.m */; };
 		556886771F98B05A004D3693 /* WDHApp.h in Headers */ = {isa = PBXBuildFile; fileRef = 556886751F98B05A004D3693 /* WDHApp.h */; };
 		556886781F98B05A004D3693 /* WDHApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 556886761F98B05A004D3693 /* WDHApp.m */; };
 		5568867B1F98B994004D3693 /* WDHAppManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 556886791F98B993004D3693 /* WDHAppManager.h */; };
@@ -413,6 +415,9 @@
 		5540E9851F7A4BAB002C944B /* WDHBundleUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDHBundleUtil.m; sourceTree = "<group>"; };
 		554AF8A01FB96D9F00FBCBB4 /* WDHInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WDHInterface.h; sourceTree = "<group>"; };
 		554AF8A11FB96D9F00FBCBB4 /* WDHInterface.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WDHInterface.m; sourceTree = "<group>"; };
+		554E3481201482D7002FC2AE /* WHE_getLocation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WHE_getLocation.h; sourceTree = "<group>"; };
+		554E3482201482D7002FC2AE /* WHE_getLocation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WHE_getLocation.m; sourceTree = "<group>"; };
+		554E34862014D889002FC2AE /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		556886751F98B05A004D3693 /* WDHApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDHApp.h; sourceTree = "<group>"; };
 		556886761F98B05A004D3693 /* WDHApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDHApp.m; sourceTree = "<group>"; };
 		556886791F98B993004D3693 /* WDHAppManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDHAppManager.h; sourceTree = "<group>"; };
@@ -512,6 +517,7 @@
 			children = (
 				4682827D1F601DED00FC71D8 /* WHEBaseApi.h */,
 				4682827E1F601DED00FC71D8 /* WHEBaseApi.m */,
+				554E348020148298002FC2AE /* Location */,
 				5581FA131F74BCE800802ABF /* UI */,
 				5581FA121F74BCE100802ABF /* Device */,
 				5581FA111F74BCD800802ABF /* DataCache */,
@@ -712,6 +718,15 @@
 			path = Tools;
 			sourceTree = "<group>";
 		};
+		554E348020148298002FC2AE /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				554E3481201482D7002FC2AE /* WHE_getLocation.h */,
+				554E3482201482D7002FC2AE /* WHE_getLocation.m */,
+			);
+			path = Location;
+			sourceTree = "<group>";
+		};
 		5581FA0E1F74BCB000802ABF /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -841,6 +856,7 @@
 		B1CB0C9A957C91B59420918A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				554E34862014D889002FC2AE /* CoreLocation.framework */,
 				46FCE4121F208E8400A84199 /* WebKit.framework */,
 				7F3020D76C0B31956B93E8CC /* libPods-Hera.a */,
 			);
@@ -953,6 +969,7 @@
 				553A771A1F46CC5C003F33F5 /* WDHURLProtocol.h in Headers */,
 				5568867B1F98B994004D3693 /* WDHAppManager.h in Headers */,
 				468282981F601DED00FC71D8 /* WHE_addPhoneContact.h in Headers */,
+				554E3483201482D7002FC2AE /* WHE_getLocation.h in Headers */,
 				E94AD6AB1FB9559800AC5B39 /* WHEImagePickerManager.h in Headers */,
 				468282C61F601DEE00FC71D8 /* WHE_removeStorage.h in Headers */,
 				551675621FCD6E2E0037CF8F /* WDHLog.h in Headers */,
@@ -1187,6 +1204,7 @@
 				468282841F601DED00FC71D8 /* WDDocumentPreviewController.m in Sources */,
 				468282971F601DED00FC71D8 /* WHEStorageUtil.m in Sources */,
 				E94AD6FE1FB974D400AC5B39 /* WHEImagePickerView.m in Sources */,
+				554E3484201482D7002FC2AE /* WHE_getLocation.m in Sources */,
 				E94AD6E61FB96F9B00AC5B39 /* WHEImagePickerBaseViewController.m in Sources */,
 				468282B51F601DEE00FC71D8 /* WHE_getStorageInfoSync.m in Sources */,
 				55A062651FA70C5400CDB080 /* WDHBaseViewController.m in Sources */,
