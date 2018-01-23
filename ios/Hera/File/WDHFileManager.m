@@ -151,6 +151,13 @@ static NSString *PROJECT_ROOT_Framework = @"framework";
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"HeraRes" ofType:@"bundle"];
     NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
+	
+	if(!bundle) {
+		NSBundle *classBundle = [NSBundle bundleForClass:WDHFileManager.class];
+		bundlePath = [classBundle pathForResource:@"HeraRes" ofType:@"bundle"];
+		bundle = [NSBundle bundleWithPath:bundlePath];
+	}
+	
     if (!bundle) {
         HRLog(@"HeraRes.bundle is missing");
 		return NO;
