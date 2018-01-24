@@ -57,12 +57,8 @@ public class StorageUtil {
      * @param context 上下文
      * @return 框架根目录文件
      */
-    public static File getHeraDir(Context context) {
-        File heraDir = new File(context.getFilesDir(), "hera");
-        if (!heraDir.exists() || !heraDir.isDirectory()) {
-            heraDir.mkdirs();
-        }
-        return heraDir;
+    public static String getHeraPath(Context context) {
+        return context.getFilesDir() + "/hera/";
     }
 
     /**
@@ -72,7 +68,7 @@ public class StorageUtil {
      * @return 存放framework的目录文件
      */
     public static File getFrameworkDir(Context context) {
-        File frameworkDir = new File(getHeraDir(context), "framework");
+        File frameworkDir = new File(getHeraPath(context), "framework");
         if (!frameworkDir.exists() || !frameworkDir.isDirectory()) {
             frameworkDir.mkdirs();
         }
@@ -85,12 +81,8 @@ public class StorageUtil {
      * @param context 上下文
      * @return 存放小程序的目录文件
      */
-    public static File getHeraAppDir(Context context) {
-        File heraAppDir = new File(getHeraDir(context), "app");
-        if (!heraAppDir.exists() || !heraAppDir.isDirectory()) {
-            heraAppDir.mkdirs();
-        }
-        return heraAppDir;
+    public static String getHeraAppPath(Context context) {
+        return getHeraPath(context) + "app/";
     }
 
     /**
@@ -101,7 +93,7 @@ public class StorageUtil {
      * @return 指定小程序id的目录文件
      */
     public static File getMiniAppDir(Context context, String appId) {
-        File miniAppDir = new File(getHeraAppDir(context), appId);
+        File miniAppDir = new File(getHeraAppPath(context), appId);
         if (!miniAppDir.exists() || !miniAppDir.isDirectory()) {
             miniAppDir.mkdirs();
         }
@@ -175,11 +167,10 @@ public class StorageUtil {
      */
     public static boolean isFrameworkExists(Context context) {
         File frameworkDir = StorageUtil.getFrameworkDir(context);
-        if (!frameworkDir.exists() || !frameworkDir.isDirectory()) {
+        if (!frameworkDir.exists()) {
             return false;
         }
-
-        File[] files = frameworkDir.listFiles();
+        String[] files = frameworkDir.list();
         return files != null && files.length > 0;
     }
 
