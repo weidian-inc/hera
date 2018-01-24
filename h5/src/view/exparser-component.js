@@ -498,6 +498,7 @@ require('./behaviors/wx-mask-Behavior')
 require('./behaviors/wx-native')
 require('./behaviors/wx-player')
 require('./behaviors/wx-touchtrack')
+require('./behaviors/wx-positioning-target')
 
 require('./components/wx-action-sheet-cancel')
 require('./components/wx-action-sheet')
@@ -535,4 +536,5 @@ require('./components/wx-video')
 require('./components/wx-view')
 require('./components/wx-contact-button')
 require('./components/wx-rich-text')
+require('./components/wx-web-view')
 // import ContactButton from './wx-contact-button'
