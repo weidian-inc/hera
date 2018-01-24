@@ -1,5 +1,7 @@
 .DS_Store
 temp
-.idea/
+.idea/gs
 .vscode/
 npm-debug.log
+ios/Podfile.lock
+ios/Pods
