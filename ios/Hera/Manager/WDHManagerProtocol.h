@@ -67,7 +67,7 @@
  @param callbackId 回调参数
  */
 - (void)page_publishHandler:(NSString *)eventName param:(NSString *)param pageModel:(WDHPageModel *)pageModel callbackId:(NSString *)callbackId;
-
+- (void)page_invokeHandler:(NSString *)eventName param:(NSString *)param pageModel:(WDHPageModel *)pageModel callbackId:(NSString *)callbackId;
 /**
  开启服务
  */

@@ -49,16 +49,16 @@
 - (instancetype)initWithAppInfo:(WDHAppInfo *)appInfo;
 {
 	if (self = [super init]) {
-		
+
 		_appInfo = appInfo;
 		_pageManager = [WDHPageManager new];
 		_extensionApi = [[WHHybridExtension alloc] init];
 		_pageApi = [[WDHPageApi alloc] initWithPageManager:_pageManager];
-		
+
 		self.pageManager.whManager = self;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRefresh:) name:@"onPullDownRefresh" object:nil];
 	}
-	
+
 	return self;
 }
 
@@ -75,16 +75,16 @@
 - (void)startService
 {
 	HRLog(@"load_app_service");
-	
+
 	//拦截schema
 	[NSURLProtocol registerClass:[WDHURLProtocol class]];
 	[NSURLProtocol wk_registerScheme:@"wdfile"];
-	
+
 	//注册UA
 	NSString *userAgent = [[[UIWebView alloc] init] stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
 	NSString * customUA = [userAgent stringByAppendingFormat:@" Hera(JSBridgeVersion/3.0)"];
 	[[NSUserDefaults standardUserDefaults] registerDefaults:@{@"UserAgent" : customUA}];
-	
+
 	NSDictionary *configuration = @{@"service_html":[WDHFileManager appServiceEnterencePath:_appInfo.appId],@"root":[WDHFileManager appSourceDirPath:_appInfo.appId]};
 	self.service = [[WDHService alloc] initWithAppConfiguration:configuration manager:self];
 }
@@ -96,7 +96,7 @@
 	self.pageManager = nil;
 	self.pageApi = nil;
 	self.extensionApi = nil;
-	
+
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -132,9 +132,9 @@
 	else {
 		[self.pageManager callSubscribeHandler:eventName jsonParam:param webIds:webIds];
 	}
-	
+
 	//publish的回调
-	
+
 	if (callbackId) {
 		[self.service publishCallbackHandler:callbackId];
 	}
@@ -142,10 +142,10 @@
 
 - (void)page_publishHandler:(NSString *)eventName param:(NSString *)param pageModel:(WDHPageModel *)pageModel callbackId:(NSString *)callbackId
 {
-	
+
 
 	unsigned long long webId = pageModel.pageId;
-	
+
 	//根据具体事件进行分发
 	if ([eventName isEqualToString:@"custom_event_DOMContentLoaded"]) {
 		NSString *opentype = pageModel.openType;
@@ -174,14 +174,26 @@
 	} else if ([eventName isEqualToString:@"custom_event_H5_CONSOLE_LOG"]) {
 		HRLog(@"WDHodoer custom_event_H5_CONSOLE_LOG: %@", param);
 	}
-	
-	
+
+
+}
+
+- (void)page_invokeHandler:(NSString *)eventName param:(NSString *)param pageModel:(WDHPageModel *)pageModel callbackId:(NSString *)callbackId
+{
+
+
+    unsigned long long webId = pageModel.pageId;
+
+    //根据具体事件进行分发
+    if ([eventName isEqualToString:@"insertHTMLWebView"]) {
+    }
+
 }
 
 - (void)service_apiRequest:(NSString *)command param:(NSString *)param callbackId:(int)callbackId
 {
 	HRLog(@"service_api--->command: %@, param: %@", command, param);
-	
+
 	NSDictionary *paramDic = [param wdh_jsonObject];
 	WDHApiRequest *request = [[WDHApiRequest alloc] init];
 	request.command = command;
@@ -190,39 +202,39 @@
 		if (!callbackId) {
 			return;
 		}
-		
+
 		NSString *resultJsonString = [result wdh_jsonString];
-		
+
 		if (!resultJsonString) {
 			resultJsonString = @"{}";
 		}
-		
+
 		HRLog(@"service_api--->api: %@, data: %@", command, resultJsonString);
-		
+
 		[self.service invokeCallbackHandler:callbackId param:resultJsonString];
 	};
-	
+
 	[self.extensionApi didRecieveHybridApiWithApi:request];
 }
 
 - (void)service_innerApiRequest:(NSString *)command param:(NSString *)param callbackId:(int)callbackId
 {
 	NSDictionary *paramsDict = [param wdh_jsonObject];
-	
+
 	self.pageApi.basePath = [WDHFileManager appSourceDirPath:self.appInfo.appId];
 	self.pageApi.service = self.service;
-	
+
 	[self.pageApi receive:command param:paramsDict callback:^(NSDictionary<NSString *,NSObject *> *result) {
 		if (!callbackId) {
 			return;
 		}
-		
+
 		NSString *resultJsonString = [result wdh_jsonString];
-		
+
 		if (!resultJsonString) {
 			resultJsonString = @"{}";
 		}
-		
+
 		[self.service invokeCallbackHandler:callbackId param:resultJsonString];
 	}];
 }

@@ -55,6 +55,15 @@
 //MARK: - wk js invoke/publish handler
 - (void)invokeHandler:(id)data {
     HRLog(@"<page> invokeHandler: %@",data);
+    if (data) {
+        NSString *e = data[@"C"];
+        if (!e || !self.manager) {
+            return;
+        }
+        if (data[@"paramsString"]) {
+            [self.manager page_invokeHandler:e param:data[@"paramsString"] pageModel:self.controller.pageModel callbackId:data[@"callbackId"]];
+        }
+    }
 }
 
 - (void)publishHandler:(id)data
