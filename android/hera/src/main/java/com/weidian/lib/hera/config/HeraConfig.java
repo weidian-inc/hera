@@ -27,25 +27,31 @@
 
 package com.weidian.lib.hera.config;
 
-import com.weidian.lib.hera.remote.IHostApiDispatcher;
+import android.text.TextUtils;
+
+import com.weidian.lib.hera.interfaces.IApi;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Hera框架的配置信息
  */
 public class HeraConfig {
 
-    public static final String VERSION = "1.0.0";
+    public static final String VERSION = "2.0.0";
 
-    private IHostApiDispatcher mDispatcher;
+    private Map<String, IApi> mExtendsApi;
     private boolean mDebug;
 
     private HeraConfig(Builder builder) {
-        mDispatcher = builder.dispatcher;
+        mExtendsApi = builder.extendsApi;
         mDebug = builder.debug;
     }
 
-    public IHostApiDispatcher hostApiDispatcher() {
-        return mDispatcher;
+    public Map<String, IApi> getExtendsApi() {
+        return mExtendsApi;
     }
 
     /**
@@ -60,17 +66,45 @@ public class HeraConfig {
 
     public static class Builder {
 
-        private IHostApiDispatcher dispatcher;
+        private Map<String, IApi> extendsApi;
         private boolean debug;
 
         /**
-         * 设置宿主的api派发处理器
+         * 添加扩展api
          *
-         * @param dispatcher 扩展api的分发器
+         * @param api 实现特定功能的api实例对象
          * @return Builder对象
          */
-        public Builder setHostApiDispatcher(IHostApiDispatcher dispatcher) {
-            this.dispatcher = dispatcher;
+        public Builder addExtendsApi(IApi api) {
+            if (extendsApi == null) {
+                extendsApi = new HashMap<>();
+            }
+            if (api != null && api.apis() != null && api.apis().length > 0) {
+                String[] apiNames = api.apis();
+                for (String name : apiNames) {
+                    if (!TextUtils.isEmpty(name)) {
+                        extendsApi.put(name, api);
+                    }
+                }
+            }
+            return this;
+        }
+
+        /**
+         * 添加扩展api
+         *
+         * @param apiList 特定功能的一组api列表
+         * @return Builder对象
+         */
+        public Builder addExtendsApi(List<IApi> apiList) {
+            if (extendsApi == null) {
+                extendsApi = new HashMap<>();
+            }
+            if (apiList != null && !apiList.isEmpty()) {
+                for (IApi api : apiList) {
+                    addExtendsApi(api);
+                }
+            }
             return this;
         }
 

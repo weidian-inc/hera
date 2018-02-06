@@ -33,10 +33,8 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.weidian.lib.hera.R;
-import com.weidian.lib.hera.api.AbsModule;
-import com.weidian.lib.hera.api.HeraApi;
-import com.weidian.lib.hera.interfaces.IApiCallback;
-import com.weidian.lib.hera.trace.HeraTrace;
+import com.weidian.lib.hera.api.BaseApi;
+import com.weidian.lib.hera.interfaces.ICallback;
 import com.weidian.lib.hera.utils.ColorUtil;
 import com.weidian.lib.hera.widget.ActionSheetDialog;
 import com.weidian.lib.hera.widget.ModalDialog;
@@ -51,8 +49,7 @@ import java.util.List;
 /**
  * 模态对话框，ActionSheet对话框
  */
-@HeraApi(names = {"showModal", "showActionSheet"})
-public class DialogModule extends AbsModule {
+public class DialogModule extends BaseApi {
 
     private ModalDialog mModalDialog;
     private ActionSheetDialog mActionSheetDialog;
@@ -62,34 +59,29 @@ public class DialogModule extends AbsModule {
     }
 
     @Override
-    public void invoke(String event, String params, IApiCallback callback) {
+    public String[] apis() {
+        return new String[]{"showModal", "showActionSheet"};
+    }
+
+    @Override
+    public void invoke(String event, JSONObject param, ICallback callback) {
         if ("showModal".equals(event)) {
-            showModal(event, params, callback);
+            showModal(param, callback);
         } else if ("showActionSheet".equals(event)) {
-            showActionSheet(event, params, callback);
+            showActionSheet(param, callback);
         }
     }
 
-    private void showModal(final String event, String params, final IApiCallback callback) {
-        String title = null;
-        String content = null;
-        boolean showCancel = true;
-        String cancelText = getContext().getString(R.string.cancel);
-        String cancelColor = "#000000";
-        String confirmText = getContext().getString(R.string.confirm);
-        String confirmColor = "#3CC51F";
-        try {
-            JSONObject json = new JSONObject(params);
-            title = json.optString("title");
-            content = json.optString("content");
-            showCancel = json.optBoolean("showCancel", true);
-            cancelText = json.optString("cancelText", cancelText);
-            cancelColor = json.optString("cancelColor", cancelColor);
-            confirmText = json.optString("confirmText", confirmText);
-            confirmColor = json.optString("confirmColor", confirmColor);
-        } catch (Exception e) {
-            HeraTrace.e(TAG, "showModal parse params exception!");
-        }
+    private void showModal(JSONObject param, final ICallback callback) {
+        String title = param.optString("title");
+        String content = param.optString("content");
+        boolean showCancel = param.optBoolean("showCancel", true);
+        String cancelText = param.optString("cancelText",
+                getContext().getString(R.string.cancel));
+        String cancelColor = param.optString("cancelColor", "#000000");
+        String confirmText = param.optString("confirmText",
+                getContext().getString(R.string.confirm));
+        String confirmColor = param.optString("confirmColor", "#3CC51F");
 
         if (mModalDialog == null) {
             mModalDialog = new ModalDialog(getContext());
@@ -108,9 +100,9 @@ public class DialogModule extends AbsModule {
                     try {
                         data.put("cancel", true);
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        //ignore
                     }
-                    callback.onResult(packageResultData(event, RESULT_OK, data));
+                    callback.onSuccess(data);
                 }
             });
         }
@@ -123,34 +115,27 @@ public class DialogModule extends AbsModule {
                 try {
                     data.put("confirm", true);
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    //ignore
                 }
-                callback.onResult(packageResultData(event, RESULT_OK, data));
+                callback.onSuccess(data);
             }
         });
 
         mModalDialog.show();
     }
 
-    private void showActionSheet(final String event, String params, final IApiCallback callback) {
-        String itemColor = "#000000";
-        List<String> itemList = null;
-        try {
-            JSONObject json = new JSONObject(params);
-            itemColor = json.optString("itemColor", itemColor);
-            JSONArray itemArray = json.optJSONArray("itemList");
-            if (itemArray != null) {
-                itemList = new ArrayList<>();
-                int len = itemArray.length();
-                for (int i = 0; i < len; i++) {
-                    String itemText = itemArray.optString(i);
-                    if (!TextUtils.isEmpty(itemText)) {
-                        itemList.add(itemText);
-                    }
+    private void showActionSheet(JSONObject param, final ICallback callback) {
+        List<String> itemList = new ArrayList<>();
+        String itemColor = param.optString("itemColor", "#000000");
+        JSONArray itemArray = param.optJSONArray("itemList");
+        if (itemArray != null) {
+            int len = itemArray.length();
+            for (int i = 0; i < len; i++) {
+                String itemText = itemArray.optString(i);
+                if (!TextUtils.isEmpty(itemText)) {
+                    itemList.add(itemText);
                 }
             }
-        } catch (Exception e) {
-            HeraTrace.e(TAG, "showModal parse params exception!");
         }
 
         if (mActionSheetDialog == null) {
@@ -165,23 +150,18 @@ public class DialogModule extends AbsModule {
                 try {
                     data.put("tapIndex", index);
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    //ignore
                 }
-                callback.onResult(packageResultData(event, RESULT_OK, data));
+                callback.onSuccess(data);
             }
         });
         mActionSheetDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                JSONObject data = new JSONObject();
-                try {
-                    data.put("errMsg", "showActionSheet:fail cancel");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                callback.onResult(data.toString());
+                callback.onCancel();
             }
         });
         mActionSheetDialog.show();
     }
+
 }

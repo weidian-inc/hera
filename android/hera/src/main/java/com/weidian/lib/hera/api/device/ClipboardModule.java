@@ -27,41 +27,68 @@
 
 package com.weidian.lib.hera.api.device;
 
+import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 
-import com.weidian.lib.hera.api.AbsModule;
-import com.weidian.lib.hera.api.HeraApi;
-import com.weidian.lib.hera.interfaces.IApiCallback;
+import com.weidian.lib.hera.api.BaseApi;
+import com.weidian.lib.hera.interfaces.ICallback;
+import com.weidian.lib.hera.trace.HeraTrace;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * 系统剪贴板api
  */
-@HeraApi(names = {"setClipboardData", "getClipboardData"})
-public class ClipboardModule extends AbsModule {
+public class ClipboardModule extends BaseApi {
 
     public ClipboardModule(Context context) {
         super(context);
     }
 
     @Override
-    public void invoke(String event, String params, IApiCallback callback) {
+    public String[] apis() {
+        return new String[]{"setClipboardData", "getClipboardData"};
+    }
+
+    @Override
+    public void invoke(String event, JSONObject param, ICallback callback) {
+        ClipboardManager cm = (ClipboardManager) getContext()
+                .getSystemService(Context.CLIPBOARD_SERVICE);
+        if (cm == null) {
+            callback.onFail();
+            return;
+        }
+        if ("setClipboardData".equals(event)) {
+            setClipboardData(cm, param.optString("data"), callback);
+        } else if ("getClipboardData".equals(event)) {
+            getClipboardData(cm, callback);
+        }
+    }
+
+    private void setClipboardData(ClipboardManager cm, String data, ICallback callback) {
+        if (data == null) {
+            data = "";
+        }
+        cm.setPrimaryClip(ClipData.newPlainText(null, data));
+        callback.onSuccess(null);
+    }
+
+    private void getClipboardData(ClipboardManager cm, ICallback callback) {
+        CharSequence data = "";
+        ClipData clipData = cm.getPrimaryClip();
+        if (clipData != null && clipData.getItemCount() > 0) {
+            data = clipData.getItemAt(0).coerceToText(getContext());
+        }
+
+        JSONObject result = new JSONObject();
         try {
-            ClipboardManager cmb = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-            if ("setClipboardData".equals(event)) {
-                JSONObject json = new JSONObject(params);
-                cmb.setText(json.optString("data"));
-                callback.onResult(packageResultData(event, RESULT_OK, null));
-            } else if ("getClipboardData".equals(event)) {
-                JSONObject data = new JSONObject();
-                CharSequence text = cmb.getText();
-                data.put("data", text.toString());
-                callback.onResult(packageResultData(event, RESULT_OK, data));
-            }
-        } catch (Throwable t) {
-            callback.onResult(packageResultData(event, RESULT_FAIL, null));
+            result.put("data", data);
+            callback.onSuccess(result);
+        } catch (JSONException e) {
+            HeraTrace.e(TAG, "getClipboardData assemble result exception!");
+            callback.onFail();
         }
     }
 }

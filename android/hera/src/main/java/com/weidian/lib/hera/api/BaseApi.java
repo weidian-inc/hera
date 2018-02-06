@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2017, weidian.com
+// Copyright (c) 2018, weidian.com
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -25,40 +25,26 @@
 //
 
 
-package com.weidian.lib.hera.remote;
+package com.weidian.lib.hera.api;
 
-import org.json.JSONObject;
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
-/**
- * 宿主进程api处理结果的回调接口
- */
-public interface IHostApiCallback {
+public abstract class BaseApi extends AbsApi {
 
-    /**
-     * 成功状态码
-     */
-    int SUCCEED = 0;
+    protected static final String TAG = "InnerApi";
 
-    /**
-     * 失败状态码
-     */
-    int FAILED = 1;
+    protected static final Handler HANDLER = new Handler(Looper.getMainLooper());
 
-    /**
-     * 未定义状态码
-     */
-    int UNDEFINE = 2;
+    private Context mContext;
 
-    /**
-     * 中间状态，表示返回的结果需要SDK进一步处理，如openPageForResult调用
-     */
-    int PENDING = 3;
+    public BaseApi(Context context) {
+        mContext = context;
+    }
 
-    /**
-     * 结果的回调方法
-     *
-     * @param status 状态码，有效值：{@link #SUCCEED}，{@link #FAILED}，{@link #UNDEFINE}，{@link #PENDING}，其他值按{@link #UNDEFINE}处理
-     * @param result json结果
-     */
-    void onResult(int status, JSONObject result);
+    public Context getContext() {
+        return mContext;
+    }
+
 }

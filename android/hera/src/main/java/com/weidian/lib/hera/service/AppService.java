@@ -30,11 +30,11 @@ package com.weidian.lib.hera.service;
 import android.content.Context;
 import android.widget.LinearLayout;
 
-import com.weidian.lib.hera.api.ApiCallback;
-import com.weidian.lib.hera.api.ApiManager;
+import com.weidian.lib.hera.api.ApisManager;
 import com.weidian.lib.hera.config.AppConfig;
-import com.weidian.lib.hera.interfaces.IBridgeHandler;
+import com.weidian.lib.hera.interfaces.IBridge;
 import com.weidian.lib.hera.interfaces.OnEventListener;
+import com.weidian.lib.hera.model.Event;
 import com.weidian.lib.hera.service.view.ServiceWebView;
 import com.weidian.lib.hera.trace.HeraTrace;
 import com.weidian.lib.hera.utils.FileUtil;
@@ -46,22 +46,22 @@ import java.io.File;
 /**
  * appservice层，小程序运行的基石，即framework的运行时
  */
-public class AppService extends LinearLayout implements IBridgeHandler {
+public class AppService extends LinearLayout implements IBridge {
 
     private static final String TAG = "AppService";
 
     private OnEventListener mEventListener;
     private ServiceWebView mServiceWebView;
     private AppConfig mAppConfig;
-    private ApiManager mApiManager;
+    private ApisManager mApisManager;
 
 
     public AppService(Context context, OnEventListener listener,
-                      AppConfig appConfig, ApiManager apiManager) {
+                      AppConfig appConfig, ApisManager apisManager) {
         super(context);
         mEventListener = listener;
         mAppConfig = appConfig;
-        mApiManager = apiManager;
+        mApisManager = apisManager;
 
         mServiceWebView = new ServiceWebView(context);
         mServiceWebView.setJsHandler(this);
@@ -87,8 +87,8 @@ public class AppService extends LinearLayout implements IBridgeHandler {
     }
 
     @Override
-    public void handlePublish(String event, String params, String viewIds) {
-        HeraTrace.d(TAG, String.format("service handlePublish(), event=%s, params=%s, viewIds=%s",
+    public void publish(String event, String params, String viewIds) {
+        HeraTrace.d(TAG, String.format("service publish(), event=%s, params=%s, viewIds=%s",
                 event, params, viewIds));
         if ("custom_event_serviceReady".equals(event)) {
             onEventServiceReady(params);
@@ -102,26 +102,18 @@ public class AppService extends LinearLayout implements IBridgeHandler {
     }
 
     @Override
-    public void handleInvoke(String event, String params, String callbackId) {
+    public void invoke(String event, String params, String callbackId) {
         HeraTrace.d(TAG, String.format("api invoke, event=%s, params=%s, callbackId=%s",
                 event, params, callbackId));
-        ApiCallback apiCallback = new ApiCallback(event, callbackId) {
-            @Override
-            public void onResult(String result) {
-                HeraTrace.d(TAG, String.format("api callback, event=%s, result=%s, callbackId=%s",
-                        getEvent(), result, getCallbackId()));
-                String jsFun = getInvokeCallbackJS(getCallbackId(), result);
-                HeraTrace.d(TAG, String.format("[invokeCallback]%s", jsFun));
-                mServiceWebView.loadUrl(jsFun);
-            }
-        };
-
-        mApiManager.invoke(event, params, apiCallback);
+        Event e = new Event(event, params, callbackId);
+        mApisManager.invoke(e, this);
     }
 
-    private String getInvokeCallbackJS(String callbackId, String data) {
-        return String.format("javascript:ServiceJSBridge.invokeCallbackHandler(%s,%s)",
-                callbackId, data);
+    @Override
+    public void callback(String callbackId, String result) {
+        mServiceWebView.loadUrl(
+                String.format("javascript:ServiceJSBridge.invokeCallbackHandler(%s,%s)",
+                        callbackId, result));
     }
 
     /**

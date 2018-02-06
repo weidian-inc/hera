@@ -29,19 +29,16 @@ package com.weidian.lib.hera.api.ui;
 
 import android.content.Context;
 
-import com.weidian.lib.hera.api.AbsModule;
-import com.weidian.lib.hera.api.HeraApi;
-import com.weidian.lib.hera.interfaces.IApiCallback;
+import com.weidian.lib.hera.api.BaseApi;
+import com.weidian.lib.hera.interfaces.ICallback;
 import com.weidian.lib.hera.interfaces.OnEventListener;
+
+import org.json.JSONObject;
 
 /**
  * 页面跳转，导航栏设置，Toast或Loading对话框
  */
-@HeraApi(names = {"showToast", "hideToast", "showLoading", "hideLoading",
-        "switchTab", "navigateTo", "redirectTo", "reLaunch", "navigateBack",
-        "setNavigationBarTitle", "setNavigationBarColor", "showNavigationBarLoading",
-        "hideNavigationBarLoading", "startPullDownRefresh", "stopPullDownRefresh"})
-public class PageModule extends AbsModule {
+public class PageModule extends BaseApi {
 
     private OnEventListener mListener;
 
@@ -51,13 +48,24 @@ public class PageModule extends AbsModule {
     }
 
     @Override
-    public void invoke(String event, String params, IApiCallback callback) {
+    public String[] apis() {
+        return new String[]{"showToast", "hideToast", "showLoading", "hideLoading",
+                "switchTab", "navigateTo", "redirectTo", "reLaunch", "navigateBack",
+                "setNavigationBarTitle", "setNavigationBarColor", "showNavigationBarLoading",
+                "hideNavigationBarLoading", "startPullDownRefresh", "stopPullDownRefresh"};
+    }
+
+    @Override
+    public void invoke(String event, JSONObject param, ICallback callback) {
         boolean res = false;
         if (mListener != null) {
-            res = mListener.onPageEvent(event, params);
+            res = mListener.onPageEvent(event, param.toString());
         }
 
-        int status = res ? RESULT_OK : RESULT_FAIL;
-        callback.onResult(packageResultData(event, status, null));
+        if (res) {
+            callback.onSuccess(null);
+        } else {
+            callback.onFail();
+        }
     }
 }

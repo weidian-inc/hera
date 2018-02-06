@@ -28,12 +28,11 @@
 package com.weidian.lib.hera.api.device;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 
-import com.weidian.lib.hera.api.AbsModule;
-import com.weidian.lib.hera.api.HeraApi;
-import com.weidian.lib.hera.interfaces.IApiCallback;
-import com.weidian.lib.hera.interfaces.OnActivityResultListener;
+import com.weidian.lib.hera.api.BaseApi;
+import com.weidian.lib.hera.interfaces.ICallback;
 import com.weidian.lib.hera.scancode.ui.activity.ScanCaptureActivity;
 import com.weidian.lib.hera.trace.HeraTrace;
 
@@ -45,62 +44,55 @@ import static com.weidian.lib.hera.utils.Constants.REQUEST_CODE_SCAN_CODE;
 /**
  * 扫码api
  */
-@HeraApi(names = {"scanCode"})
-public class ScanCodeModule extends AbsModule implements OnActivityResultListener {
-
-    private Activity mActivity;
-    private IApiCallback mApiCallback;
+public class ScanCodeModule extends BaseApi {
 
     public ScanCodeModule(Activity context) {
         super(context);
-        mActivity = context;
     }
 
     @Override
-    public void invoke(String event, String params, IApiCallback callback) {
-        mApiCallback = callback;
-        boolean onlyFromCamera = true;
-        try {
-            JSONObject jsonObject = new JSONObject(params);
-            onlyFromCamera = jsonObject.optBoolean("onlyFromCamera", true);
-        } catch (Exception e) {
-            HeraTrace.w(TAG, "scanCode, parse json params exception!");
-        }
+    public String[] apis() {
+        return new String[]{"scanCode"};
+    }
+
+    @Override
+    public void invoke(String event, JSONObject param, ICallback callback) {
+        boolean onlyFromCamera = param.optBoolean("onlyFromCamera", true);
         if (onlyFromCamera) {
-            Intent intent = new Intent(mActivity, ScanCaptureActivity.class);
-            mActivity.startActivityForResult(intent, REQUEST_CODE_SCAN_CODE);
-        } else {
-            callback.onResult(packageResultData(event, RESULT_FAIL, null));
+            Intent intent = new Intent();
+            intent.setComponent(new ComponentName(getContext(), ScanCaptureActivity.class));
+            callback.startActivityForResult(intent, REQUEST_CODE_SCAN_CODE);
+            return;
         }
+        callback.onFail();
     }
 
     @Override
-    public boolean isResultReceiver(int requestCode) {
-        return requestCode == REQUEST_CODE_SCAN_CODE;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (mApiCallback == null || requestCode != REQUEST_CODE_SCAN_CODE) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data, ICallback callback) {
+        if (requestCode != REQUEST_CODE_SCAN_CODE) {
             return;
         }
 
         if (resultCode != Activity.RESULT_OK) {
-            mApiCallback.onResult(packageResultData("scanCode", RESULT_CANCEL, null));
-        } else if (data == null) {
-            mApiCallback.onResult(packageResultData("scanCode", RESULT_FAIL, null));
-        } else {
-            String result = data.getStringExtra("result");
-            String scanType = data.getStringExtra("scanType");
-            JSONObject jsonObject = new JSONObject();
-            try {
-                jsonObject.put("result", result);
-                jsonObject.put("scanType", scanType);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            mApiCallback.onResult(packageResultData("scanCode", RESULT_OK, jsonObject));
+            callback.onCancel();
+            return;
         }
 
+        if (data == null) {
+            callback.onFail();
+            return;
+        }
+
+        String result = data.getStringExtra("result");
+        String scanType = data.getStringExtra("scanType");
+        JSONObject resultJson = new JSONObject();
+        try {
+            resultJson.put("result", result);
+            resultJson.put("scanType", scanType);
+            callback.onSuccess(resultJson);
+        } catch (JSONException e) {
+            HeraTrace.e(TAG, "scanCode assemble result exception!");
+            callback.onFail();
+        }
     }
 }

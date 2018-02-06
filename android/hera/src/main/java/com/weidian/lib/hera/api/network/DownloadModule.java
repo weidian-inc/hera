@@ -29,12 +29,10 @@ package com.weidian.lib.hera.api.network;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.weidian.lib.hera.api.AbsModule;
-import com.weidian.lib.hera.api.HeraApi;
+import com.weidian.lib.hera.api.BaseApi;
 import com.weidian.lib.hera.config.AppConfig;
-import com.weidian.lib.hera.interfaces.IApiCallback;
+import com.weidian.lib.hera.interfaces.ICallback;
 import com.weidian.lib.hera.trace.HeraTrace;
 import com.weidian.lib.hera.utils.FileUtil;
 import com.weidian.lib.hera.utils.IOUtil;
@@ -58,8 +56,7 @@ import okhttp3.Response;
 /**
  * 下载文件api
  */
-@HeraApi(names = {"downloadFile"})
-public class DownloadModule extends AbsModule {
+public class DownloadModule extends BaseApi {
 
     private String mTempDir;
 
@@ -69,93 +66,78 @@ public class DownloadModule extends AbsModule {
     }
 
     @Override
-    public void invoke(final String event, String params, final IApiCallback callback) {
-        String url = "";
-        JSONObject header = null;
-        try {
-            JSONObject jsonObject = new JSONObject(params);
-            url = jsonObject.optString("url");
-            header = jsonObject.optJSONObject("header");
-        } catch (Exception e) {
-            Log.w(TAG, "downloadFile parse params exception", e);
-        }
+    public String[] apis() {
+        return new String[]{"downloadFile"};
+    }
+
+    @Override
+    public void invoke(String event, JSONObject param, final ICallback callback) {
+        String url = param.optString("url");
+        JSONObject header = param.optJSONObject("header");
 
         if (TextUtils.isEmpty(mTempDir) || TextUtils.isEmpty(url)) {
-            callback.onResult(packageResultData(event, RESULT_FAIL, null));
+            callback.onFail();
             return;
         }
 
-        try {
-            Headers headers = Headers.of(OkHttpUtil.parseJsonToMap(header));
-            Request request = new Request.Builder().headers(headers).url(url).build();
-
-            OkHttpUtil.enqueue(request, new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    final JSONObject data = new JSONObject();
-                    try {
-                        data.put("exception", e != null ? e.getMessage() : "download onFailure");
-                    } catch (Exception ex) {
-                        HeraTrace.w(TAG, "download failed, assemble exception message to json error!");
+        Headers headers = Headers.of(OkHttpUtil.parseJsonToMap(header));
+        Request request = new Request.Builder().headers(headers).url(url).build();
+        OkHttpUtil.enqueue(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                HANDLER.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onFail();
                     }
-                    HANDLER.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            callback.onResult(packageResultData(event, RESULT_FAIL, data));
-                        }
-                    });
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                File tempFile = null;
+                InputStream is = null;
+                FileOutputStream os = null;
+                try {
+                    String urlPath = response.request().url().encodedPath();
+                    String tempFileName = StorageUtil.PREFIX_TMP + System.currentTimeMillis()
+                            + FileUtil.getFileSuffix(urlPath);
+                    tempFile = new File(mTempDir, tempFileName);
+                    is = response.body().byteStream();
+                    os = new FileOutputStream(tempFile);
+                    byte[] buffer = new byte[4096];
+                    int len;
+                    while ((len = is.read(buffer)) >= 0) {
+                        os.write(buffer, 0, len);
+                    }
+                    os.flush();
+                } catch (IOException e) {
+                    tempFile = null;
+                } finally {
+                    IOUtil.closeAll(is, os);
                 }
 
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    File tempFile = null;
-                    InputStream is = null;
-                    FileOutputStream os = null;
-                    try {
-                        String urlPath = response.request().url().encodedPath();
-                        String tempFileName = StorageUtil.PREFIX_TMP + System.currentTimeMillis()
-                                + FileUtil.getFileSuffix(urlPath);
-                        tempFile = new File(mTempDir, tempFileName);
-                        is = response.body().byteStream();
-                        os = new FileOutputStream(tempFile);
-                        byte[] buffer = new byte[4096];
-                        int len;
-                        while ((len = is.read(buffer)) >= 0) {
-                            os.write(buffer, 0, len);
-                        }
-                        os.flush();
-                    } catch (IOException e) {
-                        tempFile = null;
-                    } finally {
-                        IOUtil.closeAll(is, os);
-                    }
-
-                    final int statusCode = response.code();
-                    final String tempFileName = tempFile != null ?
-                            StorageUtil.SCHEME_WDFILE + tempFile.getName() : null;
-                    HANDLER.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (TextUtils.isEmpty(tempFileName)) {
-                                callback.onResult(packageResultData(event, RESULT_FAIL, null));
-                            } else {
-                                JSONObject data = new JSONObject();
-                                try {
-                                    data.put("statusCode", statusCode);
-                                    data.put("tempFilePath", tempFileName);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                callback.onResult(packageResultData(event, RESULT_OK, data));
+                final int statusCode = response.code();
+                final String tempFileName = tempFile != null ?
+                        StorageUtil.SCHEME_WDFILE + tempFile.getName() : null;
+                HANDLER.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!TextUtils.isEmpty(tempFileName)) {
+                            JSONObject data = new JSONObject();
+                            try {
+                                data.put("statusCode", statusCode);
+                                data.put("tempFilePath", tempFileName);
+                                callback.onSuccess(data);
+                                return;
+                            } catch (JSONException e) {
+                                HeraTrace.e(TAG, "downloadFile assemble result exception!");
                             }
                         }
-                    });
-
-                }
-            });
-        } catch (Exception e) {
-            callback.onResult(packageResultData(event, RESULT_FAIL, null));
-        }
+                        callback.onFail();
+                    }
+                });
+            }
+        });
     }
-
 }

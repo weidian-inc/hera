@@ -5,17 +5,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.weidian.lib.hera.api.HeraApi;
-import com.weidian.lib.hera.remote.IHostApiCallback;
+import com.weidian.lib.hera.api.AbsApi;
+import com.weidian.lib.hera.interfaces.ICallback;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * 调用扩展api示例，打开链接
  */
-@HeraApi(names = {"openLink"})
-public class ApiOpenLink implements IHostApi {
+public class ApiOpenLink extends AbsApi {
 
     private Context mContext;
 
@@ -24,27 +22,23 @@ public class ApiOpenLink implements IHostApi {
     }
 
     @Override
-    public void invoke(String event, String params, IHostApiCallback callback) {
-        JSONObject paramJson;
-        try {
-            paramJson = new JSONObject(params);
-        } catch (JSONException e) {
-            paramJson = new JSONObject();
-        }
+    public String[] apis() {
+        return new String[]{"openLink"};
+    }
 
-        if ("openLink".equals(event)) {
-            String url = paramJson.optString("url");
-            if (!TextUtils.isEmpty(url)) {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);
-                Uri uri = Uri.parse(url);
-                intent.setData(uri);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(intent);
-                callback.onResult(IHostApiCallback.SUCCEED, null);
-            } else {
-                callback.onResult(IHostApiCallback.FAILED, null);
-            }
+    @Override
+    public void invoke(String event, JSONObject param, ICallback callback) {
+        String url = param.optString("url");
+        if (!TextUtils.isEmpty(url)) {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            Uri uri = Uri.parse(url);
+            intent.setData(uri);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(intent);
+            callback.onSuccess(null);
+        } else {
+            callback.onFail();
         }
     }
 }

@@ -32,40 +32,36 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.weidian.lib.hera.api.AbsModule;
-import com.weidian.lib.hera.api.HeraApi;
-import com.weidian.lib.hera.interfaces.IApiCallback;
-import com.weidian.lib.hera.trace.HeraTrace;
+import com.weidian.lib.hera.api.BaseApi;
+import com.weidian.lib.hera.interfaces.ICallback;
 
 import org.json.JSONObject;
 
 /**
  * 拨打电话的api
  */
-@HeraApi(names = {"makePhoneCall"})
-public class PhoneCallModule extends AbsModule {
+public class PhoneCallModule extends BaseApi {
 
     public PhoneCallModule(Context context) {
         super(context);
     }
 
     @Override
-    public void invoke(String event, String params, IApiCallback callback) {
-        String phoneNumber = "";
-        try {
-            JSONObject jsonObject = new JSONObject(params);
-            phoneNumber = jsonObject.optString("phoneNumber");
-        } catch (Exception e) {
-            HeraTrace.w(TAG, "makePhoneCall, parse json params error!");
-        }
+    public String[] apis() {
+        return new String[]{"makePhoneCall"};
+    }
+
+    @Override
+    public void invoke(String event, JSONObject param, ICallback callback) {
+        String phoneNumber = param.optString("phoneNumber");
         if (!TextUtils.isEmpty(phoneNumber)) {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_DIAL);
             intent.setData(Uri.parse("tel:" + phoneNumber));
             getContext().startActivity(intent);
-            callback.onResult(packageResultData(event, RESULT_OK, null));
-        } else {
-            callback.onResult(packageResultData(event, RESULT_FAIL, null));
+            callback.onSuccess(null);
+            return;
         }
+        callback.onFail();
     }
 }

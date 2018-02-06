@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2017, weidian.com
+// Copyright (c) 2018, weidian.com
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -25,26 +25,29 @@
 //
 
 
-package com.weidian.lib.hera.api;
+package com.weidian.lib.hera.interfaces;
 
-import com.weidian.lib.hera.interfaces.IApiCallback;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 
-public abstract class ApiCallback implements IApiCallback {
+/**
+ * 绑定{@link Activity}生命周期的回调接口
+ */
+public interface ILifecycle {
 
-    private String mEvent;
-    private String mCallbackId;
+    /**
+     * 当{@link Activity#onCreate(Bundle)}方法调用时回调.
+     */
+    void onCreate();
 
-    public ApiCallback(String event, String callbackId) {
-        mEvent = event;
-        mCallbackId = callbackId;
-    }
+    /**
+     * 当{@link Activity#onDestroy()}方法调用时回调.
+     */
+    void onDestroy();
 
-    public String getEvent() {
-        return mEvent;
-    }
-
-    public String getCallbackId() {
-        return mCallbackId;
-    }
-
+    /**
+     * 当{@link Activity#onActivityResult(int, int, Intent)}方法调用时回调.
+     */
+    void onActivityResult(int requestCode, int resultCode, Intent data, ICallback callback);
 }

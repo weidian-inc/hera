@@ -30,6 +30,8 @@ package com.weidian.lib.hera.main;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
@@ -48,6 +50,7 @@ import com.weidian.lib.hera.utils.SharePreferencesUtil;
 import com.weidian.lib.hera.utils.StorageUtil;
 import com.weidian.lib.hera.utils.ZipUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -112,8 +115,9 @@ public class HeraService extends Service {
      * @param context
      */
     private static void initFramework(Context context) {
-        boolean needUpdate = SharePreferencesUtil.loadBoolean(context, AppConfig.getHostVersion(context), true);
-        if (!StorageUtil.isFrameworkExists(context) || needUpdate) {
+        SharedPreferences preferences = SharePreferencesUtil.getSharedPreference(context, "hera");
+        if (!StorageUtil.isFrameworkExists(context)
+                || preferences.getBoolean(AppConfig.getHostVersion(context), true)) {
             FrameworkInitTask task = new FrameworkInitTask(context);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
@@ -190,10 +194,16 @@ public class HeraService extends Service {
      */
     private static class FrameworkInitTask extends AsyncTask<String, Void, Boolean> {
 
-        private Context mContext;
+        private String hostVersion;
+        private String frameworkPath;
+        private SharedPreferences preferences;
+        private AssetManager assetManager;
 
         FrameworkInitTask(Context context) {
-            mContext = context;
+            hostVersion = AppConfig.getHostVersion(context);
+            frameworkPath = StorageUtil.getFrameworkDir(context).getAbsolutePath();
+            preferences = SharePreferencesUtil.getSharedPreference(context, "hera");
+            assetManager = context.getAssets();
         }
 
         @Override
@@ -201,9 +211,8 @@ public class HeraService extends Service {
             boolean unzipSuccess = false;
             InputStream in = null;
             try {
-                in = mContext.getAssets().open(HERA_FRAMEWORK);
-                unzipSuccess = ZipUtil.unzipFile(in,
-                        StorageUtil.getFrameworkDir(mContext).getAbsolutePath());
+                in = assetManager.open(HERA_FRAMEWORK);
+                unzipSuccess = ZipUtil.unzipFile(in, frameworkPath);
             } catch (IOException e) {
                 HeraTrace.e(TAG, e.getMessage());
             } finally {
@@ -215,8 +224,17 @@ public class HeraService extends Service {
 
         @Override
         protected void onPostExecute(Boolean res) {
-            if (res && StorageUtil.isFrameworkExists(mContext)) {
-                SharePreferencesUtil.saveBoolean(mContext, AppConfig.getHostVersion(mContext), false);
+            boolean isFrameworkExists = false;
+            File frameworkDir = new File(frameworkPath);
+            if (frameworkDir.exists()) {
+                File[] files = frameworkDir.listFiles();
+                isFrameworkExists = files != null && files.length > 0;
+            }
+
+            if (res && isFrameworkExists) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(hostVersion, false);
+                editor.apply();
             }
 
             HeraTrace.d(TAG, "unzip task is done: " + res);

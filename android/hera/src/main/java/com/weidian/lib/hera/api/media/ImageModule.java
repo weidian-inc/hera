@@ -31,18 +31,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.weidian.lib.hera.api.AbsModule;
-import com.weidian.lib.hera.api.HeraApi;
+import com.weidian.lib.hera.api.BaseApi;
 import com.weidian.lib.hera.config.AppConfig;
-import com.weidian.lib.hera.interfaces.IApiCallback;
-import com.weidian.lib.hera.interfaces.OnActivityResultListener;
+import com.weidian.lib.hera.interfaces.ICallback;
 import com.weidian.lib.hera.trace.HeraTrace;
 import com.weidian.lib.hera.utils.Constants;
 import com.weidian.lib.hera.utils.FileUtil;
 import com.weidian.lib.hera.utils.StorageUtil;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -53,14 +50,14 @@ import java.util.concurrent.Executors;
 import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPreview;
 
+import static com.weidian.lib.hera.utils.Constants.REQUEST_CODE_CHOOSE;
+
 /**
  * 选择图片，图片预览api
  */
-@HeraApi(names = {"chooseImage", "previewImage"})
-public class ImageModule extends AbsModule implements OnActivityResultListener {
+public class ImageModule extends BaseApi {
 
     private Activity mActivity;
-    private IApiCallback mApiCallback;
     private String mMiniAppTempDir;
 
     public ImageModule(Activity context, AppConfig appConfig) {
@@ -70,44 +67,52 @@ public class ImageModule extends AbsModule implements OnActivityResultListener {
     }
 
     @Override
-    public void invoke(final String event, String params, final IApiCallback callback) {
+    public String[] apis() {
+        return new String[]{"chooseImage", "previewImage"};
+    }
+
+    @Override
+    public void invoke(String event, JSONObject param, ICallback callback) {
         if ("chooseImage".equals(event)) {
-            chooseImage(params, callback);
+            chooseImage(param, callback);
         } else if ("previewImage".equals(event)) {
-            previewImage(params, callback);
+            previewImage(param, callback);
         }
     }
 
     @Override
-    public boolean isResultReceiver(int requestCode) {
-        return requestCode == Constants.REQUEST_CODE_CHOOSE;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (mApiCallback == null || resultCode != Activity.RESULT_OK) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data,
+                                 final ICallback callback) {
+        if (requestCode != REQUEST_CODE_CHOOSE) {
             return;
         }
 
-        if (Constants.REQUEST_CODE_CHOOSE == requestCode && data != null) {
-            final ArrayList<String> photos =
-                    data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
-
-            if (photos == null) {
-                mApiCallback.onResult(packageResultData("chooseImage", RESULT_FAIL, null));
-                return;
-            }
-
-            Executors.newSingleThreadExecutor().execute(new Runnable() {
-                @Override
-                public void run() {
-                    handleResult(photos);
-                }
-            });
+        if (resultCode != Activity.RESULT_OK) {
+            callback.onCancel();
+            return;
         }
+
+        if (data == null) {
+            callback.onFail();
+            return;
+        }
+
+        final ArrayList<String> photos =
+                data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+        if (photos == null) {
+            callback.onFail();
+            return;
+        }
+
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                handleResult(photos, callback);
+            }
+        });
     }
 
-    private void handleResult(List<String> photos) {
+    private void handleResult(List<String> photos, final ICallback callback) {
         final JSONObject resultData = new JSONObject();
         JSONArray tempFilePaths = new JSONArray();
         JSONArray tempFiles = new JSONArray();
@@ -133,52 +138,36 @@ public class ImageModule extends AbsModule implements OnActivityResultListener {
             }
             resultData.put("tempFilePaths", tempFilePaths);
             resultData.put("tempFiles", tempFiles);
-        } catch (Exception e) {
-            HeraTrace.e(e);
             HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
-                    mApiCallback.onResult(packageResultData("chooseImage", RESULT_FAIL, null));
+                    callback.onSuccess(resultData);
                 }
             });
-            return;
+        } catch (Exception e) {
+            HeraTrace.e(TAG, "chooseImage assemble result exception!");
+            HANDLER.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onFail();
+                }
+            });
         }
-        HANDLER.post(new Runnable() {
-            @Override
-            public void run() {
-                mApiCallback.onResult(packageResultData("chooseImage", RESULT_OK, resultData));
-            }
-        });
     }
 
-    private void chooseImage(String params, IApiCallback callback) {
-        mApiCallback = callback;
+    private void chooseImage(JSONObject param, ICallback callback) {
         //params ={"count":3,"sizeType":["original","compressed"],"sourceType":["album","camera"]}
-        int chooseCount = 9;
-
         boolean chooseWithoutCamera = false;// 默认相册加入相机选项
 
-
-        try {
-            JSONObject object = new JSONObject(params);
-            chooseCount = object.optInt("count", 9);
-            JSONArray sourceType = object.getJSONArray("sourceType");
-
-            if (sourceType != null && sourceType.length() == 1) {
-                String type = sourceType.optString(0, "");
-                if (!TextUtils.isEmpty(type)) {
-                    if (type.equals("album")) { // 不加入相机功能
-                        chooseWithoutCamera = true;
-                    }
+        int chooseCount = param.optInt("count", 9);
+        JSONArray sourceType = param.optJSONArray("sourceType");
+        if (sourceType != null && sourceType.length() == 1) {
+            String type = sourceType.optString(0, "");
+            if (!TextUtils.isEmpty(type)) {
+                if (type.equals("album")) { // 不加入相机功能
+                    chooseWithoutCamera = true;
                 }
             }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        if (mActivity == null) {
-            mApiCallback.onResult(packageResultData("chooseImage", RESULT_FAIL, null));
         }
 
         PhotoPicker.builder()
@@ -187,51 +176,43 @@ public class ImageModule extends AbsModule implements OnActivityResultListener {
                 .setShowGif(false)
                 .setPreviewEnabled(true)
                 .start(mActivity, Constants.REQUEST_CODE_CHOOSE);
-
-
     }
 
-    private void previewImage(String params, IApiCallback callback) {
-        try {
-            JSONObject object = new JSONObject(params);
-            String currentUrl = object.optString("current", "");
-            JSONArray urls = object.optJSONArray("urls");
+    private void previewImage(JSONObject param, ICallback callback) {
+        String currentUrl = param.optString("current", "");
+        JSONArray urls = param.optJSONArray("urls");
 
-            if (urls == null || urls.length() == 0) {
-                HeraTrace.w(TAG, "urls is null");
-                callback.onResult(packageResultData("previewImage", RESULT_FAIL, null));
-                return;
-            }
-
-            int curIndex = 0;
-            int len = urls.length();
-            ArrayList<String> imageUrls = new ArrayList<>(len);
-            for (int i = 0; i < len; i++) {
-                String uriString = urls.optString(i);
-                if (TextUtils.isEmpty(uriString)) {
-                    continue;
-                }
-
-                if (uriString.equals(currentUrl)) {
-                    curIndex = i;
-                }
-
-                String imagePath = uriString;
-                if (uriString.startsWith(StorageUtil.SCHEME_WDFILE)) {
-                    imagePath = mMiniAppTempDir + uriString.substring(
-                            StorageUtil.SCHEME_WDFILE.length());
-                }
-                imageUrls.add(imagePath);
-            }
-
-            PhotoPreview.builder()
-                    .setPhotos(imageUrls)
-                    .setCurrentItem(curIndex)
-                    .start(mActivity);
-        } catch (JSONException e) {
-            callback.onResult(packageResultData("previewImage", RESULT_FAIL, null));
-            HeraTrace.e(TAG, e);
+        if (urls == null || urls.length() == 0) {
+            HeraTrace.w(TAG, "urls is null");
+            callback.onFail();
+            return;
         }
+
+        int curIndex = 0;
+        int len = urls.length();
+        ArrayList<String> imageUrls = new ArrayList<>(len);
+        for (int i = 0; i < len; i++) {
+            String uriString = urls.optString(i);
+            if (TextUtils.isEmpty(uriString)) {
+                continue;
+            }
+
+            if (uriString.equals(currentUrl)) {
+                curIndex = i;
+            }
+
+            String imagePath = uriString;
+            if (uriString.startsWith(StorageUtil.SCHEME_WDFILE)) {
+                imagePath = mMiniAppTempDir + uriString.substring(
+                        StorageUtil.SCHEME_WDFILE.length());
+            }
+            imageUrls.add(imagePath);
+        }
+
+        PhotoPreview.builder()
+                .setPhotos(imageUrls)
+                .setCurrentItem(curIndex)
+                .start(mActivity);
     }
 
 }

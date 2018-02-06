@@ -29,12 +29,12 @@ package com.weidian.lib.hera.api.device;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.util.DisplayMetrics;
 
-import com.weidian.lib.hera.api.AbsModule;
-import com.weidian.lib.hera.api.HeraApi;
-import com.weidian.lib.hera.interfaces.IApiCallback;
+import com.weidian.lib.hera.api.BaseApi;
+import com.weidian.lib.hera.interfaces.ICallback;
 import com.weidian.lib.hera.trace.HeraTrace;
 import com.weidian.lib.hera.utils.DensityUtil;
 
@@ -45,8 +45,7 @@ import org.json.JSONObject;
 /**
  * 获取系统信息api
  */
-@HeraApi(names = {"getSystemInfo"})
-public class SystemInfoModule extends AbsModule {
+public class SystemInfoModule extends BaseApi {
     private String model;
     private float pixelRatio;
     private int screenWidth;
@@ -67,11 +66,11 @@ public class SystemInfoModule extends AbsModule {
     public void onCreate() {
         super.onCreate();
 
-        int statusBarHight = 0;
+        int statusBarHeight = 0;
         Resources resources = getContext().getResources();
         int resId = resources.getIdentifier("status_bar_height", "dimen", "android");
         if (resId > 0) {
-            statusBarHight = resources.getDimensionPixelSize(resId);
+            statusBarHeight = resources.getDimensionPixelSize(resId);
         }
         DisplayMetrics dm = getContext().getResources().getDisplayMetrics();
         this.model = Build.MODEL;
@@ -79,42 +78,49 @@ public class SystemInfoModule extends AbsModule {
         this.screenWidth = dm.widthPixels;
         this.screenHeight = dm.heightPixels;
         this.windowWidth = dm.widthPixels;
-        this.windowHeight = dm.heightPixels - statusBarHight - DensityUtil.dip2px(getContext(), 50);
+        this.windowHeight = dm.heightPixels - statusBarHeight - getActionBarSize(getContext());
         this.language = "zh-CN";
         this.version = "1.0";
         this.system = Build.VERSION.RELEASE;
         this.platform = "android";
-        this.SDKVersion = "1.0";
+        this.SDKVersion = "0.1";
     }
 
     @Override
-    public void invoke(String event, String params, IApiCallback callback) {
-        if (event.equals("getSystemInfo")) {
-            getSystemInfo(event, params, callback);
+    public String[] apis() {
+        return new String[]{"getSystemInfo"};
+    }
+
+    @Override
+    public void invoke(String event, JSONObject param, ICallback callback) {
+        try {
+            JSONObject result = new JSONObject();
+            result.put("model", model);
+            result.put("pixelRatio", pixelRatio);
+            result.put("screenWidth", screenWidth);
+            result.put("screenHeight", screenHeight);
+            result.put("windowWidth", windowWidth);
+            result.put("windowHeight", windowHeight);
+            result.put("language", language);
+            result.put("version", version);
+            result.put("system", system);
+            result.put("platform", platform);
+            result.put("SDKVersion", SDKVersion);
+            callback.onSuccess(result);
+        } catch (JSONException e) {
+            HeraTrace.e(TAG, "systemInfo assemble result exception!");
+            callback.onFail();
         }
     }
 
-    private void getSystemInfo(String event, String params, IApiCallback callback) {
-        JSONObject json = new JSONObject();
+    private int getActionBarSize(Context context) {
+        int[] attrs = {android.R.attr.actionBarSize};
+        TypedArray values = context.getTheme().obtainStyledAttributes(attrs);
         try {
-            json.put("model", model);
-            json.put("pixelRatio", pixelRatio);
-            json.put("screenWidth", screenWidth);
-            json.put("screenHeight", screenHeight);
-            json.put("windowWidth", windowWidth);
-            json.put("windowHeight", windowHeight);
-            json.put("language", language);
-            json.put("version", version);
-            json.put("system", system);
-            json.put("platform", platform);
-            json.put("SDKVersion", SDKVersion);
-            json.put("inHera", true);
-        } catch (JSONException e) {
-            HeraTrace.e(TAG, "systemInfo to json exception!");
+            return values.getDimensionPixelSize(0, DensityUtil.dip2px(context, 56));
+        } finally {
+            values.recycle();
         }
-
-        callback.onResult(packageResultData(event, RESULT_OK, json));
-
     }
 
 }

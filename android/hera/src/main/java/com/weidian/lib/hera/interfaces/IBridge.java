@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2017, weidian.com
+// Copyright (c) 2018, weidian.com
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -25,17 +25,37 @@
 //
 
 
-package com.weidian.lib.hera.api;
+package com.weidian.lib.hera.interfaces;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+/**
+ * H5-->Native的调用接口
+ */
+public interface IBridge {
 
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+    /**
+     * 发布事件，由Service层或View层的JSBridge调用
+     *
+     * @param event   事件名称
+     * @param params  参数
+     * @param viewIds 页面的id数组字符串
+     */
+    void publish(String event, String params, String viewIds);
 
+    /**
+     * 调用事件，由Service层或View层的JSBridge调用
+     *
+     * @param event         事件名称
+     * @param params        参数
+     * @param callbackId    回调函数的id，执行结果回调时使用
+     */
+    void invoke(String event, String params, String callbackId);
 
-@Retention(RUNTIME)
-@Target({ElementType.TYPE})
-public @interface HeraApi {
-    String[] names() default {};
+    /**
+     * 事件处理完成后的回调
+     *
+     * @param callbackId 回调函数的id
+     * @param result     事件的处理结果
+     */
+    void callback(String callbackId, String result);
+
 }

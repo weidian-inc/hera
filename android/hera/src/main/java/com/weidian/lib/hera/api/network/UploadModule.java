@@ -29,12 +29,10 @@ package com.weidian.lib.hera.api.network;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.weidian.lib.hera.api.AbsModule;
-import com.weidian.lib.hera.api.HeraApi;
+import com.weidian.lib.hera.api.BaseApi;
 import com.weidian.lib.hera.config.AppConfig;
-import com.weidian.lib.hera.interfaces.IApiCallback;
+import com.weidian.lib.hera.interfaces.ICallback;
 import com.weidian.lib.hera.trace.HeraTrace;
 import com.weidian.lib.hera.utils.OkHttpUtil;
 import com.weidian.lib.hera.utils.StorageUtil;
@@ -58,8 +56,7 @@ import okhttp3.Response;
 /**
  * 上传文件api
  */
-@HeraApi(names = {"uploadFile"})
-public class UploadModule extends AbsModule {
+public class UploadModule extends BaseApi {
 
     private String mTempDir;
 
@@ -69,25 +66,19 @@ public class UploadModule extends AbsModule {
     }
 
     @Override
-    public void invoke(final String event, String params, final IApiCallback callback) {
-        String url = "";
-        String filePath = "";
-        String name = "";
-        JSONObject header = null;
-        JSONObject formData = null;
-        try {
-            JSONObject jsonObject = new JSONObject(params);
-            url = jsonObject.optString("url");
-            filePath = jsonObject.optString("filePath");
-            name = jsonObject.optString("name");
-            header = jsonObject.optJSONObject("header");
-            formData = jsonObject.optJSONObject("formData");
-        } catch (Exception e) {
-            Log.w(TAG, "parse params exception", e);
-        }
+    public String[] apis() {
+        return new String[]{"uploadFile"};
+    }
 
+    @Override
+    public void invoke(String event, JSONObject param, final ICallback callback) {
+        String url = param.optString("url");
+        String filePath = param.optString("filePath");
+        String name = param.optString("name");
+        JSONObject header = param.optJSONObject("header");
+        JSONObject formData = param.optJSONObject("formData");
         if (TextUtils.isEmpty(url) || TextUtils.isEmpty(filePath) || TextUtils.isEmpty(name)) {
-            callback.onResult(packageResultData(event, RESULT_FAIL, null));
+            callback.onFail();
             return;
         }
 
@@ -98,60 +89,56 @@ public class UploadModule extends AbsModule {
             filePath = filePath.substring(StorageUtil.SCHEME_FILE.length());
         }
 
-        try {
-            Map<String, String> reqParam = OkHttpUtil.parseJsonToMap(formData);
-            Headers headers = Headers.of(OkHttpUtil.parseJsonToMap(header));
-            File file = new File(filePath);
-            MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
-            bodyBuilder.setType(MultipartBody.FORM);
-            bodyBuilder.addFormDataPart(name, file.getName(),
-                    RequestBody.create(MediaType.parse("image/jpeg"), file));
-            for (Map.Entry<String, String> entry : reqParam.entrySet()) {
-                bodyBuilder.addFormDataPart(entry.getKey(), entry.getValue());
+        Map<String, String> reqParam = OkHttpUtil.parseJsonToMap(formData);
+        Headers headers = Headers.of(OkHttpUtil.parseJsonToMap(header));
+        File file = new File(filePath);
+        MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
+        bodyBuilder.setType(MultipartBody.FORM);
+        bodyBuilder.addFormDataPart(name, file.getName(),
+                RequestBody.create(MediaType.parse("image/jpeg"), file));
+        for (Map.Entry<String, String> entry : reqParam.entrySet()) {
+            bodyBuilder.addFormDataPart(entry.getKey(), entry.getValue());
+        }
+
+        Request request = new Request.Builder()
+                .headers(headers)
+                .url(url)
+                .post(bodyBuilder.build())
+                .build();
+
+        OkHttpUtil.enqueue(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                HANDLER.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onFail();
+                    }
+                });
             }
 
-            Request request = new Request.Builder()
-                    .headers(headers)
-                    .url(url)
-                    .post(bodyBuilder.build())
-                    .build();
-
-            OkHttpUtil.enqueue(request, new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
                     final JSONObject data = new JSONObject();
-                    try {
-                        data.put("exception", e != null ? e.getMessage() : "upload onFailure");
-                    } catch (Exception ex) {
-                        HeraTrace.w(TAG, "upload failed, assemble exception message to json error!");
-                    }
+                    data.put("statusCode", response.code());
+                    data.put("data", response.body().string());
                     HANDLER.post(new Runnable() {
                         @Override
                         public void run() {
-                            callback.onResult(packageResultData(event, RESULT_FAIL, data));
+                            callback.onSuccess(data);
                         }
                     });
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    final JSONObject data = new JSONObject();
-                    try {
-                        data.put("statusCode", response.code());
-                        data.put("data", response.body().string());
-                    } catch (JSONException e) {
-                        HeraTrace.w(TAG, "upload success, assemble data to json error!");
-                    }
+                } catch (JSONException e) {
+                    HeraTrace.e(TAG, "uploadFile assemble result exception!");
                     HANDLER.post(new Runnable() {
                         @Override
                         public void run() {
-                            callback.onResult(packageResultData(event, RESULT_OK, data));
+                            callback.onFail();
                         }
                     });
                 }
-            });
-        } catch (Exception e) {
-            callback.onResult(packageResultData(event, RESULT_FAIL, null));
-        }
+            }
+        });
     }
 }

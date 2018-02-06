@@ -1,30 +1,50 @@
 package com.weidian.lib.hera.sample.api;
 
-import com.weidian.lib.hera.api.HeraApi;
-import com.weidian.lib.hera.remote.IHostApiCallback;
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Intent;
 
-import org.json.JSONException;
+import com.weidian.lib.hera.api.AbsApi;
+import com.weidian.lib.hera.interfaces.ICallback;
+import com.weidian.lib.hera.utils.JsonUtil;
+
 import org.json.JSONObject;
 
 /**
  * 调用扩展api示例，打开某个可返回结果的Activity
  */
-@HeraApi(names = {"openPageForResult"})
-public class ApiOpenPageForResult implements IHostApi {
+public class ApiOpenPageForResult extends AbsApi {
+
+    private static final int REQUEST_CODE = 0x11;
 
     @Override
-    public void invoke(String event, String params, IHostApiCallback callback) {
-        //根据params参数打开指定页面，由小程序业务定义
-        JSONObject resultJson = new JSONObject();
-        try {//示例
-            resultJson.put("package", "com.weidian.lib.hera.sample");
-            resultJson.put("name", "com.weidian.lib.hera.sample.ForResultActivity");
-            resultJson.put("params", params);
-            callback.onResult(IHostApiCallback.PENDING, resultJson);
-        } catch (JSONException e) {
-            callback.onResult(IHostApiCallback.FAILED, null);
+    public String[] apis() {
+        return new String[]{"openPageForResult"};
+    }
+
+    @Override
+    public void invoke(String event, JSONObject param, ICallback callback) {
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName("com.weidian.lib.hera.sample",
+                "com.weidian.lib.hera.sample.ForResultActivity"));
+        callback.startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data, ICallback callback) {
+        if (requestCode != REQUEST_CODE) {
             return;
         }
-        callback.onResult(IHostApiCallback.SUCCEED, resultJson);
+        if (resultCode != Activity.RESULT_OK) {
+            callback.onCancel();
+            return;
+        }
+        if (data == null) {
+            callback.onFail();
+            return;
+        }
+
+        callback.onSuccess(JsonUtil.parseToJson(data.getExtras()));
     }
+
 }

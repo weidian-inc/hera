@@ -34,9 +34,8 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.weidian.lib.hera.api.AbsModule;
-import com.weidian.lib.hera.api.HeraApi;
-import com.weidian.lib.hera.interfaces.IApiCallback;
+import com.weidian.lib.hera.api.BaseApi;
+import com.weidian.lib.hera.interfaces.ICallback;
 import com.weidian.lib.hera.trace.HeraTrace;
 
 import org.json.JSONException;
@@ -48,8 +47,7 @@ import java.util.Set;
 /**
  * 网络类型及状态的api
  */
-@HeraApi(names = {"getNetworkType", "onNetworkStatusChange"})
-public class NetInfoModule extends AbsModule {
+public class NetInfoModule extends BaseApi {
     private static final String TAG = NetInfoModule.class.getSimpleName();
     private static final String CONNECTION_TYPE_NONE = "none";
     private static final String CONNECTION_TYPE_UNKNOWN = "unknown";
@@ -57,22 +55,26 @@ public class NetInfoModule extends AbsModule {
     private final ConnectivityBroadcastReceiver mConnectivityBroadcastReceiver;
     private boolean mIsConnected = false;
     private String mConnectivity = CONNECTION_TYPE_NONE;
-    private Set<IApiCallback> mCallbacks;
+    private Set<ICallback> mCallbacks;
 
     public NetInfoModule(Context context) {
         super(context);
         mConnectivityManager =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         mConnectivityBroadcastReceiver = new ConnectivityBroadcastReceiver();
-
     }
 
     @Override
-    public void invoke(String event, String params, IApiCallback callback) {
+    public String[] apis() {
+        return new String[]{"getNetworkType", "onNetworkStatusChange"};
+    }
+
+    @Override
+    public void invoke(String event, JSONObject param, ICallback callback) {
         if ("getNetworkType".equals(event)) {
-            getNetworkType(event, params, callback);
+            getNetworkType(callback);
         } else if ("onNetworkStatusChange".equals(event)) {
-            onNetworkStatusChange(event, params, callback);
+            onNetworkStatusChange(callback);
         }
     }
 
@@ -94,28 +96,23 @@ public class NetInfoModule extends AbsModule {
     /**
      * 获取当前网络状态
      *
-     * @param event
-     * @param params
      * @param callback
      */
-    private void getNetworkType(String event, String params, IApiCallback callback) {
-
-
+    private void getNetworkType(ICallback callback) {
         JSONObject data = new JSONObject();
         try {
             data.put("networkType", mConnectivity);
+            callback.onSuccess(data);
         } catch (JSONException e) {
-            HeraTrace.e(TAG, "networkType parse params exception!");
+            HeraTrace.e(TAG, "getNetworkType assemble result exception!");
+            callback.onFail();
         }
-        callback.onResult(packageResultData(event, RESULT_OK, data));
     }
 
-    private void onNetworkStatusChange(String event, String params, IApiCallback callback) {
-
+    private void onNetworkStatusChange(ICallback callback) {
         if (callback != null) {
             this.mCallbacks.add(callback);
         }
-
     }
 
     private void registerReceiver() {
@@ -160,7 +157,6 @@ public class NetInfoModule extends AbsModule {
     }
 
     private void sendConnectivityChangedEvent() {
-
         JSONObject data = new JSONObject();
         try {
             data.put("isConnected", mIsConnected);
@@ -169,8 +165,8 @@ public class NetInfoModule extends AbsModule {
             HeraTrace.e(TAG, "networkType parse params exception!");
         }
 
-        for (IApiCallback callback : mCallbacks) {
-            callback.onResult(packageResultData("onNetworkStatusChange", RESULT_OK, data));
+        for (ICallback callback : mCallbacks) {
+            callback.onSuccess(data);
         }
     }
 
@@ -191,7 +187,7 @@ public class NetInfoModule extends AbsModule {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
                 updateAndSendConnectionType();
             }
         }

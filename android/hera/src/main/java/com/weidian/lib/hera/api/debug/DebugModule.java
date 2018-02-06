@@ -29,40 +29,35 @@ package com.weidian.lib.hera.api.debug;
 
 import android.content.Context;
 import android.os.Build;
+
 import com.tencent.smtt.sdk.WebView;
+import com.weidian.lib.hera.api.BaseApi;
+import com.weidian.lib.hera.interfaces.ICallback;
 
-import com.weidian.lib.hera.api.AbsModule;
-import com.weidian.lib.hera.api.HeraApi;
-import com.weidian.lib.hera.interfaces.IApiCallback;
-import com.weidian.lib.hera.trace.HeraTrace;
-
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * 设置调试模式的api
  */
-@HeraApi(names = {"setEnableDebug"})
-public class DebugModule extends AbsModule {
+public class DebugModule extends BaseApi {
 
     public DebugModule(Context context) {
         super(context);
     }
 
     @Override
-    public void invoke(String event, String params, IApiCallback callback) {
-        try {
-            JSONObject json = new JSONObject(params);
-            boolean debug = json.optBoolean("enableDebug");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                WebView.setWebContentsDebuggingEnabled(debug);
-                callback.onResult(packageResultData(event, RESULT_OK, null));
-                return;
-            }
-        } catch (JSONException e) {
-            HeraTrace.w(TAG, "setEnableDebug, assemble data to json error!");
-        }
+    public String[] apis() {
+        return new String[]{"setEnableDebug"};
+    }
 
-        callback.onResult(packageResultData(event, RESULT_FAIL, null));
+    @Override
+    public void invoke(String event, JSONObject param, ICallback callback) {
+        boolean debug = param.optBoolean("enableDebug");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(debug);
+            callback.onSuccess(null);
+            return;
+        }
+        callback.onFail();
     }
 }

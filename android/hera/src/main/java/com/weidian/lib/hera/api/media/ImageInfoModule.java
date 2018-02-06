@@ -32,9 +32,8 @@ import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.webkit.URLUtil;
 
-import com.weidian.lib.hera.api.AbsModule;
-import com.weidian.lib.hera.api.HeraApi;
-import com.weidian.lib.hera.interfaces.IApiCallback;
+import com.weidian.lib.hera.api.BaseApi;
+import com.weidian.lib.hera.interfaces.ICallback;
 import com.weidian.lib.hera.trace.HeraTrace;
 import com.weidian.lib.hera.utils.IOUtil;
 import com.weidian.lib.hera.utils.OkHttpUtil;
@@ -56,8 +55,7 @@ import okhttp3.Response;
 /**
  * 获取图片信息的api
  */
-@HeraApi(names = {"getImageInfo"})
-public class ImageInfoModule extends AbsModule {
+public class ImageInfoModule extends BaseApi {
 
     private String mTempDir;
 
@@ -67,17 +65,15 @@ public class ImageInfoModule extends AbsModule {
     }
 
     @Override
-    public void invoke(String event, String params, IApiCallback callback) {
-        String src = "";
-        try {
-            JSONObject paramJson = new JSONObject(params);
-            src = paramJson.optString("src");
-        } catch (JSONException e) {
-            HeraTrace.e(TAG, "getImageInfo parse params exception!");
-        }
+    public String[] apis() {
+        return new String[]{"getImageInfo"};
+    }
 
+    @Override
+    public void invoke(String event, JSONObject param, ICallback callback) {
+        String src = param.optString("src");
         if (TextUtils.isEmpty(src)) {
-            callback.onResult(packageResultData(event, RESULT_FAIL, null));
+            callback.onFail();
             return;
         }
 
@@ -86,86 +82,82 @@ public class ImageInfoModule extends AbsModule {
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeFile(src, options);
 
-            JSONObject data = new JSONObject();
             try {
-                data.put("width", options.outWidth);
-                data.put("height", options.outHeight);
-                data.put("path", src);
+                JSONObject result = new JSONObject();
+                result.put("width", options.outWidth);
+                result.put("height", options.outHeight);
+                result.put("path", src);
+                callback.onSuccess(result);
             } catch (JSONException e) {
-                e.printStackTrace();
+                HeraTrace.e(TAG, "getImageInfo assemble result exception!");
+                callback.onFail();
             }
-
-            callback.onResult(packageResultData(event, RESULT_OK, data));
         } else {
-            getImageInfoForUrl(src, event, callback);
+            getImageInfoForUrl(src, callback);
         }
     }
 
-    private void getImageInfoForUrl(String url, final String event, final IApiCallback callback) {
-        try {
-            Request request = new Request.Builder().url(url).build();
-            OkHttpUtil.enqueue(request, new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    HANDLER.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            callback.onResult(packageResultData(event, RESULT_FAIL, null));
-                        }
-                    });
+    private void getImageInfoForUrl(String url, final ICallback callback) {
+        Request request = new Request.Builder().url(url).build();
+        OkHttpUtil.enqueue(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                HANDLER.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onFail();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(final Call call, Response response) throws IOException {
+                String tempFilePath = null;
+                InputStream is = null;
+                FileOutputStream os = null;
+                try {
+                    tempFilePath = new File(mTempDir,
+                            String.valueOf(System.currentTimeMillis())).getAbsolutePath();
+                    is = response.body().byteStream();
+                    os = new FileOutputStream(tempFilePath);
+                    byte[] buffer = new byte[4096];
+                    int len;
+                    while ((len = is.read(buffer)) >= 0) {
+                        os.write(buffer, 0, len);
+                    }
+                    os.flush();
+                } catch (IOException e) {
+                    tempFilePath = null;
+                } finally {
+                    IOUtil.closeAll(is, os);
                 }
 
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    String tempFilePath = null;
-                    InputStream is = null;
-                    FileOutputStream os = null;
-                    try {
-                        tempFilePath = new File(mTempDir,
-                                String.valueOf(System.currentTimeMillis())).getAbsolutePath();
-                        is = response.body().byteStream();
-                        os = new FileOutputStream(tempFilePath);
-                        byte[] buffer = new byte[4096];
-                        int len;
-                        while ((len = is.read(buffer)) >= 0) {
-                            os.write(buffer, 0, len);
-                        }
-                        os.flush();
-                    } catch (IOException e) {
-                        tempFilePath = null;
-                    } finally {
-                        IOUtil.closeAll(is, os);
-                    }
+                final String filePath = tempFilePath;
+                HANDLER.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!TextUtils.isEmpty(filePath)) {
+                            BitmapFactory.Options options = new BitmapFactory.Options();
+                            options.inJustDecodeBounds = true;
+                            BitmapFactory.decodeFile(filePath, options);
 
-                    final String filePath = tempFilePath;
-                    HANDLER.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (TextUtils.isEmpty(filePath)) {
-                                callback.onResult(packageResultData(event, RESULT_FAIL, null));
-                            } else {
-                                BitmapFactory.Options options = new BitmapFactory.Options();
-                                options.inJustDecodeBounds = true;
-                                BitmapFactory.decodeFile(filePath, options);
-
-                                JSONObject data = new JSONObject();
-                                try {
-                                    data.put("width", options.outWidth);
-                                    data.put("height", options.outHeight);
-                                    data.put("path", filePath);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                callback.onResult(packageResultData(event, RESULT_OK, data));
+                            JSONObject result = new JSONObject();
+                            try {
+                                result.put("width", options.outWidth);
+                                result.put("height", options.outHeight);
+                                result.put("path", filePath);
+                                callback.onSuccess(result);
+                                return;
+                            } catch (JSONException e) {
+                                HeraTrace.e(TAG, "getImageInfo assemble result exception!");
                             }
                         }
-                    });
 
-                }
-            });
-        } catch (Exception e) {
-            callback.onResult(packageResultData(event, RESULT_FAIL, null));
-        }
+                        callback.onFail();
+                    }
+                });
+            }
+        });
     }
 
 }

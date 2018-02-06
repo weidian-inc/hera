@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2017, weidian.com
+// Copyright (c) 2018, weidian.com
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -25,31 +25,27 @@
 //
 
 
-package com.weidian.lib.hera.interfaces;
+package com.weidian.lib.hera.api;
 
 import android.content.Intent;
 
-/**
- * {@link android.app.Activity#onActivityResult(int, int, Intent)}方法的调用监听接口，
- * 由Api类根据需要实现此接口
- */
-public interface OnActivityResultListener {
+import com.weidian.lib.hera.interfaces.IApi;
+import com.weidian.lib.hera.interfaces.ICallback;
 
-    /**
-     * 是否是结果接收者，根据requestCode判断，Api类应确保requestCode不重复，如使用hashCode值等
-     *
-     * @param requestCode 请求码
-     * @return true：是结果接受者，否则亦然
-     */
-    boolean isResultReceiver(int requestCode);
+public abstract class AbsApi implements IApi {
 
-    /**
-     * {@link android.app.Activity#onActivityResult(int, int, Intent)}
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    void onActivityResult(int requestCode, int resultCode, Intent data);
+    @Override
+    public void onCreate() {
 
+    }
+
+    @Override
+    public void onDestroy() {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data, ICallback callback) {
+
+    }
 }

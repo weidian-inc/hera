@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2017, weidian.com
+// Copyright (c) 2018, weidian.com
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -25,19 +25,40 @@
 //
 
 
-package com.weidian.lib.hera.remote;
+package com.weidian.lib.hera.interfaces;
+
+import android.content.Intent;
+
+import org.json.JSONObject;
 
 /**
- * 宿主进程api分发接口
+ * Api回调接口
  */
-public interface IHostApiDispatcher {
+public interface ICallback {
 
     /**
-     * 分发api调用
+     * Api调用成功
      *
-     * @param event    api名称
-     * @param param    调用参数
-     * @param callback 结果回调接口
+     * @param result Api调用返回的结果
      */
-    void dispatch(String event, String param, IHostApiCallback callback);
+    void onSuccess(JSONObject result);
+
+    /**
+     * Api调用失败
+     */
+    void onFail();
+
+    /**
+     * Api调用取消
+     */
+    void onCancel();
+
+    /**
+     * 回调{@link android.app.Activity#startActivityForResult(Intent, int)}方法
+     *
+     * @param intent
+     * @param requestCode
+     */
+    void startActivityForResult(Intent intent, int requestCode);
+
 }

@@ -31,7 +31,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.webkit.JavascriptInterface;
 
-import com.weidian.lib.hera.interfaces.IBridgeHandler;
+import com.weidian.lib.hera.interfaces.IBridge;
 import com.weidian.lib.hera.trace.HeraTrace;
 
 /**
@@ -41,10 +41,10 @@ public class JSInterface {
 
     private static final String TAG = "JSInterface";
 
-    private IBridgeHandler mBridgeHandler;
+    private IBridge mBridgeHandler;
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
-    public JSInterface(IBridgeHandler handler) {
+    public JSInterface(IBridge handler) {
         mBridgeHandler = handler;
     }
 
@@ -56,7 +56,7 @@ public class JSInterface {
             @Override
             public void run() {
                 if (mBridgeHandler != null) {
-                    mBridgeHandler.handlePublish(event, params, viewIds);
+                    mBridgeHandler.publish(event, params, viewIds);
                 }
             }
         });
@@ -70,7 +70,7 @@ public class JSInterface {
             @Override
             public void run() {
                 if (mBridgeHandler != null) {
-                    mBridgeHandler.handleInvoke(event, params, callbackId);
+                    mBridgeHandler.invoke(event, params, callbackId);
                 }
             }
         });

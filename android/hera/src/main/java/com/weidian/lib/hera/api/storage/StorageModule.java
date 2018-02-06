@@ -32,10 +32,9 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.weidian.lib.hera.api.AbsModule;
-import com.weidian.lib.hera.api.HeraApi;
+import com.weidian.lib.hera.api.BaseApi;
 import com.weidian.lib.hera.config.AppConfig;
-import com.weidian.lib.hera.interfaces.IApiCallback;
+import com.weidian.lib.hera.interfaces.ICallback;
 import com.weidian.lib.hera.trace.HeraTrace;
 
 import org.json.JSONException;
@@ -44,10 +43,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.Set;
 
-@HeraApi(names = {"setStorage", "setStorageSync", "getStorage", "getStorageSync",
-        "getStorageInfo", "getStorageInfoSync", "removeStorage", "removeStorageSync",
-        "clearStorage", "clearStorageSync"})
-public class StorageModule extends AbsModule {
+public class StorageModule extends BaseApi {
 
     private static final long BYTE_LIMIT = 10 * 1024 * 1024;
     private String mAppId;
@@ -62,7 +58,6 @@ public class StorageModule extends AbsModule {
         mUserId = appConfig.getUserId();
     }
 
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -74,199 +69,161 @@ public class StorageModule extends AbsModule {
         mCurSize = loadPreferenceSize(mPreferenceName);
     }
 
+    @Override
+    public String[] apis() {
+        return new String[]{"setStorage", "setStorageSync", "getStorage", "getStorageSync",
+                "getStorageInfo", "getStorageInfoSync", "removeStorage", "removeStorageSync",
+                "clearStorage", "clearStorageSync"};
+    }
 
     @Override
-    public void invoke(String event, String params, IApiCallback callback) {
-        if ("setStorage".equals(event) || "setStorageSync".equals(event)) {
-            setStorage(event, params, callback);
-        } else if ("getStorage".equals(event) || "getStorageSync".equals(event)) {
-            getStorage(event, params, callback);
-        } else if ("getStorageInfo".equals(event) || "getStorageInfoSync".equals(event)) {
-            getStorageInfo(event, params, callback);
-        } else if ("removeStorage".equals(event) || "removeStorageSync".equals(event)) {
-            removeStorage(event, params, callback);
-        } else if ("clearStorage".equals(event) || "clearStorageSync".equals(event)) {
-            clearStorage(event, params, callback);
+    public void invoke(String event, JSONObject param, ICallback callback) {
+        switch (event) {
+            case "setStorage":
+            case "setStorageSync":
+                setStorage(param, callback);
+                break;
+            case "getStorage":
+            case "getStorageSync":
+                getStorage(param, callback);
+                break;
+            case "getStorageInfo":
+            case "getStorageInfoSync":
+                getStorageInfo(callback);
+                break;
+            case "removeStorage":
+            case "removeStorageSync":
+                removeStorage(param, callback);
+                break;
+            case "clearStorage":
+            case "clearStorageSync":
+                clearStorage(callback);
+                break;
         }
     }
 
     /**
      * 将数据存储在本地缓存中指定的key中，会覆盖掉原来该 key 对应的内容
      *
-     * @param event
-     * @param params
+     * @param param
      * @param callback
      */
-    public void setStorage(String event, String params, IApiCallback callback) {
-        String key = null;
-
-        Object data = null;
-
-        try {
-            JSONObject jsonParam = new JSONObject(params);
-            key = jsonParam.optString("key");
-            data = jsonParam.opt("data");
-
-        } catch (JSONException e) {
-            callback.onResult(packageResultData(event, RESULT_FAIL, null));
+    private void setStorage(JSONObject param, ICallback callback) {
+        String key = param.optString("key");
+        Object data = param.opt("data");
+        if (getContext() == null || TextUtils.isEmpty(mPreferenceName)
+                || mCurSize >= BYTE_LIMIT || TextUtils.isEmpty(key) || data == null) {
+            callback.onFail();
             return;
         }
 
-        if (getContext() == null || TextUtils.isEmpty(mPreferenceName) || mCurSize >= BYTE_LIMIT || TextUtils.isEmpty(key) || data == null) {
-            callback.onResult(packageResultData(event, RESULT_FAIL, null));
-            return;
-        }
-
-
-        SharedPreferences preference = getContext().getSharedPreferences(mPreferenceName, Context.MODE_PRIVATE);
+        SharedPreferences preference = getContext().getSharedPreferences(mPreferenceName,
+                Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preference.edit();
         editor.putString(key, String.valueOf(data));
         editor.apply();
 
-        callback.onResult(packageResultData(event, RESULT_OK, null));
+        callback.onSuccess(null);
 
         mCurSize = loadPreferenceSize(mPreferenceName);
-
     }
 
     /**
      * 从本地缓存中获取指定 key 对应的内容。
      *
-     * @param event
-     * @param params
+     * @param param
      * @param callback
      */
-    public void getStorage(String event, String params, IApiCallback callback) {
-        String key = null;
-
-        try {
-            JSONObject jsonParam = new JSONObject(params);
-            key = jsonParam.optString("key");
-        } catch (JSONException e) {
-            callback.onResult(packageResultData(event, RESULT_FAIL, null));
-            return;
-        }
+    private void getStorage(JSONObject param, ICallback callback) {
+        String key = param.optString("key");
         if (getContext() == null || TextUtils.isEmpty(mPreferenceName) || TextUtils.isEmpty(key)) {
-            callback.onResult(packageResultData(event, RESULT_FAIL, null));
+            callback.onFail();
             return;
         }
-
-        SharedPreferences settings = getContext()
-                .getSharedPreferences(mPreferenceName, Context.MODE_PRIVATE);
-        String data = settings.getString(key, "");
-        JSONObject res = new JSONObject();
         try {
-            res.put("data", data);
-            res.put("dataType", "String");
+            SharedPreferences settings = getContext()
+                    .getSharedPreferences(mPreferenceName, Context.MODE_PRIVATE);
+            String data = settings.getString(key, "");
+            JSONObject result = new JSONObject();
+            result.put("data", data);
+            result.put("dataType", "String");
+            callback.onSuccess(result);
         } catch (JSONException e) {
-            callback.onResult(packageResultData(event, RESULT_FAIL, null));
-            return;
+            HeraTrace.e(TAG, "getStorage assemble result exception!");
+            callback.onFail();
         }
-
-        callback.onResult(packageResultData(event, RESULT_OK, res));
-
     }
 
     /**
      * 获取当前storage的相关信息
      *
-     * @param event
-     * @param params
      * @param callback
      */
-    public void getStorageInfo(String event, String params, IApiCallback callback) {
-
+    private void getStorageInfo(ICallback callback) {
         if (getContext() == null || TextUtils.isEmpty(mPreferenceName)) {
-            callback.onResult(packageResultData(event, RESULT_FAIL, null));
+            callback.onFail();
             return;
         }
 
-        SharedPreferences settings = getContext()
-                .getSharedPreferences(mPreferenceName, Context.MODE_PRIVATE);
-        Set<String> keys = settings.getAll().keySet();
-
-
-        JSONObject res = new JSONObject();
-
         try {
-            res.put("keys", String.valueOf(keys));
-            res.put("currentSize", mCurSize / 1024);
-            res.put("limitSize", BYTE_LIMIT / 1024);
+            SharedPreferences settings = getContext()
+                    .getSharedPreferences(mPreferenceName, Context.MODE_PRIVATE);
+            Set<String> keys = settings.getAll().keySet();
+            JSONObject result = new JSONObject();
+            result.put("keys", String.valueOf(keys));
+            result.put("currentSize", mCurSize / 1024);
+            result.put("limitSize", BYTE_LIMIT / 1024);
+            callback.onSuccess(result);
         } catch (JSONException e) {
-            e.printStackTrace();
+            HeraTrace.e(TAG, "getStorageInfo assemble result exception!");
+            callback.onFail();
         }
-
-        callback.onResult(packageResultData(event, RESULT_OK, res));
-
     }
 
     /**
      * 从本地缓存中异步移除指定 key 。
      *
-     * @param event
-     * @param params
+     * @param param
      * @param callback
      */
-    public void removeStorage(String event, String params, IApiCallback callback) {
-
-        String key = null;
-
-
-        try {
-            JSONObject jsonParam = new JSONObject(params);
-            key = jsonParam.optString("key");
-
-        } catch (JSONException e) {
-            callback.onResult(packageResultData(event, RESULT_FAIL, null));
-            return;
-        }
-
+    private void removeStorage(JSONObject param, ICallback callback) {
+        String key = param.optString("key");
         if (getContext() == null || TextUtils.isEmpty(mPreferenceName) || TextUtils.isEmpty(key)) {
-            callback.onResult(packageResultData(event, RESULT_FAIL, null));
+            callback.onFail();
             return;
         }
 
-
-        SharedPreferences preference = getContext().getSharedPreferences(mPreferenceName, Context.MODE_PRIVATE);
-
-        String data = preference.getString(key, "");
-        SharedPreferences.Editor editor = preference.edit();
-        editor.remove(key);
-        editor.apply();
-
-        JSONObject res = new JSONObject();
-
         try {
-            res.put("data", data);
+            SharedPreferences preference = getContext().getSharedPreferences(mPreferenceName,
+                    Context.MODE_PRIVATE);
+            String data = preference.getString(key, "");
+            SharedPreferences.Editor editor = preference.edit();
+            editor.remove(key);
+            editor.apply();
 
+            JSONObject result = new JSONObject();
+            result.put("data", data);
+            callback.onSuccess(result);
         } catch (JSONException e) {
-            e.printStackTrace();
+            HeraTrace.e(TAG, "removeStorage assemble result exception!");
+            callback.onFail();
         }
-
-
-        callback.onResult(packageResultData(event, RESULT_OK, res));
 
         mCurSize = loadPreferenceSize(mPreferenceName);
-
-
     }
 
     /**
      * 清理本地数据缓存。
      *
-     * @param event
-     * @param params
      * @param callback
      */
-    public void clearStorage(String event, String params, IApiCallback callback) {
-
+    private void clearStorage(ICallback callback) {
         if (mSpFile != null) {
             mSpFile.delete();
         }
 
-        callback.onResult(packageResultData(event, RESULT_OK, null));
+        callback.onSuccess(null);
         mCurSize = 0;
-
     }
 
 
@@ -291,4 +248,5 @@ public class StorageModule extends AbsModule {
 
         return res;
     }
+
 }

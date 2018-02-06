@@ -37,7 +37,7 @@ import android.view.Window;
 import android.widget.FrameLayout;
 
 import com.weidian.lib.hera.R;
-import com.weidian.lib.hera.api.ApiManager;
+import com.weidian.lib.hera.api.ApisManager;
 import com.weidian.lib.hera.config.AppConfig;
 import com.weidian.lib.hera.interfaces.OnEventListener;
 import com.weidian.lib.hera.service.AppService;
@@ -60,7 +60,7 @@ public class HeraActivity extends AppCompatActivity implements OnEventListener {
 
     private FrameLayout mContainer;
     private AppConfig mAppConfig;
-    private ApiManager mApiManager;
+    private ApisManager mApisManager;
     private AppService mAppService;
     private PageManager mPageManager;
 
@@ -92,7 +92,8 @@ public class HeraActivity extends AppCompatActivity implements OnEventListener {
         mAppConfig = new AppConfig(appId, userId);
 
         //3. 创建ApiManager，管理Api的调用
-        mApiManager = new ApiManager(this, this, mAppConfig);
+        mApisManager = new ApisManager(this, this, mAppConfig);
+        mApisManager.onCreate();
 
         //4. 初始化视图
         setContentView(R.layout.hera_main_activity);
@@ -121,7 +122,7 @@ public class HeraActivity extends AppCompatActivity implements OnEventListener {
      * @param container
      */
     private void loadPage(FrameLayout container) {
-        mAppService = new AppService(this, this, mAppConfig, mApiManager);
+        mAppService = new AppService(this, this, mAppConfig, mApisManager);
         container.addView(mAppService, new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         mPageManager = new PageManager(this, mAppConfig);
@@ -164,13 +165,13 @@ public class HeraActivity extends AppCompatActivity implements OnEventListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mApiManager.onActivityResult(requestCode, resultCode, data);
+        mApisManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     protected void onDestroy() {
         HeraTrace.d(TAG, String.format("MiniApp[%s] close", mAppConfig.getAppId()));
-        mApiManager.destroy();
+        mApisManager.onDestroy();
         StorageUtil.clearMiniAppTempDir(this, mAppConfig.getAppId());
         super.onDestroy();
     }

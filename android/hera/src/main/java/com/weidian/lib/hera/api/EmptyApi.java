@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2017, weidian.com
+// Copyright (c) 2018, weidian.com
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -25,28 +25,39 @@
 //
 
 
-package com.weidian.lib.hera.interfaces;
+package com.weidian.lib.hera.api;
 
-/**
- * H5-->Native的调用接口
- */
-public interface IBridgeHandler {
+import android.content.Intent;
 
-    /**
-     * 发布事件，由Service层或View层的JSBridge调用
-     *
-     * @param event   事件名称
-     * @param params  参数
-     * @param viewIds 页面的id数组字符串
-     */
-    void handlePublish(String event, String params, String viewIds);
+import com.weidian.lib.hera.interfaces.IApi;
+import com.weidian.lib.hera.interfaces.ICallback;
 
-    /**
-     * 调用事件，由Service层或View层的JSBridge调用
-     *
-     * @param event         事件名称
-     * @param params        参数
-     * @param callbackId    回调函数的id，执行结果回调时使用
-     */
-    void handleInvoke(String event, String params, String callbackId);
+import org.json.JSONObject;
+
+public class EmptyApi implements IApi {
+
+    @Override
+    public void onCreate() {
+
+    }
+
+    @Override
+    public void onDestroy() {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data, ICallback callback) {
+
+    }
+
+    @Override
+    public String[] apis() {
+        return null;
+    }
+
+    @Override
+    public void invoke(String event, JSONObject param, ICallback callback) {
+
+    }
 }

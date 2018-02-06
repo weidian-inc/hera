@@ -28,7 +28,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <service android:name="com.weidian.lib.hera.remote.HostApiService" />
+        <service android:name="com.weidian.lib.hera.remote.RemoteService" />
         <service android:name="com.weidian.lib.hera.main.HeraService"
             android:screenOrientation="portrait"
             android:process=":hera"/>

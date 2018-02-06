@@ -38,7 +38,7 @@ import com.tencent.smtt.sdk.WebView;
 import android.widget.Toast;
 
 import com.weidian.lib.hera.config.HeraConfig;
-import com.weidian.lib.hera.interfaces.IBridgeHandler;
+import com.weidian.lib.hera.interfaces.IBridge;
 import com.weidian.lib.hera.trace.HeraTrace;
 
 import java.lang.reflect.Field;
@@ -85,7 +85,7 @@ public class HeraWebView extends WebView {
         setHorizontalScrollBarEnabled(false);
     }
 
-    public void setJsHandler(IBridgeHandler handler) {
+    public void setJsHandler(IBridge handler) {
         addJavascriptInterface(new JSInterface(handler), "HeraJSCore");
     }
 

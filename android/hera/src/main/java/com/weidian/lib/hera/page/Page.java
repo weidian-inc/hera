@@ -46,7 +46,7 @@ import android.widget.LinearLayout;
 
 import com.weidian.lib.hera.R;
 import com.weidian.lib.hera.config.AppConfig;
-import com.weidian.lib.hera.interfaces.IBridgeHandler;
+import com.weidian.lib.hera.interfaces.IBridge;
 import com.weidian.lib.hera.interfaces.OnEventListener;
 import com.weidian.lib.hera.model.TabItemInfo;
 import com.weidian.lib.hera.page.view.NavigationBar;
@@ -70,7 +70,7 @@ import java.util.Set;
 /**
  * Page层，即小程序view展示层
  */
-public class Page extends LinearLayout implements IBridgeHandler,
+public class Page extends LinearLayout implements IBridge,
         TabBar.OnSwitchTabListener, PageWebView.OnHorizontalSwipeListener {
 
     public static final String TAG = "Page";
@@ -230,8 +230,8 @@ public class Page extends LinearLayout implements IBridgeHandler,
     }
 
     @Override
-    public void handlePublish(String event, String params, String viewIds) {
-        HeraTrace.d(TAG, String.format("view@%s handlePublish(), event=%s, params=%s, viewIds=%s",
+    public void publish(String event, String params, String viewIds) {
+        HeraTrace.d(TAG, String.format("view@%s publish(), event=%s, params=%s, viewIds=%s",
                 getViewId(), event, params, viewIds));
 
         if ("custom_event_DOMContentLoaded".equals(event)) {
@@ -244,9 +244,13 @@ public class Page extends LinearLayout implements IBridgeHandler,
     }
 
     @Override
-    public void handleInvoke(String event, String params, String callbackId) {
-        HeraTrace.d(TAG, String.format("view@%s handleInvoke(), event=%s, params=%s, callbackIds=%s",
+    public void invoke(String event, String params, String callbackId) {
+        HeraTrace.d(TAG, String.format("view@%s invoke(), event=%s, params=%s, callbackIds=%s",
                 getViewId(), event, params, callbackId));
+    }
+
+    @Override
+    public void callback(String callbackId, String result) {
     }
 
     @Override
