@@ -39,7 +39,7 @@ public class HeraApplication extends Application {
         //在主进程中初始化框架配置，启动框架服务进程
         if (HeraTrace.isMainProcess(this)){
             HeraConfig config = new HeraConfig.Builder()
-                    .setHostApiDispatcher(new HostApiDispatcher(this)) // 自定义扩展API配置
+                    .addExtendsApi(new XxxApi()) // 添加自定义扩展API，可连续调用添加或传入一组api列表
                     .setDebug(true) // 调试模式
                     .build();
             HeraService.start(this.getApplicationContext(), config);
@@ -48,7 +48,7 @@ public class HeraApplication extends Application {
 }
 ```
 
-其中 `setHostApiDispatcher` 用于进行自定义扩展API相关配置。详见[自定义扩展API](../docs/zh-cn/Others/API-Extend.md)
+其中 `addExtendsApi` 用于添加自定义扩展API。详见[自定义扩展API](../docs/zh-cn/Others/API-Extend.md)
 
 ## 打开小程序页面
 

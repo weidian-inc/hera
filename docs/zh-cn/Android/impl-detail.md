@@ -8,6 +8,6 @@ SDK Native层[`HeraActivity`]作为逻辑流程控制中心，建立了页面视
 ![](assets/impl/logical.jpg)
 
 ### API实现
-SDK本身提供了丰富的[API](../Others/API.md)实现，同时也提供了扩展API的接口，方便被接入的App实现自定义的API功能。由于SDK运行于独立进程，因此通过进程通信的方式调用宿主提供的扩展API。`SdkApiManager`和`HostApiManager`分别对应SDK内部API的管理和扩展API的管理。
+SDK本身提供了丰富的[API](../Others/API.md)实现，同时也提供了扩展API的接口，方便被接入的App实现自定义的API功能。由于SDK运行于独立进程，因此通过进程通信的方式调用宿主提供的扩展API。
 
 ![](assets/impl/extapi.jpg)

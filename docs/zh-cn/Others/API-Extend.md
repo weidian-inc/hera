@@ -23,59 +23,61 @@ module.exports = {
 
 ### 调用接收
 
-在Native端，开发者需要在Hera框架初始化时提供一个实现了 `IHostApiDispatcher` 接口的对象，通过该接口的 `dispatch` 方法可以对来自小程序业务端的API调用事件进行接收和处理.
+在Native端，开发者需要在Hera框架初始化时通过addExtendsApi方法添加自定义的扩展api（实现IApi接口或继承AbsApi类），业务调用时会自动查找并调用。
+
+`IApi` 接口的定义
 
 ```java
-@Override
-public void dispatch(String event, //事件名称，即api名称
-                        String param, //调用参数
-                        IHostApiCallback apiCallback //回调接口
-) {
-    //此处处理api调用
-    //处理完毕后应调用IHostApiCallback的回调方法将结果回传，否则调用的api将收不到结果
+public interface IApi extends ILifecycle {
+
+    /**
+     * @return 支持可调用的api名称的数组
+     */
+    String[] apis();
+
+    /**
+     * 接收到对应的api调用时，会调用此方法，在此方法中处理api调用的功能逻辑
+     *
+     * @param event    事件名称，即api名称
+     * @param param    参数
+     * @param callback 回调接口
+     */
+    void invoke(String event, JSONObject param, ICallback callback);
 }
-```
-
-`IHostApiCallback` 接口的定义
-
-```java
-/**
- * 结果的回调方法
- *
- * @param status 状态码，参考以下状态码说明，无效值按'UNDEFINE'处理
- * @param result json结果
- */
-void onResult(int status, JSONObject result);
-
-/**
- * 成功状态码，即api调用成功，将结果返回
- */
-SUCCEED;
-
-/**
- * 失败状态码，即api调用失败
- */
-FAILED;
-
-/**
- * 未定义状态码，即调用的api不存在或未实现
- */
-UNDEFIN;
-
-/**
- * 中间状态，与"openPageForResult" api配合使用，
- * 用与打开其他Activity页面并接收其返回的结果，参考sample示例
- */
-PENDING;
 ```
 
 ### 结果返回
 
-当事件处理完毕后，通过 `IHostApiDispatcher` 接口对象的 `onResult` 方法将调用结果返回。如下：
+当事件处理完毕后，通过 `ICallback` 接口的方法将调用结果返回。接口定义如下：
 
 ```java
-onResult(IHostApiDispatcher.SUCCEED, resultJson); //处理调用成功的结果返回
-onResult(IHostApiDispatcher.FAILED, null); //处理调用失败的结果返回
+public interface ICallback {
+
+    /**
+     * Api调用成功
+     *
+     * @param result Api调用返回的结果
+     */
+    void onSuccess(JSONObject result);
+
+    /**
+     * Api调用失败
+     */
+    void onFail();
+
+    /**
+     * Api调用取消
+     */
+    void onCancel();
+
+    /**
+     * 回调{@link android.app.Activity#startActivityForResult(Intent, int)}方法
+     *
+     * @param intent
+     * @param requestCode
+     */
+    void startActivityForResult(Intent intent, int requestCode);
+}
 ```
 
 ## iOS 端
