@@ -158,7 +158,8 @@ public class HeraActivity extends AppCompatActivity implements OnEventListener {
         if (mPageManager != null && mPageManager.backPage()) {
             return;
         }
-        super.onBackPressed();
+
+        moveTaskToBack(false);
         //overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 

@@ -101,11 +101,11 @@ public class HeraService extends Service {
             throw new IllegalArgumentException("context, appId and userId are not null");
         }
 
+
         Intent intent = new Intent(context, HeraActivity.class);
         intent.putExtra(HeraActivity.APP_ID, appId);
         intent.putExtra(HeraActivity.USER_ID, userId);
         intent.putExtra(HeraActivity.APP_PATH, appPath);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 

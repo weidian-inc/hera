@@ -30,26 +30,48 @@
 
         <service android:name="com.weidian.lib.hera.remote.RemoteService" />
         <service android:name="com.weidian.lib.hera.main.HeraService"
-            android:screenOrientation="portrait"
-            android:process=":hera"/>
+            android:screenOrientation="portrait" />
         <activity android:name="me.iwf.photopicker.PhotoPickerActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:process=":hera"
-            />
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <activity android:name="me.iwf.photopicker.PhotoPagerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:screenOrientation="portrait"
-            android:process=":hera"/>
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name="com.weidian.lib.hera.main.HeraActivity"
-            android:process=":hera"
+            android:launchMode="singleInstance"
+            android:taskAffinity=".heraBrandUI"
+            android:process=":heraBrand"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidian.lib.hera.main.HeraActivity1"
+            android:launchMode="singleInstance"
+            android:taskAffinity=".heraBrandUI1"
+            android:process=":heraBrand1"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidian.lib.hera.main.HeraActivity2"
+            android:launchMode="singleInstance"
+            android:taskAffinity=".heraBrandUI"
+            android:process=":heraBrand2"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidian.lib.hera.main.HeraActivity3"
+            android:launchMode="singleInstance"
+            android:taskAffinity=".heraBrandUI"
+            android:process=":heraBrand3"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.weidian.lib.hera.main.HeraActivity4"
+            android:launchMode="singleInstance"
+            android:taskAffinity=".heraBrandUI"
+            android:process=":heraBrand4"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name="com.weidian.lib.hera.scancode.ui.activity.ScanCaptureActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:process=":hera"
             android:screenOrientation="portrait" />
 
 
