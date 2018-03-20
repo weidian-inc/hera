@@ -40,32 +40,32 @@
 
         <activity
             android:name="com.weidian.lib.hera.main.HeraActivity"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:taskAffinity=".heraBrandUI"
             android:process=":heraBrand"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.weidian.lib.hera.main.HeraActivity1"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:taskAffinity=".heraBrandUI1"
             android:process=":heraBrand1"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.weidian.lib.hera.main.HeraActivity2"
-            android:launchMode="singleInstance"
-            android:taskAffinity=".heraBrandUI"
+            android:launchMode="singleTask"
+            android:taskAffinity=".heraBrandUI2"
             android:process=":heraBrand2"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.weidian.lib.hera.main.HeraActivity3"
-            android:launchMode="singleInstance"
-            android:taskAffinity=".heraBrandUI"
+            android:launchMode="singleTask"
+            android:taskAffinity=".heraBrandUI3"
             android:process=":heraBrand3"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.weidian.lib.hera.main.HeraActivity4"
-            android:launchMode="singleInstance"
-            android:taskAffinity=".heraBrandUI"
+            android:launchMode="singleTask"
+            android:taskAffinity=".heraBrandUI4"
             android:process=":heraBrand4"
             android:screenOrientation="portrait" />
 
