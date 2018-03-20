@@ -3,6 +3,7 @@ buildscript {
     repositories {
         mavenCentral()
         jcenter()
+        maven { url 'https://dl.google.com/dl/android/maven2/' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.2'
@@ -12,12 +13,14 @@ buildscript {
 repositories {
     mavenCentral()
     jcenter()
+    maven { url 'https://dl.google.com/dl/android/maven2/' }
 }
 
 subprojects {
     repositories {
         mavenCentral()
         jcenter()
+        maven { url 'https://dl.google.com/dl/android/maven2/' }
     }
 
     ext {

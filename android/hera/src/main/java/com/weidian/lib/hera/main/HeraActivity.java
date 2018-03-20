@@ -27,9 +27,11 @@
 
 package com.weidian.lib.hera.main;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Process;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -75,6 +77,32 @@ public class HeraActivity extends AppCompatActivity implements OnEventListener {
 
         //1. 获取并校验参数
         Intent intent = getIntent();
+        initVariable(intent);
+
+        //4. 初始化视图
+        setContentView(R.layout.hera_main_activity);
+        mContainer = (FrameLayout) findViewById(R.id.container);
+
+        //5. 初始化并同步小程序信息
+        mLoadingIndicator = (LoadingIndicator) findViewById(R.id.loading_indicator);
+        mLoadingIndicator.setTitle(getString(R.string.app_name));
+        mLoadingIndicator.show();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        initVariable(intent);
+    }
+
+    /**
+     * 初始化变量
+     *
+     * @param intent
+     */
+    private void initVariable(Intent intent) {
+
         String appId = intent.getStringExtra(APP_ID);
         String userId = intent.getStringExtra(USER_ID);
         String appPath = intent.getStringExtra(APP_PATH);
@@ -86,6 +114,12 @@ public class HeraActivity extends AppCompatActivity implements OnEventListener {
             throw new IllegalArgumentException("Intent has not extra 'user_id', " +
                     "start HeraActivity failed!");
         }
+
+        //重新打开小程序不更新页面
+        if (mAppConfig != null && appId.equals(mAppConfig.getAppId())) {
+            return;
+        }
+
         HeraTrace.d(TAG, String.format("MiniApp[%s] open", appId));
 
         //2. 创建AppConfig，将appId和userId缓存，在整个小程序运行期内有效
@@ -95,14 +129,6 @@ public class HeraActivity extends AppCompatActivity implements OnEventListener {
         mApisManager = new ApisManager(this, this, mAppConfig);
         mApisManager.onCreate();
 
-        //4. 初始化视图
-        setContentView(R.layout.hera_main_activity);
-        mContainer = (FrameLayout) findViewById(R.id.container);
-
-        //5. 初始化并同步小程序信息
-        mLoadingIndicator = (LoadingIndicator) findViewById(R.id.loading_indicator);
-        mLoadingIndicator.setTitle(getString(R.string.app_name));
-        mLoadingIndicator.show();
         HeraAppManager.syncMiniApp(this, appId, appPath, new HeraAppManager.SyncCallback() {
             @Override
             public void onResult(boolean result) {
@@ -158,7 +184,8 @@ public class HeraActivity extends AppCompatActivity implements OnEventListener {
         if (mPageManager != null && mPageManager.backPage()) {
             return;
         }
-        super.onBackPressed();
+
+        moveTaskToBack(false);
         //overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 
@@ -173,7 +200,9 @@ public class HeraActivity extends AppCompatActivity implements OnEventListener {
         HeraTrace.d(TAG, String.format("MiniApp[%s] close", mAppConfig.getAppId()));
         mApisManager.onDestroy();
         StorageUtil.clearMiniAppTempDir(this, mAppConfig.getAppId());
+        HeraService.heraActivityFactory().remove(mAppConfig.getAppId());
         super.onDestroy();
+        Process.killProcess(Process.myPid());
     }
 
     @Override

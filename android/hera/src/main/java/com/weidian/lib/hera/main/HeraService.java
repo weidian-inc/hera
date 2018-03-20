@@ -64,8 +64,14 @@ public class HeraService extends Service {
 
     private static HeraConfig sConfig;
 
+    private static HeraActivityFactory sActivityFactory;
+
     public static HeraConfig config() {
         return sConfig != null ? sConfig : new HeraConfig.Builder().build();
+    }
+
+    public static HeraActivityFactory heraActivityFactory() {
+        return sActivityFactory != null ? sActivityFactory : new HeraActivityFactory();
     }
 
     /**
@@ -77,6 +83,7 @@ public class HeraService extends Service {
     public static void start(Context context, HeraConfig config) {
         HeraTrace.d(TAG, "start HeraProcessService");
         sConfig = config;//宿主进程记录的HeraConfig
+        sActivityFactory = new HeraActivityFactory();
         initFramework(context);
 
         initX5(context);
@@ -101,11 +108,11 @@ public class HeraService extends Service {
             throw new IllegalArgumentException("context, appId and userId are not null");
         }
 
-        Intent intent = new Intent(context, HeraActivity.class);
+
+        Intent intent = new Intent(context, sActivityFactory.get(appId));
         intent.putExtra(HeraActivity.APP_ID, appId);
         intent.putExtra(HeraActivity.USER_ID, userId);
         intent.putExtra(HeraActivity.APP_PATH, appPath);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 

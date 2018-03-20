@@ -27,4 +27,11 @@ public class SampleActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        //应用退向后台
+
+        moveTaskToBack(false);
+    }
 }
