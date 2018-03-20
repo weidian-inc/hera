@@ -25,14 +25,6 @@ public class SampleActivity extends AppCompatActivity {
                 HeraService.launchHome(getApplicationContext(), userId, appId, appPath);
             }
         });
-
-        //跳转多个小程序
-        findViewById(R.id.enter_hera1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HeraService.launchHome(getApplicationContext(), userId, appId, appPath);
-            }
-        });
     }
 
     @Override
