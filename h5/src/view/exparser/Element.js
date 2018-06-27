@@ -27,7 +27,8 @@ const attachedElement = function (ele) {
   if (!ele.parentNode || ele.parentNode.__attached) {
     let setAttachedRecursively = function (ele) {
       ele.__attached = !0
-      ele.shadowRoot instanceof Element && setAttachedRecursively(ele.shadowRoot)
+      ele.shadowRoot instanceof Element &&
+        setAttachedRecursively(ele.shadowRoot)
       let childNodes = ele.childNodes
       if (childNodes) {
         for (let idx = 0; idx < childNodes.length; idx++) {
@@ -39,7 +40,8 @@ const attachedElement = function (ele) {
 
     let callAttachedLifeTimeFuncRecursively = function (ele) {
       ele.__lifeTimeFuncs && componentSystem._callLifeTimeFuncs(ele, 'attached')
-      ele.shadowRoot instanceof Element && callAttachedLifeTimeFuncRecursively(ele.shadowRoot)
+      ele.shadowRoot instanceof Element &&
+        callAttachedLifeTimeFuncRecursively(ele.shadowRoot)
       let childNodes = ele.childNodes
       if (childNodes) {
         for (let idx = 0; idx < childNodes.length; idx++) {
@@ -66,7 +68,8 @@ const detachedElement = function (ele) {
 
     const callLifeTimeFuncRecursively = function (ele) {
       ele.__lifeTimeFuncs && componentSystem._callLifeTimeFuncs(ele, 'detached')
-      ele.shadowRoot instanceof Element && callLifeTimeFuncRecursively(ele.shadowRoot)
+      ele.shadowRoot instanceof Element &&
+        callLifeTimeFuncRecursively(ele.shadowRoot)
       let childNodes = ele.childNodes
       if (childNodes) {
         for (let idx = 0; idx < childNodes.length; idx++) {
@@ -78,7 +81,10 @@ const detachedElement = function (ele) {
   }
 }
 const childObserver = function (ele, observerName, targetNode) {
-  if (ele.__childObservers && !ele.__childObservers.empty || ele.__subtreeObserversCount) {
+  if (
+    (ele.__childObservers && !ele.__childObservers.empty) ||
+    ele.__subtreeObserversCount
+  ) {
     let opt = null
     if (observerName === 'add') {
       opt = {
@@ -96,32 +102,49 @@ const childObserver = function (ele, observerName, targetNode) {
     Observer._callObservers(ele, '__childObservers', opt)
   }
 }
-const attachShadowRoot = function (componentObj, newNode, oldNode, isRemoveOldNode) {//增、删、改节点
+const attachShadowRoot = function (
+  componentObj,
+  newNode,
+  oldNode,
+  isRemoveOldNode
+) {
+  // 增、删、改节点
   let copyOfOriginalElement = componentObj
-    //找dom根节点
+  // 找dom根节点
   if (copyOfOriginalElement instanceof Element) {
     for (; copyOfOriginalElement.__virtual;) {
       let slotParent = copyOfOriginalElement.__slotParent
       if (!slotParent) {
         return
       }
-      if (newNode && !oldNode) {//为插入新节点做铺垫
-        let oldNodeIdx = slotParent.__slotChildren.indexOf(copyOfOriginalElement)
+      if (newNode && !oldNode) {
+        // 为插入新节点做铺垫
+        let oldNodeIdx = slotParent.__slotChildren.indexOf(
+          copyOfOriginalElement
+        )
         oldNode = slotParent.__slotChildren[oldNodeIdx + 1]
       }
       copyOfOriginalElement = slotParent
     }
-    copyOfOriginalElement instanceof Element &&(copyOfOriginalElement = copyOfOriginalElement.__domElement)
+    copyOfOriginalElement instanceof Element &&
+      (copyOfOriginalElement = copyOfOriginalElement.__domElement)
   }
 
   let newDomEle = null
-  if (newNode) {//找newNode的dom节点
+  if (newNode) {
+    // 找newNode的dom节点
     if (newNode.__virtual) {
       let fragment = document.createDocumentFragment()
       let appendDomElement = function (ele) {
-        for (let slotChildIdx = 0; slotChildIdx < ele.__slotChildren.length; slotChildIdx++) {
+        for (
+          let slotChildIdx = 0;
+          slotChildIdx < ele.__slotChildren.length;
+          slotChildIdx++
+        ) {
           let slotChild = ele.__slotChildren[slotChildIdx]
-          slotChild.__virtual ? appendDomElement(slotChild) : fragment.appendChild(slotChild.__domElement)
+          slotChild.__virtual
+            ? appendDomElement(slotChild)
+            : fragment.appendChild(slotChild.__domElement)
         }
       }
       appendDomElement(newNode)
@@ -138,9 +161,15 @@ const attachShadowRoot = function (componentObj, newNode, oldNode, isRemoveOldNo
       let oldNodeIdx = 0
       if (isRemoveOldNode) {
         let removeDomElement = function (ele) {
-          for (let slotChildIdx = 0; slotChildIdx < ele.__slotChildren.length; slotChildIdx++) {
+          for (
+            let slotChildIdx = 0;
+            slotChildIdx < ele.__slotChildren.length;
+            slotChildIdx++
+          ) {
             let slotChild = ele.__slotChildren[slotChildIdx]
-            slotChild.__virtual ? removeDomElement(slotChild) : copyOfOriginalElement.removeChild(slotChild.__domElement)
+            slotChild.__virtual
+              ? removeDomElement(slotChild)
+              : copyOfOriginalElement.removeChild(slotChild.__domElement)
           }
         }
         removeDomElement(oldNode)
@@ -165,10 +194,18 @@ const attachShadowRoot = function (componentObj, newNode, oldNode, isRemoveOldNo
         }
         oldNode = null
         let curOldParentNode = oldParentNode
-        for (; oldNode = findNonVirtualNode(curOldParentNode, oldNodeIdx), !oldNode && curOldParentNode.__virtual; curOldParentNode = curOldParentNode.__slotParent) {
-          oldNodeIdx = curOldParentNode.__slotParent.__slotChildren.indexOf(curOldParentNode) + 1
+        for (
+          ;
+          (oldNode = findNonVirtualNode(curOldParentNode, oldNodeIdx)),
+            !oldNode && curOldParentNode.__virtual;
+          curOldParentNode = curOldParentNode.__slotParent
+        ) {
+          oldNodeIdx =
+            curOldParentNode.__slotParent.__slotChildren.indexOf(
+              curOldParentNode
+            ) + 1
         }
-        oldNode && (oldDomEle = oldNode.__domElement)//??是否存在的!oldNode 但nOrigParentNode.__virtual为false?
+        oldNode && (oldDomEle = oldNode.__domElement) // ??是否存在的!oldNode 但nOrigParentNode.__virtual为false?
       }
     } else {
       oldDomEle = oldNode.__domElement
@@ -176,9 +213,14 @@ const attachShadowRoot = function (componentObj, newNode, oldNode, isRemoveOldNo
   }
 
   if (isRemoveOldNode) {
-    newDomEle ? copyOfOriginalElement.replaceChild(newDomEle, oldDomEle) : copyOfOriginalElement.removeChild(oldDomEle)
+    newDomEle
+      ? copyOfOriginalElement.replaceChild(newDomEle, oldDomEle)
+      : copyOfOriginalElement.removeChild(oldDomEle)
   } else {
-    newDomEle && (oldDomEle ? copyOfOriginalElement.insertBefore(newDomEle, oldDomEle) : copyOfOriginalElement.appendChild(newDomEle))
+    newDomEle &&
+      (oldDomEle
+        ? copyOfOriginalElement.insertBefore(newDomEle, oldDomEle)
+        : copyOfOriginalElement.appendChild(newDomEle))
   }
 }
 const updateSubtree = function (ele, newNode, oldNode, willRemoveOldNode) {
@@ -215,10 +257,13 @@ const updateSubtree = function (ele, newNode, oldNode, willRemoveOldNode) {
     if (parentNode) {
       let originalIndexOfNewNode = parentNode.childNodes.indexOf(newNode)
       parentNode.childNodes.splice(originalIndexOfNewNode, 1)
-      parentNode === ele && originalIndexOfNewNode < oldNodeIndex && oldNodeIndex--
+      parentNode === ele &&
+        originalIndexOfNewNode < oldNodeIndex &&
+        oldNodeIndex--
       subtreeObserversCount -= parentNode.__subtreeObserversCount
     }
-    subtreeObserversCount && Observer._updateSubtreeCaches(newNode, subtreeObserversCount)
+    subtreeObserversCount &&
+      Observer._updateSubtreeCaches(newNode, subtreeObserversCount)
   }
   attachShadowRoot(originalParentNode, newNode, oldNode, willRemoveOldNode)
   oldNodeIndex === -1 && (oldNodeIndex = ele.childNodes.length)

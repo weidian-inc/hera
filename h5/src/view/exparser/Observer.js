@@ -1,5 +1,5 @@
 import Events from './Events'
-//监视器模块
+// 监视器模块
 const Observer = function () {}
 
 Observer.prototype = Object.create(Object.prototype, {
@@ -20,7 +20,10 @@ Observer.create = function (cb) {
   return tempObj
 }
 
-const updateSubtreeCaches = Observer._updateSubtreeCaches = function (ele, count) {
+const updateSubtreeCaches = (Observer._updateSubtreeCaches = function (
+  ele,
+  count
+) {
   ele.__subtreeObserversCount += count
   let childNodes = ele.childNodes
   if (childNodes) {
@@ -28,14 +31,15 @@ const updateSubtreeCaches = Observer._updateSubtreeCaches = function (ele, count
       updateSubtreeCaches(childNodes[idx], count)
     }
   }
-}
+})
 
 Observer.prototype.observe = function (ele, opt) {
   opt = opt || {}
   let count = 0
-  let subtree = opt.subtree ? this._cb : this._noSubtreeCb//是否对子节点observe
+  let subtree = opt.subtree ? this._cb : this._noSubtreeCb // 是否对子节点observe
   if (opt.properties) {
-    ele.__propObservers || (ele.__propObservers = Events.create('Observer Callback'))
+    ele.__propObservers ||
+      (ele.__propObservers = Events.create('Observer Callback'))
     this._binded.push({
       funcArr: ele.__propObservers,
       id: ele.__propObservers.add(subtree),
@@ -44,7 +48,8 @@ Observer.prototype.observe = function (ele, opt) {
     count++
   }
   if (opt.childList) {
-    ele.__childObservers || (ele.__childObservers = Events.create('Observer Callback'))
+    ele.__childObservers ||
+      (ele.__childObservers = Events.create('Observer Callback'))
     this._binded.push({
       funcArr: ele.__childObservers,
       id: ele.__childObservers.add(subtree),
@@ -54,7 +59,8 @@ Observer.prototype.observe = function (ele, opt) {
   }
 
   if (opt.characterData) {
-    ele.__textObservers || (ele.__textObservers = Events.create('Observer Callback'))
+    ele.__textObservers ||
+      (ele.__textObservers = Events.create('Observer Callback'))
     this._binded.push({
       funcArr: ele.__textObservers,
       id: ele.__textObservers.add(subtree),

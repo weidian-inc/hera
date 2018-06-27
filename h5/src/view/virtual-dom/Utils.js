@@ -1,6 +1,7 @@
 import Enums from './Enums'
 
-const objAssign = Object.assign ||
+const objAssign =
+  Object.assign ||
   function (originObj) {
     for (let idx = 1; idx < arguments.length; idx++) {
       let argObj = arguments[idx]
@@ -17,16 +18,20 @@ const isString = function (target) {
 }
 
 const isIphone = navigator.userAgent.match('iPhone')
-const screenWidth = window.screen && window.screen.width || 375
+const screenWidth = (window.screen && window.screen.width) || 375
 const devicePixelRatio = window.devicePixelRatio || 2
 const SMALL_NUM = 1e-4
 const rpxToPxNum = function (rpxNum) {
   rpxNum = rpxNum / Enums.BASE_DEVICE_WIDTH * screenWidth
   rpxNum = Math.floor(rpxNum + SMALL_NUM)
-  return rpxNum === 0 ? devicePixelRatio !== 1 && isIphone ? 0.5 : 1 : rpxNum
+  return rpxNum === 0 ? (devicePixelRatio !== 1 && isIphone ? 0.5 : 1) : rpxNum
 }
 const parseRpx = function (matches) {
-  let num = 0, decimalRadix = 1, isHandlingDecimal = !1, isNeg = !1, idx = 0
+  let num = 0,
+    decimalRadix = 1,
+    isHandlingDecimal = !1,
+    isNeg = !1,
+    idx = 0
   for (; idx < matches.length; ++idx) {
     let ch = matches[idx]
     if (ch >= '0' && ch <= '9') {
@@ -57,11 +62,11 @@ export default {
     return Object.getPrototypeOf
       ? Object.getPrototypeOf(obj)
       : obj.__proto__
-          ? obj.__proto__
-          : obj.constructor ? obj.constructor.prototype : void 0
+        ? obj.__proto__
+        : obj.constructor ? obj.constructor.prototype : void 0
   },
   isObject: function (obj) {
-    return typeof(obj) === 'object' && obj !== null
+    return typeof obj === 'object' && obj !== null
   },
   isEmptyObject: function (obj) {
     for (let key in obj) {
@@ -94,9 +99,12 @@ export default {
   },
   uuid: function () {
     let uuidPart = function () {
-      return Math.floor(65536 * (1 + Math.random())).toString(16).substring(1)
+      return Math.floor(65536 * (1 + Math.random()))
+        .toString(16)
+        .substring(1)
     }
-    return uuidPart() +
+    return (
+      uuidPart() +
       uuidPart() +
       '-' +
       uuidPart() +
@@ -108,8 +116,12 @@ export default {
       uuidPart() +
       uuidPart() +
       uuidPart()
+    )
   },
   getDataType: function (obj) {
-    return Object.prototype.toString.call(obj).split(' ')[1].split(']')[0]
+    return Object.prototype.toString
+      .call(obj)
+      .split(' ')[1]
+      .split(']')[0]
   }
 }

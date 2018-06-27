@@ -5,11 +5,10 @@ const initFontSize = function () {
   document.addEventListener(
     'DOMContentLoaded',
     function () {
-      let screenWidth = window.innerWidth > 0
-        ? window.innerWidth
-        : screen.width
-      //screenWidth = screenWidth>375?375:screenWidth
-      document.documentElement.style.fontSize = screenWidth / Enums.RPX_RATE + 'px'
+      let screenWidth = window.innerWidth > 0 ? window.innerWidth : screen.width
+      // screenWidth = screenWidth>375?375:screenWidth
+      document.documentElement.style.fontSize =
+        screenWidth / Enums.RPX_RATE + 'px'
     },
     1e3
   )
@@ -20,4 +19,4 @@ const init = function () {
   initFontSize()
 }
 
-export default {init}
+export default { init }

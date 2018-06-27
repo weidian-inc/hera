@@ -12,7 +12,8 @@ const getWindowHeight = function () {
 }
 
 const getScrollHeight = function () {
-  let bodyScrollHeight = 0, documentElementScrollHeight = 0
+  let bodyScrollHeight = 0,
+    documentElementScrollHeight = 0
   document.body && (bodyScrollHeight = document.body.scrollHeight)
   document.documentElement &&
     (documentElementScrollHeight = document.documentElement.scrollHeight)
@@ -30,12 +31,9 @@ const triggerPullUpRefresh = function () {
   if (refreshFinish && !stopedTouch) {
     wd.publishPageEvent('onReachBottom', {})
     refreshFinish = !1
-    setTimeout(
-      function () {
-        refreshFinish = !0
-      },
-      350
-    )
+    setTimeout(function () {
+      refreshFinish = !0
+    }, 350)
   }
 }
 

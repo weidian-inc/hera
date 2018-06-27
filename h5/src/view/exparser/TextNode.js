@@ -24,7 +24,10 @@ Object.defineProperty(TextNode.prototype, 'textContent', {
   },
   set: function (txt) {
     this.__domElement.textContent = txt
-    if (this.__textObservers && !this.__textObservers.empty || this.__subtreeObserversCount) {
+    if (
+      (this.__textObservers && !this.__textObservers.empty) ||
+      this.__subtreeObserversCount
+    ) {
       Observer._callObservers(this, '__textObservers', {
         type: 'characterData',
         target: this
