@@ -7,6 +7,7 @@
 
 Hera 是一个用小程序方式来写跨平台应用的开发框架，使用它可以让你的小程序除了在微信上运行，还可以打包成 Android 、 iOS应用，以及以h5的方式跑在浏览器端
 
+:warning: 注意：master 分支内容过旧，一些问题在 dev 分支上已经解决了，[点我查看构建指南链接](https://github.com/weidian-inc/hera/blob/master-dev/docs/zh-cn/Quickstart/BuildWithSourceCode.md) :warning:
 ## 快速体验
 
 安装脚手架
