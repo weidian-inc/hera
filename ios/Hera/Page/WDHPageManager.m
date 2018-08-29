@@ -32,6 +32,7 @@
 #import "NSString+WDH.h"
 #import "WDHAppletViewController.h"
 #import "WDHLog.h"
+#import "WDHTimerJS.h"
 
 @implementation WDHPageStack
 
@@ -172,10 +173,14 @@
 
 /////////action////////
 - (void)push:(WDHBaseViewController *)page {
+    //清除了所有定时器
+    [[WDHTimerJS sharedInstance] clearAllTimeout];
 	[self.naviController pushViewController:page animated:YES];
 }
 
 - (WDHBaseViewController *)pop {
+    //清除了所有定时器
+    [[WDHTimerJS sharedInstance] clearAllTimeout];
 	
 	NSArray *pages = [self stack];
 	if (pages.count > 0) {
@@ -196,6 +201,8 @@
 }
 
 - (void)popToPage:(WDHBaseViewController *)toPage {
+    //清除了所有定时器
+    [[WDHTimerJS sharedInstance] clearAllTimeout];
 	
 	NSArray *pages = [self stack];
 	[pages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(WDHBaseViewController *  _Nonnull page, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -213,6 +220,8 @@
 }
 
 - (UIViewController *)popToRoot {
+    //清除了所有定时器
+    [[WDHTimerJS sharedInstance] clearAllTimeout];
 	
 	NSArray *pages = [self stack];
 	if (pages.count > 0) {
@@ -570,6 +579,8 @@
 
 - (void)switchTabbar:(NSDictionary *)itemInfo
 {
+    //清除了所有定时器
+    [[WDHTimerJS sharedInstance] clearAllTimeout];
 	HRLog(@"itemInfo:%@",itemInfo);
 	NSArray *arr = self.pageStack.naviController.viewControllers;
 	[arr enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(WDHTabBarViewController  *controller, NSUInteger idx, BOOL * _Nonnull stop) {

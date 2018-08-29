@@ -32,6 +32,7 @@
 #import "NSURLProtocol+WebKitSupport.h"
 #import "WDHFileManager.h"
 #import "WDHLog.h"
+#import "WDHTimerJS.h"
 
 @interface WDHManager()
 
@@ -129,6 +130,28 @@
 		NSDictionary *jsonParam = [param wdh_jsonObject];
 		HRLog(@"custom_event_H5_LOG_MSG: %@", jsonParam);
 	}
+    // setTimeout事件处理
+    else if ([eventName isEqualToString:@"custom_event_setTimeout"]) {
+        NSDictionary *jsonParam = [param wdh_jsonObject];
+        HRLog(@"custom_event_setTimeout");
+        
+        [[WDHTimerJS sharedInstance] startWithParams:jsonParam repeat:NO callback:^(NSString *params) {
+            [self.service callSubscribeHandlerWithEvent: @"onSetTimeout" jsonParam: params];
+        }];
+    }
+    else if ([eventName isEqualToString:@"custom_event_setInterval"]) {
+        NSDictionary *jsonParam = [param wdh_jsonObject];
+        HRLog(@"custom_event_setInterval");
+        [[WDHTimerJS sharedInstance] startWithParams:jsonParam repeat:YES callback:^(NSString *params) {
+            [self.service callSubscribeHandlerWithEvent: @"onSetInterval" jsonParam: params];
+        }];
+    }
+    else if ([eventName isEqualToString:@"custom_event_clearTimeout"]) {
+        HRLog(@"custom_event_clearTimeout:%@",param);
+        if (param && ![param isEqualToString:@""]){
+            [[WDHTimerJS sharedInstance] clearTimeout:param];
+        }
+    }
 	else {
 		[self.pageManager callSubscribeHandler:eventName jsonParam:param webIds:webIds];
 	}

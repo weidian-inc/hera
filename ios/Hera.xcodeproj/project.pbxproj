@@ -191,6 +191,8 @@
 		55A062651FA70C5400CDB080 /* WDHBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55A062641FA70C5400CDB080 /* WDHBaseViewController.m */; };
 		55DFD2781F6F74D700E1D8C3 /* UINavigationController+WDHodoerLifeCycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 55DFD2761F6F74D700E1D8C3 /* UINavigationController+WDHodoerLifeCycle.h */; };
 		55DFD2791F6F74D700E1D8C3 /* UINavigationController+WDHodoerLifeCycle.m in Sources */ = {isa = PBXBuildFile; fileRef = 55DFD2771F6F74D700E1D8C3 /* UINavigationController+WDHodoerLifeCycle.m */; };
+		9D028534212FE07C00477EE4 /* WDHTimerJS.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D028532212FE07C00477EE4 /* WDHTimerJS.h */; };
+		9D028535212FE07C00477EE4 /* WDHTimerJS.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D028533212FE07C00477EE4 /* WDHTimerJS.m */; };
 		E94AD6AB1FB9559800AC5B39 /* WHEImagePickerManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E94AD6A91FB9559800AC5B39 /* WHEImagePickerManager.h */; };
 		E94AD6AC1FB9559800AC5B39 /* WHEImagePickerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E94AD6AA1FB9559800AC5B39 /* WHEImagePickerManager.m */; };
 		E94AD6AF1FB956D600AC5B39 /* WHEImageProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = E94AD6AD1FB956D600AC5B39 /* WHEImageProcessor.h */; };
@@ -431,6 +433,8 @@
 		55DFD2771F6F74D700E1D8C3 /* UINavigationController+WDHodoerLifeCycle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+WDHodoerLifeCycle.m"; sourceTree = "<group>"; };
 		796F1B8CE8BDB481C4A6BDC0 /* Pods-Hera.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hera.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Hera/Pods-Hera.debug.xcconfig"; sourceTree = "<group>"; };
 		7F3020D76C0B31956B93E8CC /* libPods-Hera.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Hera.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D028532212FE07C00477EE4 /* WDHTimerJS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WDHTimerJS.h; sourceTree = "<group>"; };
+		9D028533212FE07C00477EE4 /* WDHTimerJS.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WDHTimerJS.m; sourceTree = "<group>"; };
 		E94AD6A91FB9559800AC5B39 /* WHEImagePickerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WHEImagePickerManager.h; sourceTree = "<group>"; };
 		E94AD6AA1FB9559800AC5B39 /* WHEImagePickerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WHEImagePickerManager.m; sourceTree = "<group>"; };
 		E94AD6AD1FB956D600AC5B39 /* WHEImageProcessor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WHEImageProcessor.h; sourceTree = "<group>"; };
@@ -714,6 +718,8 @@
 				469D62491F14DA0300719AFE /* NSData+WDH.m */,
 				551675601FCD6E2E0037CF8F /* WDHLog.h */,
 				551675611FCD6E2E0037CF8F /* WDHLog.m */,
+				9D028532212FE07C00477EE4 /* WDHTimerJS.h */,
+				9D028533212FE07C00477EE4 /* WDHTimerJS.m */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -989,6 +995,7 @@
 				468282D01F601DEE00FC71D8 /* WHE_scanCode.h in Headers */,
 				468282AE1F601DEE00FC71D8 /* WHE_getScreenBrightness.h in Headers */,
 				E94AD6E51FB96F9B00AC5B39 /* WHEImagePickerBaseViewController.h in Headers */,
+				9D028534212FE07C00477EE4 /* WDHTimerJS.h in Headers */,
 				468282CE1F601DEE00FC71D8 /* WHE_saveImageToPhotosAlbum.h in Headers */,
 				553A771F1F46D4AF003F33F5 /* ACObfuscationHeader.h in Headers */,
 				E94AD6AF1FB956D600AC5B39 /* WHEImageProcessor.h in Headers */,
@@ -1123,9 +1130,12 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Hera/Pods-Hera-resources.sh",
+				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1138,13 +1148,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Hera-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1222,6 +1235,7 @@
 				468282911F601DED00FC71D8 /* WHEMaskView.m in Sources */,
 				468282A31F601DEE00FC71D8 /* WHE_getClipboardData.m in Sources */,
 				468282BF1F601DEE00FC71D8 /* WHE_pauseVoice.m in Sources */,
+				9D028535212FE07C00477EE4 /* WDHTimerJS.m in Sources */,
 				553A771B1F46CC5C003F33F5 /* WDHURLProtocol.m in Sources */,
 				468282DF1F601DEE00FC71D8 /* WHE_showModal.m in Sources */,
 				4625BB871F1749A10031CE7D /* WDHPageManager.m in Sources */,
