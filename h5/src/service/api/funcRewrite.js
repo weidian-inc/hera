@@ -57,6 +57,9 @@
         window.clearTimeout = function (timerId) {
             ServiceJSBridge.publish('clearTimeout', timerId, '')
         }
+        window.clearInterval = function (timerId) {
+            ServiceJSBridge.publish('clearTimeout', timerId, '')
+        }
     } else {
         var originalSetTimeOut = setTimeout
         window.setTimeout = function (fn, timer) {

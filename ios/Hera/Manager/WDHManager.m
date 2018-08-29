@@ -135,14 +135,14 @@
         NSDictionary *jsonParam = [param wdh_jsonObject];
         HRLog(@"custom_event_setTimeout");
         
-        [[WDHTimerJS sharedInstance] startWithParams:jsonParam repeat:YES callback:^(NSString *params) {
+        [[WDHTimerJS sharedInstance] startWithParams:jsonParam repeat:NO callback:^(NSString *params) {
             [self.service callSubscribeHandlerWithEvent: @"onSetTimeout" jsonParam: params];
         }];
     }
     else if ([eventName isEqualToString:@"custom_event_setInterval"]) {
         NSDictionary *jsonParam = [param wdh_jsonObject];
         HRLog(@"custom_event_setInterval");
-        [[WDHTimerJS sharedInstance] startWithParams:jsonParam repeat:NO callback:^(NSString *params) {
+        [[WDHTimerJS sharedInstance] startWithParams:jsonParam repeat:YES callback:^(NSString *params) {
             [self.service callSubscribeHandlerWithEvent: @"onSetInterval" jsonParam: params];
         }];
     }
