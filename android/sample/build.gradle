@@ -1,7 +1,9 @@
 apply plugin: 'com.android.application'
 
 dependencies {
-    compile project(':hera')
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation project(':hera')
 }
 
 android {
