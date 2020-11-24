@@ -94,7 +94,7 @@
 			tabbarFrame = (CGRect){0,naviHeight,w,49};
 		}else {
 			CGFloat tabbarHeight = IS_IPHONE_X ? 83 : 49;
-			tabbarFrame = (CGRect){0,h - self.tabbar.wdh_view.bounds.size.height,w,tabbarHeight};
+			tabbarFrame = (CGRect){0,h - tabbarHeight,w,tabbarHeight};
 		}
 		
 		self.tabbar.wdh_view.frame = tabbarFrame;
