@@ -1,8 +1,9 @@
 package com.weidian.lib.hera.sample;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.View;
 
 import com.weidian.lib.hera.main.HeraService;

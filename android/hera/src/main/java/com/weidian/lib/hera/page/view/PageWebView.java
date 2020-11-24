@@ -28,13 +28,13 @@
 package com.weidian.lib.hera.page.view;
 
 import android.content.Context;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.view.ViewParent;
 
-import com.weidian.lib.hera.trace.HeraTrace;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.weidian.lib.hera.web.HeraWebView;
 
 public class PageWebView extends HeraWebView {
