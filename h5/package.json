@@ -49,7 +49,7 @@
     "koa-router": "^5.4.0",
     "koa-send": "^3.2.0",
     "koa-static": "^2.0.0",
-    "merge": "^1.2.0",
+    "merge": "^2.1.1",
     "minimatch": "^3.0.2",
     "mkdir-p": "0.0.7",
     "node-parallel": "^0.1.6",
