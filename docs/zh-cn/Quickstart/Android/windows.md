@@ -29,7 +29,7 @@ node -v
 首先切换 npm 源，如果您已经使用了代理则可忽略这一步骤
 
 ```sh
-npm config set registry https://registry.npm.taobao.org
+npm config set registry https://registry.npmmirror.com
 ```
 
 > Tips: 也可以使用 [nrm](https://github.com/Pana/nrm) 命令切换至[国内的 npm 源](http://www.jianshu.com/p/171ec231ced4)
